@@ -260,7 +260,7 @@ export async function getServerSideProps(context: any) {
 
 	for (const [key, value] of Object.entries(videoMap)) {
 		videos.push({
-			src: `https://objects.iunstable0.com/videos/website/${key}`,
+			src: `https://objects.iunstable0.com/videos/42f6080c-3878-48b2-84ab-58e1f319d402/${key}`,
 			title: value.title,
 			artist: value.artist,
 		});
@@ -306,7 +306,7 @@ export async function getServerSideProps(context: any) {
 	// };
 }
 
-export default function Page({ firstTimeVisit, userInfo }: { firstTimeVisit: boolean; userInfo: any }) {
+export default function Page({ firstTimeVisit, userInfo, contentVisible }: { firstTimeVisit: boolean; userInfo: any; contentVisible: boolean }) {
 	const router = useRouter();
 
 	const [page, setPage] = useState<any>(router.query.p || null);
@@ -325,87 +325,109 @@ export default function Page({ firstTimeVisit, userInfo }: { firstTimeVisit: boo
 			return;
 		}
 
-		const page = localStorage.getItem("page");
-
-		if (page) {
-			setPage(page);
-		} else {
-			setPage("home");
-		}
+		setPage(localStorage.getItem("page") || "home");
 	}, []);
 
 	return (
-		<>
-			<Nav
-				page={page}
-				setPage={(page: string) => {
-					setPage(page);
+		<AnimatePresence>
+			{contentVisible && (
+				<motion.div
+					key={"content"}
+					initial="pageInitial"
+					animate="pageAnimate"
+					exit="pageExit"
+					variants={{
+						pageInitial: {
+							opacity: 0,
+							// display: "none",
+						},
+						pageAnimate: {
+							opacity: 1,
+							// display: "block",
+							// transition: {
+							// 	delay: delayTime,
+							// },
+						},
+						pageExit: {
+							opacity: 0,
+						},
+					}}
+					transition={{
+						duration: durationTime,
+					}}
+				>
+					<Nav
+						page={page}
+						setPage={(page: string) => {
+							setPage(page);
 
-					localStorage.setItem("page", page);
-				}}
-			/>
+							localStorage.setItem("page", page);
+						}}
+					/>
 
-			<AnimatePresence>
-				{page === "home" && (
-					<motion.div
-						key={page}
-						initial="pageInitial"
-						animate="pageAnimate"
-						exit="pageExit"
-						variants={{
-							pageInitial: {
-								opacity: 0,
-								display: "none",
-							},
-							pageAnimate: {
-								opacity: 1,
-								display: "block",
-								transition: {
-									delay: delayTime,
-								},
-							},
-							pageExit: {
-								opacity: 0,
-							},
-						}}
-						transition={{
-							duration: durationTime,
-						}}
-					>
-						<Home setPage={setPage} />
-					</motion.div>
-				)}
+					<AnimatePresence>
+						{page === "home" && (
+							<motion.div
+								key={page}
+								initial="pageInitial"
+								animate="pageAnimate"
+								exit="pageExit"
+								variants={{
+									pageInitial: {
+										opacity: 0,
+										display: "none",
+									},
+									pageAnimate: {
+										opacity: 1,
+										display: "block",
+										transition: {
+											delay: delayTime,
+										},
+									},
+									pageExit: {
+										opacity: 0,
+									},
+								}}
+								transition={{
+									duration: durationTime,
+								}}
+							>
+								<Home setPage={setPage} />
+							</motion.div>
+						)}
 
-				{page === "about" && (
-					<motion.div
-						key={page}
-						initial="pageInitial"
-						animate="pageAnimate"
-						exit="pageExit"
-						variants={{
-							pageInitial: {
-								opacity: 0,
-								display: "none",
-							},
-							pageAnimate: {
-								opacity: 1,
-								display: "block",
-								transition: {
-									delay: delayTime,
-								},
-							},
-							pageExit: {
-								opacity: 0,
-							},
-						}}
-						transition={{
-							duration: durationTime,
-						}}
-					>
-						{/* <About setPage={setPage} userInfo={userInfo} /> */}
-					</motion.div>
-				)}
-			</AnimatePresence>
-		</>
+						{page === "about" && (
+							<motion.div
+								key={page}
+								initial="pageInitial"
+								animate="pageAnimate"
+								exit="pageExit"
+								variants={{
+									pageInitial: {
+										opacity: 0,
+										display: "none",
+									},
+									pageAnimate: {
+										opacity: 1,
+										display: "block",
+										transition: {
+											delay: delayTime,
+										},
+									},
+									pageExit: {
+										opacity: 0,
+									},
+								}}
+								transition={{
+									duration: durationTime,
+								}}
+							>
+								{/* <About setPage={setPage} userInfo={userInfo} /> */}
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</motion.div>
+			)}
+		</AnimatePresence>
 	);
 }
