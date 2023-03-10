@@ -1,0 +1,134 @@
+.container {
+	background: #13386e;
+	border-radius: 12px 12px 0 0;
+	height: 90px;
+
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+
+	opacity: 0.8;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.middle {
+	// Column
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.title {
+	position: fixed;
+
+	bottom: 52px;
+
+	// margin-bottom: 10px;
+}
+
+.playback {
+	// margin-bottom: 10px;
+	// position: fixed;
+
+	// bottom: 26px;
+	margin-top: 30px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.play {
+	// position: fixed;
+	margin: 0 10px;
+	width: 20px;
+	height: 20px;
+
+	transition: all 0.25s;
+}
+
+.pause {
+	// position: fixed;
+	margin: 0 10px;
+	width: 24px;
+	height: 24px;
+
+	transition: all 0.25s;
+}
+
+.prev {
+	// Next to the play/pause button
+	// position: fixed;
+	// right: 55%;
+	margin: 0 10px;
+	width: 27px;
+	height: 27px;
+
+	transition: all 0.25s;
+}
+
+.skip {
+	// Next to the play/pause button
+	// position: fixed;
+	// left: 55%;
+	margin: 0 10px;
+	width: 27px;
+	height: 27px;
+
+	transition: all 0.25s;
+}
+
+.hideControls {
+	position: fixed;
+	right: 28px;
+
+	width: 42px;
+	height: 42px;
+
+	padding: 4px;
+
+	border-radius: 8px;
+
+	transition: all 0.25s;
+}
+
+.showControls {
+	position: fixed;
+	right: 28px;
+
+	width: 42px;
+	height: 42px;
+
+	padding: 4px;
+
+	border-radius: 8px;
+
+	background: #13386e;
+
+	transition: all 0.25s;
+}
+
+.playbackDisabled {
+	opacity: 0.5;
+	pointer-events: none;
+	cursor: not-allowed;
+}
+
+.play:hover,
+.pause:hover,
+.prev:hover,
+.skip:hover {
+	// width: 24px;
+	// height: 24px;
+	scale: 1.15;
+}
+
+.hideControls:hover,
+.showControls:hover {
+	background: #19488f;
+	scale: 1.1;
+}
