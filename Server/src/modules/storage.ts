@@ -35,6 +35,7 @@ export default class lib_storage {
 
 		for (const file of files) {
 			let fileName: any = file.name.split(".");
+
 			fileName.pop();
 			fileName = fileName.join(".");
 
@@ -45,14 +46,13 @@ export default class lib_storage {
 				})
 			);
 
-			if (objects.Contents && objects.Contents.length > 0) {
+			if (objects.Contents && objects.Contents.length > 0)
 				await client.send(
 					new DeleteObjectsCommand({
 						Bucket: process.env.S3_BUCKET_NAME,
 						Delete: { Objects: objects.Contents.map((object: any) => ({ Key: object.Key })) },
 					})
 				);
-			}
 
 			const key = `${db}/${file.name}`,
 				url = await getSignedUrl(
@@ -126,5 +126,18 @@ export default class lib_storage {
 			publicSharingUrl: `${process.env.S3_CUSTOM_DOMAIN}/${key}`,
 			key: key,
 		};
+	}
+
+	public static async listFiles(db: string): Promise<Array<string>> {
+		const objects = await client.send(
+			new ListObjectsV2Command({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Prefix: db,
+			})
+		);
+
+		if (objects.Contents && objects.Contents.length > 0) return objects.Contents.map((object: any) => object.Key);
+
+		return [];
 	}
 }

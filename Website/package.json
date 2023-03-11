@@ -3,9 +3,9 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "env-cmd -f ../.env env-cmd -f ../.env.development next dev -p 4004",
+		"dev": "env-cmd -f ../.env env-cmd -f ../.env.development next dev -p 4104",
 		"build": "env-cmd -f ../.env env-cmd -f ../.env.production next build",
-		"start": "env-cmd -f ../.env env-cmd -f ../.env.production next start -p 4004",
+		"start": "env-cmd -f ../.env env-cmd -f ../.env.production next start -p 4104",
 		"lint": "next lint"
 	},
 	"dependencies": {
@@ -14,6 +14,7 @@
 		"@types/node": "18.15.0",
 		"@types/react": "18.0.28",
 		"@types/react-dom": "18.0.11",
+		"axios": "^1.3.4",
 		"csstype": "^3.0.10",
 		"env-cmd": "^10.1.0",
 		"eslint": "8.36.0",

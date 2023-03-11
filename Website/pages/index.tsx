@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 
+// Additional Packages
+
+import toast from "react-hot-toast";
+
 import { useRouter } from "next/router";
+
+// import * as lib from "modules";
+import lib_toaster from "modules/toaster";
+import lib_axios from "modules/axios";
+import lib_gqlSchema from "modules/gqlSchema";
+
+// Additional Components
+
 import { motion, AnimatePresence } from "framer-motion";
 
 import Nav from "components/nav";
@@ -9,6 +21,27 @@ import Home from "components/pages/home";
 import About from "components/pages/about";
 
 export async function getServerSideProps(context: any) {
+	lib_axios
+		.request({
+			method: "POST",
+			url: "/gql",
+			baseURL: process.env.NEXT_PUBLIC_GQL,
+			headers: {
+				"Content-Type": "application/json",
+			},
+			data: {
+				query: lib_gqlSchema.query.getVideos,
+			},
+		})
+		.then((response: any) => {
+			const data = response.data.data.getVideos;
+
+			console.log(data);
+		})
+		.catch((error: any) => {
+			console.log(error);
+		});
+
 	let videoMap = {
 		"ajriwont.mp4": {
 			title: "I Won't",

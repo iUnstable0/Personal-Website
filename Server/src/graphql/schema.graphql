@@ -3,8 +3,14 @@
 scalar Date
 scalar Byte
 
-# type Query {
-# }
+type Video {
+	title: String!
+	path: String!
+}
+
+type Query {
+	getVideos: [Video!]! @rateLimit(limit: 60, duration: 10)
+}
 
 # Mutations ###########################################################################################################################################################################
 
