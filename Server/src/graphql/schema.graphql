@@ -1,0 +1,18 @@
+#graphql
+
+scalar Date
+scalar Byte
+
+type Video {
+	title: String!
+	path: String!
+}
+
+type Query {
+	getVideos: [Video!]! @rateLimit(limit: 60, duration: 10)
+}
+
+# Mutations ###########################################################################################################################################################################
+
+# type Mutation {
+# }

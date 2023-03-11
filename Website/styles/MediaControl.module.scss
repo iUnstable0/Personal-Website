@@ -1,5 +1,6 @@
 .container {
-	background: #13386e;
+	// background: #13386e;
+	// background: #000000c9;
 	border-radius: 12px 12px 0 0;
 	height: 90px;
 
@@ -21,12 +22,29 @@
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
+
+	padding: 10px 10px;
+
+	border-radius: 10px;
+
+	width: auto;
+
+	background: #000000c9;
 }
 
 .title {
-	position: fixed;
+	// Make it unselectable
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+						supported by Chrome and Opera */
 
-	bottom: 52px;
+	// position: fixed;
+
+	// bottom: 52px;
 
 	// margin-bottom: 10px;
 }
@@ -36,7 +54,8 @@
 	// position: fixed;
 
 	// bottom: 26px;
-	margin-top: 30px;
+	// margin-top: 30px;
+	margin-top: 10px;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
@@ -44,7 +63,7 @@
 
 .play {
 	// position: fixed;
-	margin: 0 10px;
+	margin: 0 12px;
 	width: 20px;
 	height: 20px;
 
@@ -82,32 +101,66 @@
 	transition: all 0.25s;
 }
 
-.hideControls {
-	position: fixed;
-	right: 28px;
+.toggleContent {
+	// position: fixed;
+	// left: 28px;
 
 	width: 42px;
 	height: 42px;
 
-	padding: 4px;
+	padding: 9px;
 
-	border-radius: 8px;
+	border-radius: 10px;
+
+	background: #000000c9;
 
 	transition: all 0.25s;
 }
 
-.showControls {
-	position: fixed;
-	right: 28px;
+.toggleVideo {
+	// position: fixed;
+	// left: 28px;
 
 	width: 42px;
 	height: 42px;
 
-	padding: 4px;
+	padding: 11px;
 
-	border-radius: 8px;
+	border-radius: 10px;
 
-	background: #13386e;
+	background: #000000c9;
+
+	transition: all 0.25s;
+}
+
+.toggleQueue {
+	// position: fixed;
+	// left: 28px;
+
+	width: 42px;
+	height: 42px;
+
+	padding: 8px;
+
+	border-radius: 10px;
+
+	background: #000000c9;
+
+	transition: all 0.25s;
+}
+
+.toggleControls {
+	// position: fixed;
+	// right: 28px;
+
+	width: 42px;
+	height: 42px;
+
+	padding: 5px;
+
+	border-radius: 10px;
+
+	background: #000000c9;
 
 	transition: all 0.25s;
 }
@@ -118,17 +171,90 @@
 	cursor: not-allowed;
 }
 
+.queue {
+	// all: unset;
+	background-color: #0000009c !important;
+	padding: 0 20px;
+
+	// max-height: 350px;
+
+	overflow-y: auto;
+}
+
+.queueTitle {
+	// all: unset;
+	font-size: 24px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.queueContent {
+	max-height: 300px;
+
+	overflow-y: auto;
+
+	margin-bottom: 10px;
+}
+
+.queueItem {
+	// all: unset;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 5px 10px;
+
+	border-radius: 10px;
+	margin-right: 20px;
+
+	transition: all 0.25s;
+}
+
+.queueItemActive {
+	background: #4673ce41;
+}
+
+.queueItemTitle {
+	// all: unset;
+	font-size: 15px;
+	// font-weight: 500;
+	text-align: left;
+	// eclipse text
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 500px;
+}
+
+.queuePlay {
+	// margin: 0 12px;
+	width: 12px;
+	height: 12px;
+
+	transition: all 0.25s;
+}
+
+.queuePause {
+	// margin: 0 10px;
+	width: 16px;
+	height: 16px;
+
+	transition: all 0.25s;
+}
+
 .play:hover,
 .pause:hover,
 .prev:hover,
 .skip:hover {
 	// width: 24px;
 	// height: 24px;
-	scale: 1.15;
+	scale: 1.175;
 }
 
-.hideControls:hover,
-.showControls:hover {
-	background: #19488f;
+.toggleControls:hover,
+.toggleContent:hover,
+.toggleQueue:hover,
+.toggleVideo:hover {
+	background: #232323;
 	scale: 1.1;
 }

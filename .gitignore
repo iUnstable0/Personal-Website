@@ -1,0 +1,6 @@
+dump.rdb
+
+# Ignore every DS_Store even if its in a directory or subdirectory
+
+.DS_Store
+**/.DS_Store
