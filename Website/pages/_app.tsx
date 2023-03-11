@@ -578,7 +578,7 @@ export default function App({ Component, pageProps }: AppProps) {
 								>
 									<MdQueueMusic
 										className={mediaControlStyles.toggleQueue}
-										onClick={() => setContentVisible(true)}
+										//onClick={() => setContentVisible(true)}
 										style={{
 											// pointerEvents: "all",
 											marginRight: "5px",
