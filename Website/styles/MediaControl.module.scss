@@ -171,6 +171,77 @@
 	cursor: not-allowed;
 }
 
+.queue {
+	// all: unset;
+	background-color: #0000009c !important;
+	padding: 0 20px;
+
+	// max-height: 350px;
+
+	overflow-y: auto;
+}
+
+.queueTitle {
+	// all: unset;
+	font-size: 24px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.queueContent {
+	max-height: 300px;
+
+	overflow-y: auto;
+
+	margin-bottom: 10px;
+}
+
+.queueItem {
+	// all: unset;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 5px 10px;
+
+	border-radius: 10px;
+	margin-right: 20px;
+
+	transition: all 0.25s;
+}
+
+.queueItemActive {
+	background: #4673ce41;
+}
+
+.queueItemTitle {
+	// all: unset;
+	font-size: 15px;
+	// font-weight: 500;
+	text-align: left;
+	// eclipse text
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 500px;
+}
+
+.queuePlay {
+	// margin: 0 12px;
+	width: 12px;
+	height: 12px;
+
+	transition: all 0.25s;
+}
+
+.queuePause {
+	// margin: 0 10px;
+	width: 16px;
+	height: 16px;
+
+	transition: all 0.25s;
+}
+
 .play:hover,
 .pause:hover,
 .prev:hover,
