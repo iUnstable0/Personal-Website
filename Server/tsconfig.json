@@ -1,0 +1,43 @@
+{
+	"compilerOptions": {
+		"rootDirs": ["src"],
+		"outDir": "build",
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		// "module": "esnext",
+		"module": "commonjs",
+		"moduleResolution": "NodeNext",
+		"esModuleInterop": true,
+		"types": ["node"],
+		"watch": true,
+		"resolveJsonModule": true,
+		"baseUrl": "src",
+		"incremental": true
+	},
+
+	"include": ["./src"],
+	"exclude": ["node_modules"]
+}
+
+// {
+//     "compilerOptions": {
+//         "target": "ES2022",
+//         "watch": true,
+//         "module": "commonjs",
+//         "moduleResolution": "node",
+//         "resolveJsonModule": true,
+//         "esModuleInterop": true,
+//         "removeComments": true,
+//         "strict": true,
+//         "strictNullChecks": false,
+//         "rootDir": "./src",
+//         "outDir": "./build",
+//         "skipLibCheck": true,
+//         "baseUrl": "./src",
+//         "incremental": true,
+//         "isolatedModules": true
+//     },
+
+//     "include": ["./src"],
+//     "exclude": ["node_modules"]
+// }
