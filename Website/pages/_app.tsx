@@ -20,6 +20,8 @@ import { MdQueueMusic } from "react-icons/md";
 import { TbView360, TbView360Off } from "react-icons/tb";
 import { SiApplemusic } from "react-icons/si";
 import { IoClose } from "react-icons/io5";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import BarLoader from "react-spinners/BarLoader";
 
 const theme = createTheme({
 	type: "dark",
@@ -38,7 +40,9 @@ export default function App({ Component, pageProps }: AppProps) {
 		[controlsVisible, setControlsVisible] = useState<any>(null),
 		[contentVisible, setContentVisible] = useState<any>(null),
 		[noVideo, setNoVideo] = useState<any>(null),
-		[videos, setVideos] = useState<any>(pageProps.videos);
+		[videos, setVideos] = useState<any>(pageProps.videos),
+		[videoLoading, setVideoLoading] = useState<any>(false),
+		[actualVideoLoading, setActualVideoLoading] = useState<any>(false);
 
 	const videoRef = useRef<any>(null);
 
@@ -65,6 +69,23 @@ export default function App({ Component, pageProps }: AppProps) {
 			}
 		}, 1);
 	}, [contentVisible, controlsVisible, noVideo]);
+
+	useEffect(() => {
+		if (videoLoading) {
+			setTimeout(() => {
+				const interval = setInterval(() => {
+					if (videoRef.current) {
+						clearInterval(interval);
+
+						// setActualVideoLoading(true);
+						setActualVideoLoading(videoRef.current.readyState < 3);
+					}
+				}, 1);
+			}, 1000);
+		} else {
+			setActualVideoLoading(false);
+		}
+	}, [videoLoading]);
 
 	// Create nextVideo function
 
@@ -223,6 +244,9 @@ export default function App({ Component, pageProps }: AppProps) {
 					transition: "all 0.5s",
 				}}
 			> */}
+
+						{/* <div>HELFEJNMKOIWDUHIBJKNDBFJ DHWNIHBHLDYGVUKDLWBHDYGHFEVKWYDGEIFGBEVFOIGVFIEGFVIEFGVVG</div> */}
+
 						<AnimatePresence>
 							{contentVisible && (
 								<motion.div
@@ -247,6 +271,46 @@ export default function App({ Component, pageProps }: AppProps) {
 									}}
 								/>
 							)}
+
+							{actualVideoLoading && (
+								<motion.div
+									key={`loadingvid_${router.pathname}`}
+									// className={styles.videoBlur}
+									initial="pageInitial"
+									animate="pageAnimate"
+									exit="pageExit"
+									variants={{
+										pageInitial: {
+											opacity: 0,
+										},
+										pageAnimate: {
+											opacity: 1,
+										},
+										pageExit: {
+											opacity: 0,
+										},
+									}}
+									transition={{
+										duration: 0.25,
+									}}
+								>
+									<BarLoader
+										// <ScaleLoader
+										color="#e2e2e2"
+										loading={actualVideoLoading}
+										style={{
+											// position: "absolute",
+											// top: "50%",
+											// left: "50%",
+											// transform: "translate(-50%, -50%)",
+											// Apply blur
+											filter: contentVisible ? "blur(10px)" : "none",
+											transition: "all 0.15s",
+											// zIndex: -4,
+										}}
+									/>
+								</motion.div>
+							)}
 						</AnimatePresence>
 
 						<video
@@ -265,6 +329,16 @@ export default function App({ Component, pageProps }: AppProps) {
 								setVideoPlaying(false);
 							}}
 							onEnded={nextVideo}
+							// Set on video loading/buffering
+							onCanPlay={() => {
+								setVideoLoading(false);
+							}}
+							onCanPlayThrough={() => {
+								setVideoLoading(false);
+							}}
+							onWaiting={() => {
+								setVideoLoading(true);
+							}}
 							ref={videoRef}
 						>
 							<source src={videos[videoPage].src} type="video/mp4" />
@@ -416,6 +490,7 @@ export default function App({ Component, pageProps }: AppProps) {
 							<IoClose
 								className={mediaControlStyles.toggleVideo}
 								onClick={() => {
+									setVideoPage(0);
 									setNoVideo(true);
 									setContentVisible(true);
 
