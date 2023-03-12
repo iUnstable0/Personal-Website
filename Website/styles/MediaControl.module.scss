@@ -107,28 +107,30 @@
 	transition: all 0.25s;
 }
 
-.toggleContent {
-	// position: fixed;
-	// left: 28px;
+.toggleContentContainer {
+	width: 42px;
+	height: 42px;
 
+	border-radius: 10px;
+
+	background: #0000007c;
+
+	backdrop-filter: blur(10px) !important;
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
+
+	transition: all 0.25s;
+}
+
+.toggleContent {
 	width: 42px;
 	height: 42px;
 
 	padding: 9px;
 
-	border-radius: 10px;
-
-	// background: #000000c9;
-
 	transition: all 0.25s;
-
-	background: #0000007c;
-
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	-moz-backdrop-filter: blur(10px);
-	-o-backdrop-filter: blur(10px);
-	-ms-backdrop-filter: blur(10px);
 }
 
 .toggleVideo {
@@ -153,27 +155,32 @@
 	-ms-backdrop-filter: blur(10px);
 }
 
-.toggleQueue {
-	// position: fixed;
-	// left: 28px;
-
+.toggleQueueContainer {
 	width: 42px;
 	height: 42px;
 
-	padding: 8px;
-
 	border-radius: 10px;
 
-	// background: #000000c9;
+	margin-right: 6px;
 
-	transition: all 0.25s;
 	background: #0000007c;
 
-	backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px) !important;
 	-webkit-backdrop-filter: blur(10px);
 	-moz-backdrop-filter: blur(10px);
 	-o-backdrop-filter: blur(10px);
 	-ms-backdrop-filter: blur(10px);
+
+	transition: all 0.25s;
+}
+
+.toggleQueue {
+	width: 42px;
+	height: 42px;
+
+	padding: 9px;
+
+	transition: all 0.25s;
 }
 
 .toggleControls {
@@ -307,8 +314,8 @@
 }
 
 .toggleControls:hover,
-.toggleContent:hover,
-.toggleQueue:hover,
+.toggleContentContainer:hover,
+.toggleQueueContainer:hover,
 .toggleVideo:hover {
 	// background: #232323;
 	background: #3d3d3d7c;
@@ -325,8 +332,8 @@
 }
 
 .toggleControls:active,
-.toggleContent:active,
-.toggleQueue:active,
+.toggleContentContainer:active,
+.toggleQueueContainer:active,
 .toggleVideo:active {
 	// background: #232323;
 	scale: 1;
