@@ -23,7 +23,7 @@
 	justify-content: space-between;
 	align-items: center;
 
-	padding: 10px 10px;
+	padding: 10px 20px;
 
 	border-radius: 10px;
 
@@ -179,6 +179,11 @@
 	// max-height: 350px;
 
 	overflow-y: auto;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 }
 
 .queueTitle {
@@ -193,7 +198,7 @@
 
 	overflow-y: auto;
 
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 .queueItem {
@@ -204,10 +209,23 @@
 
 	padding: 5px 10px;
 
+	margin-bottom: 2px;
+
 	border-radius: 10px;
 	margin-right: 20px;
 
 	transition: all 0.25s;
+
+	transform: scale(0.98);
+}
+
+.queueItem:hover:not(.queueItemActive) {
+	background: #70707059;
+	transform: scale(1);
+}
+
+.queueItem:active:not(.queueItemActive) {
+	transform: scale(0.98);
 }
 
 .queueItemActive {
@@ -236,8 +254,8 @@
 
 .queuePause {
 	// margin: 0 10px;
-	width: 16px;
-	height: 16px;
+	width: 15px;
+	height: 15px;
 
 	transition: all 0.25s;
 }
@@ -257,4 +275,21 @@
 .toggleVideo:hover {
 	background: #232323;
 	scale: 1.1;
+}
+
+.play:active,
+.pause:active,
+.prev:active,
+.skip:active {
+	// width: 24px;
+	// height: 24px;
+	scale: 1;
+}
+
+.toggleControls:active,
+.toggleContent:active,
+.toggleQueue:active,
+.toggleVideo:active {
+	// background: #232323;
+	scale: 1;
 }

@@ -595,24 +595,54 @@ export default function App({ Component, pageProps }: AppProps) {
 									<h1 className={mediaControlStyles.queueTitle}>Playlist</h1>
 
 									<div className={mediaControlStyles.queueContent}>
-										{videos.map((video, index) => (
-											<div
-												key={index}
-												className={`${mediaControlStyles.queueItem} ${videoPage === index ? mediaControlStyles.queueItemActive : ""}`}
-												onClick={() => {
-													// setVideoPage(index);
-													changeVideo(index);
-													// setContentVisible(true);
-												}}
-											>
-												<div className={mediaControlStyles.queueItemTitle}>{video.title}</div>
-												{/* <div className={mediaControlStyles.queueItemArtist}>{video.artist}</div> */}
+										{videos &&
+											videos.length &&
+											videos.map((video: any, index: any) => (
+												<div
+													key={index}
+													className={`${mediaControlStyles.queueItem} ${
+														videoPage === index ? mediaControlStyles.queueItemActive : ""
+													}`}
+													onClick={() => {
+														// setVideoPage(index);
+														changeVideo(index);
+														// setContentVisible(true);
+													}}
+												>
+													<div className={mediaControlStyles.queueItemTitle}>{video.title}</div>
+													{/* <div className={mediaControlStyles.queueItemArtist}>{video.artist}</div> */}
 
-												{videoPage === index && <GiPauseButton className={mediaControlStyles.queuePause} />}
+													<AnimatePresence>
+														{videoPage === index && (
+															<motion.img
+																key={`playinggggg_${index}`}
+																src="/playing.gif"
+																className={mediaControlStyles.queuePause}
+																initial="pageInitial"
+																animate="pageAnimate"
+																exit="pageExit"
+																variants={{
+																	pageInitial: {
+																		opacity: 0,
+																	},
+																	pageAnimate: {
+																		opacity: 1,
+																	},
+																	pageExit: {
+																		opacity: 0,
+																	},
+																}}
+																transition={{
+																	duration: 0.25,
+																}}
+															/>
+														)}
+													</AnimatePresence>
+													{/* {videoPage === index && <GiPauseButton className={mediaControlStyles.queuePause} />} */}
 
-												{videoPage !== index && <FaPlay className={mediaControlStyles.queuePlay} />}
-											</div>
-										))}
+													{/* {videoPage !== index && <FaPlay className={mediaControlStyles.queuePlay} />} */}
+												</div>
+											))}
 									</div>
 								</div>
 							</Popover.Content>
