@@ -613,6 +613,7 @@ export default function App({ Component, pageProps }: AppProps) {
 									<Popover.Content
 										css={{
 											backgroundColor: "transparent",
+											backdropFilter: "blur(10px)",
 										}}
 									>
 										<div className={mediaControlStyles.queue}>
