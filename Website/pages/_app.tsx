@@ -472,6 +472,9 @@ export default function App({ Component, pageProps }: AppProps) {
 					<div
 						style={{
 							pointerEvents: "all",
+							display: "flex",
+							marginBottom: "5px",
+							// alignItems: "center",
 						}}
 					>
 						{noVideo ? (
@@ -509,10 +512,8 @@ export default function App({ Component, pageProps }: AppProps) {
 						{/* <AnimatePresence> */}
 						{!noVideo && (
 							<motion.div
-								key={`hidevidcontrol_${router.pathname}`}
-								style={{
-									all: "unset",
-								}}
+								key={`hidecontento_${router.pathname}`}
+								className={mediaControlStyles.toggleContentContainer}
 								initial="pageInitial"
 								animate="pageAnimate"
 								exit="pageExit"
@@ -558,6 +559,9 @@ export default function App({ Component, pageProps }: AppProps) {
 					<div
 						style={{
 							pointerEvents: "all",
+							display: "flex",
+							marginBottom: "5px",
+							// alignItems: "center",
 						}}
 					>
 						{/* <MdQueueMusic
@@ -571,10 +575,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
 						{!noVideo && (
 							<motion.div
-								key={`hidevidcontrol_${router.pathname}`}
-								style={{
-									all: "unset",
-								}}
+								key={`queuemusique_${router.pathname}`}
+								className={mediaControlStyles.toggleQueueContainer}
+								// style={{
+								// 	all: "unset",
+								// }}
 								initial="pageInitial"
 								animate="pageAnimate"
 								exit="pageExit"
