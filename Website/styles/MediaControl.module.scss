@@ -9,7 +9,7 @@
 	right: 0;
 	left: 0;
 
-	opacity: 0.8;
+	// opacity: 0.8;
 
 	display: flex;
 	justify-content: center;
@@ -29,7 +29,13 @@
 
 	width: auto;
 
-	background: #000000c9;
+	background: #0000007c;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 }
 
 .title {
@@ -112,9 +118,17 @@
 
 	border-radius: 10px;
 
-	background: #000000c9;
+	// background: #000000c9;
 
 	transition: all 0.25s;
+
+	background: #0000007c;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 }
 
 .toggleVideo {
@@ -128,9 +142,15 @@
 
 	border-radius: 10px;
 
-	background: #000000c9;
+	background: #0000007c;
 
 	transition: all 0.25s;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 }
 
 .toggleQueue {
@@ -144,9 +164,16 @@
 
 	border-radius: 10px;
 
-	background: #000000c9;
+	// background: #000000c9;
 
 	transition: all 0.25s;
+	background: #0000007c;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 }
 
 .toggleControls {
@@ -160,7 +187,15 @@
 
 	border-radius: 10px;
 
-	background: #000000c9;
+	// background: #000000c9;
+
+	background: #0000007c;
+
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	-moz-backdrop-filter: blur(10px);
+	-o-backdrop-filter: blur(10px);
+	-ms-backdrop-filter: blur(10px);
 
 	transition: all 0.25s;
 }
@@ -179,6 +214,7 @@
 	// max-height: 350px;
 
 	overflow-y: auto;
+
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	-moz-backdrop-filter: blur(10px);
@@ -230,6 +266,7 @@
 
 .queueItemActive {
 	background: #4673ce41;
+	transform: scale(1);
 }
 
 .queueItemTitle {
@@ -273,7 +310,8 @@
 .toggleContent:hover,
 .toggleQueue:hover,
 .toggleVideo:hover {
-	background: #232323;
+	// background: #232323;
+	background: #3d3d3d7c;
 	scale: 1.1;
 }
 
