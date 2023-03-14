@@ -7,7 +7,11 @@ import Typewriter from "typewriter-effect";
 
 import styles from "styles/Index.module.scss";
 
-export default function Component({ setPage }: { setPage: (page: string) => void }) {
+export default function Component({
+	setPage,
+}: {
+	setPage: (page: string) => void;
+}) {
 	const times = {
 		english: {
 			prefix: "Good ",
@@ -60,8 +64,10 @@ export default function Component({ setPage }: { setPage: (page: string) => void
 		const target = times[language as keyof typeof times];
 
 		if (hour >= 3 && hour < 12) return `${target.prefix}${target.suffixes[0]}`;
-		else if (hour >= 12 && hour < 17) return `${target.prefix}${target.suffixes[1]}`;
-		else if (hour >= 17 && hour < 24) return `${target.prefix}${target.suffixes[2]}`;
+		else if (hour >= 12 && hour < 17)
+			return `${target.prefix}${target.suffixes[1]}`;
+		else if (hour >= 17 && hour < 24)
+			return `${target.prefix}${target.suffixes[2]}`;
 		else return `${target.prefix}${target.suffixes[0]}`;
 	};
 
@@ -106,7 +112,17 @@ export default function Component({ setPage }: { setPage: (page: string) => void
 		const birthday = DateTime.local(2007, 4, 8);
 		const now = DateTime.local();
 
-		const duration = now.diff(birthday, ["years", "months", "days", "hours", "minutes", "seconds", "milliseconds"]).toObject();
+		const duration = now
+			.diff(birthday, [
+				"years",
+				"months",
+				"days",
+				"hours",
+				"minutes",
+				"seconds",
+				"milliseconds",
+			])
+			.toObject();
 
 		return `I'm ${duration.years} years, ${duration.months} months, ${duration.days} days, ${duration.hours} hours, ${duration.minutes} minutes, and ${duration.seconds} seconds old`;
 	};
@@ -122,7 +138,10 @@ export default function Component({ setPage }: { setPage: (page: string) => void
 
 		for (let i = shuffledGreetings.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[shuffledGreetings[i], shuffledGreetings[j]] = [shuffledGreetings[j], shuffledGreetings[i]];
+			[shuffledGreetings[i], shuffledGreetings[j]] = [
+				shuffledGreetings[j],
+				shuffledGreetings[i],
+			];
 		}
 
 		setGreetings(shuffledGreetings);
@@ -140,7 +159,14 @@ export default function Component({ setPage }: { setPage: (page: string) => void
 						}}
 					/>
 				</h1>
-				<Image src="/wave.gif" alt="wave" width={64} height={64} className={styles.wave} priority={true} />
+				<Image
+					src="/wave.gif"
+					alt="wave"
+					width={64}
+					height={64}
+					className={styles.wave}
+					priority={true}
+				/>
 
 				<p className={styles.description}>
 					{age}

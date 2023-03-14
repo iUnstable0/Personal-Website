@@ -57,9 +57,11 @@ export default class FastifyRunner {
 				},
 				() => {
 					console.log(
-						`🚀 [Fastify] Public Fastify ready at http://${process.env.NODE_ENV === "production" ? "127.0.0.1" : "fakelocal.com"}:${
-							process.env.PUBLIC_FASTIFY_PORT
-						}/`
+						`🚀 [Fastify] Public Fastify ready at http://${
+							process.env.NODE_ENV === "production"
+								? "127.0.0.1"
+								: "fakelocal.com"
+						}:${process.env.PUBLIC_FASTIFY_PORT}/`
 					);
 
 					resolve(true);

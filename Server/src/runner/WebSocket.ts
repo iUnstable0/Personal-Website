@@ -9,7 +9,11 @@ const socketRedis = lib_redis.get("socket");
 const io = new Server(Number(process.env.WEBSOCKET_PORT), {
 	path: "/",
 	cors: {
-		origin: `http://${process.env.NODE_ENV === "production" ? "127.0.0.1" : `fakelocal.com:${process.env.DASHBOARD_PORT}`}`,
+		origin: `http://${
+			process.env.NODE_ENV === "production"
+				? "127.0.0.1"
+				: `fakelocal.com:${process.env.DASHBOARD_PORT}`
+		}`,
 	},
 });
 
@@ -33,7 +37,9 @@ socketRedis.on("message", (redisChannel: any, options: any) => {
 });
 
 console.log(
-	`🖥️  [WebSocket] WebSocket Server ready at ws://${process.env.NODE_ENV === "production" ? "127.0.0.1" : "fakelocal.com"}:${process.env.DASHBOARD_PORT}`
+	`🖥️  [WebSocket] WebSocket Server ready at ws://${
+		process.env.NODE_ENV === "production" ? "127.0.0.1" : "fakelocal.com"
+	}:${process.env.DASHBOARD_PORT}`
 );
 
 export default class WebSocketRunner {

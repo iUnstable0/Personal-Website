@@ -43,7 +43,11 @@ export async function getServerSideProps(context: any) {
 
 			return {
 				props: {
-					firstTimeVisit: !context.req.headers.referer ? true : context.req.headers.referer.includes("iunstable0.com") ? false : true,
+					firstTimeVisit: !context.req.headers.referer
+						? true
+						: context.req.headers.referer.includes("iunstable0.com")
+						? false
+						: true,
 					videos: data,
 					userInfo: null,
 				},
@@ -350,7 +354,15 @@ export async function getServerSideProps(context: any) {
 	// };
 }
 
-export default function Page({ firstTimeVisit, userInfo, contentVisible }: { firstTimeVisit: boolean; userInfo: any; contentVisible: boolean }) {
+export default function Page({
+	firstTimeVisit,
+	userInfo,
+	contentVisible,
+}: {
+	firstTimeVisit: boolean;
+	userInfo: any;
+	contentVisible: boolean;
+}) {
 	const router = useRouter();
 
 	const [page, setPage] = useState<any>(router.query.p || null);
