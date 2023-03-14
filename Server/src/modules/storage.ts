@@ -158,4 +158,26 @@ export default class lib_storage {
 
 		return [];
 	}
+
+	public static async clearFiles(db: string): Promise<void> {
+		const objects = await client.send(
+			new ListObjectsV2Command({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Prefix: db,
+			})
+		);
+
+		if (objects.Contents && objects.Contents.length > 0) {
+			await client.send(
+				new DeleteObjectsCommand({
+					Bucket: process.env.S3_BUCKET_NAME,
+					Delete: {
+						Objects: objects.Contents.map((object: any) => ({
+							Key: object.Key,
+						})),
+					},
+				})
+			);
+		}
+	}
 }
