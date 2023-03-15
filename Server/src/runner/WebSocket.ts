@@ -33,6 +33,8 @@ io.on("connection", (socket) => {
 // socketRedis.subscribe("executionResult");
 
 socketRedis.on("message", (redisChannel: any, options: any) => {
+	options = JSON.parse(options);
+
 	io.to(options.channel).emit(options.data);
 });
 
