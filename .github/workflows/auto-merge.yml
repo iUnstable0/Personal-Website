@@ -1,0 +1,23 @@
+name: Merge pull requests
+run-name: Merge pull request - @${{ github.actor }}
+
+on:
+    pull_request:
+        types:
+            - opened
+        branches:
+            - main
+
+jobs:
+    auto-merge:
+        runs-on: Server
+
+        steps:
+            - name: Automatically merge pull request
+              uses: pascalgn/automerge-action@v0.15.5
+              env:
+                  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+                  MERGE_LABELS: ""
+                  MERGE_DELETE_BRANCH: true
+                  MERGE_DELETE_BRANCH_FILTER: "main,dev"
+                  MERGE_ERROR_FAIL: true

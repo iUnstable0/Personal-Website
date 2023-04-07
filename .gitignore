@@ -4,3 +4,10 @@ dump.rdb
 
 .DS_Store
 **/.DS_Store
+
+# Ignore node_modules
+
+node_modules
+
+.vscode
+.fleet
