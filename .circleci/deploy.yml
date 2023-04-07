@@ -1,0 +1,192 @@
+version: 2.1
+
+orbs:
+    fast-checkout: issmirnov/fast-checkout@1.2.0
+
+parameters:
+    server:
+        type: boolean
+        default: false
+    website:
+        type: boolean
+        default: false
+    all:
+        type: boolean
+        default: false
+
+workflows:
+    server:
+        when:
+            or:
+                - equal: [<< pipeline.parameters.server >>, true]
+                - equal: [<< pipeline.parameters.all >>, true]
+        jobs:
+            - checkout:
+                  folder: Server
+                  runner: server
+                  filters:
+                      branches:
+                          only:
+                              - main
+            - build:
+                  folder: Server
+                  runner: server
+                  requires:
+                      - checkout
+            - deploy:
+                  folder: Server
+                  runner: server
+                  requires:
+                      - checkout
+                      - build
+    website:
+        when:
+            or:
+                - equal: [<< pipeline.parameters.website >>, true]
+                - equal: [<< pipeline.parameters.all >>, true]
+        jobs:
+            - checkout:
+                  folder: Website
+                  runner: website
+                  filters:
+                      branches:
+                          only:
+                              - main
+            - build:
+                  folder: Website
+                  runner: website
+                  requires:
+                      - checkout
+            - deploy:
+                  folder: Website
+                  runner: website
+                  wait: false
+                  requires:
+                      - checkout
+                      - build
+
+jobs:
+    checkout:
+        parameters:
+            folder:
+                type: string
+            runner:
+                type: string
+
+        machine: true
+        resource_class: iunstable0/personal-website_<< parameters.runner >>
+
+        working_directory: ~/temp
+
+        steps:
+            - run:
+                  name: Prepare to checkout
+                  command: |
+                      rm -rf Personal-Website_<< parameters.folder >>;
+            - fast-checkout/get:
+                  branch: main
+                  sparse-paths: << parameters.folder >> .env .env.production
+                  working-directory: ~/temp/Personal-Website_<< parameters.folder >>
+    build:
+        parameters:
+            folder:
+                type: string
+            runner:
+                type: string
+
+        machine: true
+        resource_class: iunstable0/personal-website_<< parameters.runner >>
+
+        working_directory: ~/temp/Personal-Website_<< parameters.folder >>/<< parameters.folder >>
+
+        steps:
+            - run:
+                  name: Install dependencies
+                  command: |
+                      if [ -d ~/Personal-Website/<< parameters.folder >>/node_modules ]; then
+                          echo "Copying node modules from production";
+
+                          error=false;
+
+                          cp -a ~/Personal-Website/<< parameters.folder >>/node_modules node_modules || error=true;
+
+                          [ $error = true ] && echo "Failed to copy node modules from production";
+                          [ $error = false ] && echo "Copied node modules from production";
+                      else
+                          echo "No node modules found in production"
+                      fi
+
+                      pnpm install;
+            - run:
+                  name: Build app
+                  command: |
+                      if [ -d ~/Personal-Website/<< parameters.folder >>/.next ]; then
+                          echo "Copying .next from production";
+
+                          error=false;
+
+                          cp -a ~/Personal-Website/<< parameters.folder >>/.next .next || error=true;
+
+                          [ $error = true ] && echo "Failed to copy .next from production";
+                          [ $error = false ] && echo "Copied .next from production";
+                      else
+                          echo "No .next found in production"
+                      fi
+
+                      pnpm build;
+    deploy:
+        parameters:
+            folder:
+                type: string
+            runner:
+                type: string
+            wait:
+                type: boolean
+                default: true
+
+        machine: true
+        resource_class: iunstable0/personal-website_<< parameters.runner >>
+
+        working_directory: ~/
+
+        steps:
+            - run:
+                  name: Prepare to deploy
+                  command: |
+                      if pm2 list | grep -q "Personal-Website/<< parameters.folder >>"; then
+                          pm2 stop "Personal-Website/<< parameters.folder >>";
+                      fi
+
+                      if [ -d temp/Personal-Website_<< parameters.folder >> ]; then
+                          echo "Moving built app to production";
+
+                          rm -rf Personal-Website;
+                          mkdir -p Personal-Website;
+
+                          mv temp/Personal-Website_<< parameters.folder >>/<< parameters.folder >> Personal-Website/<< parameters.folder >>;
+                          mv temp/Personal-Website_<< parameters.folder >>/.env Personal-Website/.env;
+                          mv temp/Personal-Website_<< parameters.folder >>/.env.production Personal-Website/.env.production;
+                      else
+                          echo "App not built"
+                      fi
+
+                      rm -rf temp/Personal-Website_<< parameters.folder >>;
+            - run:
+                  working_directory: ~/Personal-Website/<< parameters.folder >>
+
+                  name: Deploy app
+                  command: |
+                      echo 'export PATH=$HOME/.rover/bin:$PATH' >> $BASH_ENV
+
+                      if pm2 list | grep -q "Personal-Website/<< parameters.folder >>"; then
+                          pm2 restart "Personal-Website/<< parameters.folder >>" <<# parameters.wait >>--wait-ready --listen-timeout 10000<</ parameters.wait >>;
+                      else
+                          FORCE_COLOR=1 pm2 start "pnpm start" --name "Personal-Website/<< parameters.folder >>" <<# parameters.wait >>--wait-ready --listen-timeout 10000<</ parameters.wait >>;
+                      fi
+
+                      if [ << parameters.folder >> = "Server" ]; then
+                          # ~/.rover/bin/rover graph introspect https://gql.iunstable0.com/ | ~/.rover/bin/rover subgraph publish iunstable0s-team-5t8xap@main --name gql-serverside --routing-url https://gql-serverside.falcon-utility.com/ --schema - || echo "Failed to publish schema";
+                          echo "true"
+                      fi
+
+# VS Code Extension Version: 1.5.1

@@ -6,12 +6,20 @@ import { useRouter } from "next/router";
 
 import navStyles from "components/styles/Nav.module.scss";
 
-export default function NavBar({ page, setPage }: { page: string; setPage: (page: string) => void }) {
+export default function NavBar({
+	page,
+	setPage,
+}: {
+	page: string;
+	setPage: (page: string) => void;
+}) {
 	const router = useRouter();
 
 	const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
 
-	const pageName = page ? page.substring(0, 1).toUpperCase() + page.substring(1) : "Home";
+	const pageName = page
+		? page.substring(0, 1).toUpperCase() + page.substring(1)
+		: "Home";
 
 	const title = `${pageName} - iUnstable0`;
 
@@ -25,8 +33,20 @@ export default function NavBar({ page, setPage }: { page: string; setPage: (page
 
 			<div className={navStyles.container}>
 				<div className={navStyles.corner}>
-					<a title="My Github" href="https://github.com/iUnstable0" target="_blank" rel="noopener noreferrer">
-						<Image src="/github-mark-white.svg" alt="GitHub" width={32} height={32} className={navStyles.cornerImg} priority={true} />
+					<a
+						title="My Github"
+						href="https://github.com/iUnstable0"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Image
+							src="/github-mark-white.svg"
+							alt="GitHub"
+							width={32}
+							height={32}
+							className={navStyles.cornerImg}
+							priority={true}
+						/>
 					</a>
 				</div>
 				<nav className={navStyles.navBar}>
@@ -43,8 +63,20 @@ export default function NavBar({ page, setPage }: { page: string; setPage: (page
 					</ul>
 				</nav>
 				<div className={navStyles.corner}>
-					<a title="My Discord" href="https://discord.com/users/938705972350840882" target="_blank" rel="noopener noreferrer">
-						<Image src="/discord-mark-white.svg" alt="Discord" width={32} height={32} className={navStyles.cornerImg} priority={true} />
+					<a
+						title="My Discord"
+						href="https://discord.com/users/938705972350840882"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Image
+							src="/discord-mark-white.svg"
+							alt="Discord"
+							width={32}
+							height={32}
+							className={navStyles.cornerImg}
+							priority={true}
+						/>
 					</a>
 				</div>
 			</div>

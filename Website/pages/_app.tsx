@@ -45,7 +45,9 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 
-	const [welcomeBlurVisible, setWelcomeBlurVisible] = useState<any>(pageProps.firstTimeVisit),
+	const [welcomeBlurVisible, setWelcomeBlurVisible] = useState<any>(
+			pageProps.firstTimeVisit
+		),
 		[videoVisible, setVideoVisible] = useState<any>(false),
 		[videoPage, setVideoPage] = useState<any>(0),
 		[videoPlaying, setVideoPlaying] = useState<any>(false),
@@ -61,8 +63,12 @@ export default function App({ Component, pageProps }: AppProps) {
 		sourceRef = useRef<any>(null);
 
 	useEffect(() => {
-		setContentVisible(localStorage.getItem("contentVisible") === "false" ? false : true);
-		setControlsVisible(localStorage.getItem("controlsVisible") === "false" ? false : true);
+		setContentVisible(
+			localStorage.getItem("contentVisible") === "false" ? false : true
+		);
+		setControlsVisible(
+			localStorage.getItem("controlsVisible") === "false" ? false : true
+		);
 		setNoVideo(localStorage.getItem("noVideo") === "true" ? true : false);
 
 		const gradient = new Gradient();
@@ -74,7 +80,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			if (contentVisible !== null && controlsVisible !== null && noVideo !== null) {
+			if (
+				contentVisible !== null &&
+				controlsVisible !== null &&
+				noVideo !== null
+			) {
 				clearInterval(interval);
 
 				localStorage.setItem("contentVisible", contentVisible);
@@ -117,14 +127,18 @@ export default function App({ Component, pageProps }: AppProps) {
 					setVideoPage(targetPage);
 
 					videoRef.current.src = videos[targetPage].path;
-					videoRef.current.type = `video/${videos[targetPage].path.split(".").pop()}`;
+					videoRef.current.type = `video/${videos[targetPage].path
+						.split(".")
+						.pop()}`;
 
-					if (videoRef.current && videoRef.current.currentTime !== undefined) videoRef.current.currentTime = 0;
+					if (videoRef.current && videoRef.current.currentTime !== undefined)
+						videoRef.current.currentTime = 0;
 
 					await videoRef.current.load();
 					await videoRef.current.play();
 
-					if (videoRef.current && videoRef.current.currentTime !== undefined) videoRef.current.currentTime = 0;
+					if (videoRef.current && videoRef.current.currentTime !== undefined)
+						videoRef.current.currentTime = 0;
 				}
 			}, 1);
 		}, 550);
@@ -152,7 +166,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<NextUIProvider disableBaseline={true} theme={theme}>
-			<NextProgress delay={250} options={{ showSpinner: false }} height="4px" color="#29D" />
+			<NextProgress
+				delay={250}
+				options={{ showSpinner: false }}
+				height="4px"
+				color="#29D"
+			/>
 
 			<AnimatePresence>
 				{welcomeBlurVisible && (
@@ -190,20 +209,32 @@ export default function App({ Component, pageProps }: AppProps) {
 
 									// videoRef.current.fastSeek(0);
 									videoRef.current.src = videos[0].path;
-									videoRef.current.type = `video/${videos[0].path.split(".").pop()}`;
-									if (videoRef.current && videoRef.current.currentTime !== undefined) videoRef.current.currentTime = 0;
+									videoRef.current.type = `video/${videos[0].path
+										.split(".")
+										.pop()}`;
+									if (
+										videoRef.current &&
+										videoRef.current.currentTime !== undefined
+									)
+										videoRef.current.currentTime = 0;
 
 									await videoRef.current.load();
 									await videoRef.current.play();
 
-									if (videoRef.current && videoRef.current.currentTime !== undefined) videoRef.current.currentTime = 0;
+									if (
+										videoRef.current &&
+										videoRef.current.currentTime !== undefined
+									)
+										videoRef.current.currentTime = 0;
 								}
 							}, 1);
 							// }, 1000);
 						}}
 					>
 						<h1 className={styles.welcomeTitle}>Welcome!</h1>
-						<h2 className={styles.welcomeDescription}>This website is still under development. Expect bugs!</h2>
+						<h2 className={styles.welcomeDescription}>
+							This website is still under development. Expect bugs!
+						</h2>
 						<h2 className={styles.welcomeHint}>Click anywhere to enter.</h2>
 					</motion.div>
 				)}
@@ -211,7 +242,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
 			{/* Video player */}
 
-			<canvas id="gradient-canvas" className={styles.gradientBackground} data-transition-in />
+			<canvas
+				id="gradient-canvas"
+				className={styles.gradientBackground}
+				data-transition-in
+			/>
 
 			<AnimatePresence>
 				{!noVideo && videoVisible && (
@@ -340,7 +375,11 @@ export default function App({ Component, pageProps }: AppProps) {
 							}}
 							ref={videoRef}
 						>
-							<source src={videos[videoPage].path} type={`video/${videos[videoPage].path.split(".").pop()}`} ref={sourceRef} />
+							<source
+								src={videos[videoPage].path}
+								type={`video/${videos[videoPage].path.split(".").pop()}`}
+								ref={sourceRef}
+							/>
 						</video>
 						{/* </div> */}
 					</motion.div>
@@ -398,11 +437,15 @@ export default function App({ Component, pageProps }: AppProps) {
 							)} */}
 
 							<div className={mediaControlStyles.middle}>
-								<div className={mediaControlStyles.title}>{noVideo ? "No music playing" : `${videos[videoPage].title}`}</div>
+								<div className={mediaControlStyles.title}>
+									{noVideo ? "No music playing" : `${videos[videoPage].title}`}
+								</div>
 
 								<div className={mediaControlStyles.playback}>
 									<BsFillSkipStartFill
-										className={`${mediaControlStyles.prev} ${noVideo ? mediaControlStyles.playbackDisabled : ""} ${
+										className={`${mediaControlStyles.prev} ${
+											noVideo ? mediaControlStyles.playbackDisabled : ""
+										} ${
 											videoPage <= 0 ? mediaControlStyles.playbackDisabled : ""
 										}`}
 										onClick={() => {
@@ -416,14 +459,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
 									{videoPlaying ? (
 										<GiPauseButton
-											className={`${mediaControlStyles.pause} ${noVideo ? mediaControlStyles.playbackDisabled : ""}`}
+											className={`${mediaControlStyles.pause} ${
+												noVideo ? mediaControlStyles.playbackDisabled : ""
+											}`}
 											onClick={() => {
 												videoRef.current.pause();
 											}}
 										/>
 									) : (
 										<FaPlay
-											className={`${mediaControlStyles.play} ${noVideo ? mediaControlStyles.playbackDisabled : ""}`}
+											className={`${mediaControlStyles.play} ${
+												noVideo ? mediaControlStyles.playbackDisabled : ""
+											}`}
 											onClick={() => {
 												videoRef.current.play();
 											}}
@@ -431,8 +478,12 @@ export default function App({ Component, pageProps }: AppProps) {
 									)}
 
 									<BsFillSkipEndFill
-										className={`${mediaControlStyles.skip} ${noVideo ? mediaControlStyles.playbackDisabled : ""} ${
-											videoPage >= (videos.length ? videos.length : 0) - 1 ? mediaControlStyles.playbackDisabled : ""
+										className={`${mediaControlStyles.skip} ${
+											noVideo ? mediaControlStyles.playbackDisabled : ""
+										} ${
+											videoPage >= (videos.length ? videos.length : 0) - 1
+												? mediaControlStyles.playbackDisabled
+												: ""
 										}`}
 										onClick={() => {
 											// if (videoRef.current) {
@@ -622,7 +673,9 @@ export default function App({ Component, pageProps }: AppProps) {
 										}}
 									>
 										<div className={mediaControlStyles.queue}>
-											<h1 className={mediaControlStyles.queueTitle}>Playlist</h1>
+											<h1 className={mediaControlStyles.queueTitle}>
+												Playlist
+											</h1>
 
 											<div className={mediaControlStyles.queueContent}>
 												{videos &&
@@ -631,7 +684,9 @@ export default function App({ Component, pageProps }: AppProps) {
 														<div
 															key={index}
 															className={`${mediaControlStyles.queueItem} ${
-																videoPage === index ? mediaControlStyles.queueItemActive : ""
+																videoPage === index
+																	? mediaControlStyles.queueItemActive
+																	: ""
 															}`}
 															onClick={() => {
 																// setVideoPage(index);
@@ -639,7 +694,11 @@ export default function App({ Component, pageProps }: AppProps) {
 																// setContentVisible(true);
 															}}
 														>
-															<div className={mediaControlStyles.queueItemTitle}>{video.title}</div>
+															<div
+																className={mediaControlStyles.queueItemTitle}
+															>
+																{video.title}
+															</div>
 															{/* <div className={mediaControlStyles.queueItemArtist}>{video.artist}</div> */}
 
 															<AnimatePresence>
