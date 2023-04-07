@@ -47,7 +47,10 @@ export default class lib_cache {
 
 			return await redis.set(key, value, "EX", ttl);
 		} catch (error) {
-			console.error(`🚨 [Cache Lib] Error while setting key ${key} to value ${value}`, error);
+			console.error(
+				`🚨 [Cache Lib] Error while setting key ${key} to value ${value}`,
+				error
+			);
 
 			throw error;
 		}

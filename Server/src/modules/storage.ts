@@ -1,4 +1,9 @@
-import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import {
+	S3Client,
+	PutObjectCommand,
+	ListObjectsV2Command,
+	DeleteObjectsCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const provider = process.env.S3_PROVIDER.toUpperCase();
@@ -50,7 +55,11 @@ export default class lib_storage {
 				await client.send(
 					new DeleteObjectsCommand({
 						Bucket: process.env.S3_BUCKET_NAME,
-						Delete: { Objects: objects.Contents.map((object: any) => ({ Key: object.Key })) },
+						Delete: {
+							Objects: objects.Contents.map((object: any) => ({
+								Key: object.Key,
+							})),
+						},
 					})
 				);
 
@@ -66,7 +75,11 @@ export default class lib_storage {
 					}),
 					{
 						expiresIn: expires,
-						signableHeaders: new Set([`Content-Type`, `Content-Length`, `Content-MD5`]),
+						signableHeaders: new Set([
+							`Content-Type`,
+							`Content-Length`,
+							`Content-MD5`,
+						]),
 					}
 				);
 
@@ -107,7 +120,11 @@ export default class lib_storage {
 				await client.send(
 					new DeleteObjectsCommand({
 						Bucket: process.env.S3_BUCKET_NAME,
-						Delete: { Objects: objects.Contents.map((object: any) => ({ Key: object.Key })) },
+						Delete: {
+							Objects: objects.Contents.map((object: any) => ({
+								Key: object.Key,
+							})),
+						},
 					})
 				);
 			}
@@ -136,8 +153,31 @@ export default class lib_storage {
 			})
 		);
 
-		if (objects.Contents && objects.Contents.length > 0) return objects.Contents.map((object: any) => object.Key);
+		if (objects.Contents && objects.Contents.length > 0)
+			return objects.Contents.map((object: any) => object.Key);
 
 		return [];
+	}
+
+	public static async clearFiles(db: string): Promise<void> {
+		const objects = await client.send(
+			new ListObjectsV2Command({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Prefix: db,
+			})
+		);
+
+		if (objects.Contents && objects.Contents.length > 0) {
+			await client.send(
+				new DeleteObjectsCommand({
+					Bucket: process.env.S3_BUCKET_NAME,
+					Delete: {
+						Objects: objects.Contents.map((object: any) => ({
+							Key: object.Key,
+						})),
+					},
+				})
+			);
+		}
 	}
 }

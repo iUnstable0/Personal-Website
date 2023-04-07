@@ -16,7 +16,13 @@ import aboutStyles from "components/pages/styles/About.module.scss";
 
 // import banner from "../public/banner.gif";
 
-export default function Component({ setPage, userInfo }: { setPage: (page: string) => void; userInfo: any }) {
+export default function Component({
+	setPage,
+	userInfo,
+}: {
+	setPage: (page: string) => void;
+	userInfo: any;
+}) {
 	const [copyButtonClicked, setCopyButtonClicked] = useState(false);
 
 	return (
@@ -59,7 +65,11 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 									${userInfo.theme_colors.primary.processed} 30%,
 									${userInfo.theme_colors.secondary.processed} 100%
 								),
-								linear-gradient(to bottom, ${userInfo.theme_colors.primary.original} 0%, ${userInfo.theme_colors.secondary.original} 100%);
+								linear-gradient(
+									to bottom,
+									${userInfo.theme_colors.primary.original} 0%,
+									${userInfo.theme_colors.secondary.original} 100%
+								);
 							z-index: 0;
 							border: double 5px transparent;
 							background-origin: border-box;
@@ -134,7 +144,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 							margin: 1rem auto;
 							margin-right: 5%;
 							border-radius: 9px;
-							background: ${userInfo.theme === "light" ? "#ffffff99" : "#00000099"};
+							background: ${userInfo.theme === "light"
+								? "#ffffff99"
+								: "#00000099"};
 
 							width: 120px;
 							height: 48px;
@@ -144,7 +156,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 
 						.body {
 							border-radius: 9px;
-							background: ${userInfo.theme === "light" ? "#ffffff95" : "#13131395"};
+							background: ${userInfo.theme === "light"
+								? "#ffffff95"
+								: "#13131395"};
 							width: 90%;
 							margin: 0 auto 18px auto;
 							flex-grow: 1;
@@ -198,7 +212,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 						}
 
 						.bodyTextContent {
-							color: ${userInfo.theme === "light" ? "var(--text-color-dark)" : "#e2e2e2"};
+							color: ${userInfo.theme === "light"
+								? "var(--text-color-dark)"
+								: "#e2e2e2"};
 							font-weight: 400;
 							font-size: 15px;
 							display: inline-block;
@@ -226,7 +242,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 						}
 
 						.dateText {
-							color: ${userInfo.theme === "light" ? "var(--text-color-dark)" : "#e2e2e2"};
+							color: ${userInfo.theme === "light"
+								? "var(--text-color-dark)"
+								: "#e2e2e2"};
 
 							font-weight: 400;
 							font-size: 16px;
@@ -246,7 +264,11 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 							className={aboutStyles.bannerImg}
 						/> */}
 						{userInfo.banner ? (
-							<img src={userInfo.banner} alt="Profile Banner" className={`${aboutStyles.banner} bannerImg`} />
+							<img
+								src={userInfo.banner}
+								alt="Profile Banner"
+								className={`${aboutStyles.banner} bannerImg`}
+							/>
 						) : (
 							// <Image
 							// 	src={banner}
@@ -412,7 +434,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 							<div className="body">
 								<div className="username">
 									{userInfo.username}
-									<span className="discriminator">#{userInfo.discriminator}</span>
+									<span className="discriminator">
+										#{userInfo.discriminator}
+									</span>
 									{/* <button className={aboutStyles.copyButton}>
 										Copy
 									</button> */}
@@ -450,8 +474,12 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 												}}
 											>
 												<img
-													src={`https://cdn.discordapp.com/emojis/${userInfo.customActivity.emoji.id}.${
-														userInfo.customActivity.emoji.animated ? "gif" : "png"
+													src={`https://cdn.discordapp.com/emojis/${
+														userInfo.customActivity.emoji.id
+													}.${
+														userInfo.customActivity.emoji.animated
+															? "gif"
+															: "png"
 													}?size=96`}
 													alt="Emoji"
 													style={{
@@ -468,7 +496,10 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 										)}
 										<span
 											style={{
-												color: userInfo.theme === "light" ? "var(--text-color-dark)" : "#e2e2e2",
+												color:
+													userInfo.theme === "light"
+														? "var(--text-color-dark)"
+														: "#e2e2e2",
 												fontWeight: 400,
 												fontSize: "15px",
 
@@ -509,102 +540,109 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 											session:
 											05e54486ba05faa5a31d197cb2818fffb4d7797080c43a8d186822166f8a8b5152 */}
 										{console.log(userInfo.bio.split("\n"))}
-										{userInfo.bio.split("\n").map((item: string, key: string) => {
-											// console.log(item);
-											if (item === "")
-												return (
-													<>
-														{/* <div key={key} className="bodyTextContent" />
+										{userInfo.bio
+											.split("\n")
+											.map((item: string, key: string) => {
+												// console.log(item);
+												if (item === "")
+													return (
+														<>
+															{/* <div key={key} className="bodyTextContent" />
 														<div key={key} className="bodyTextContent" /> */}
-														<div
-															key={key}
-															style={{
-																marginTop: "0px",
-																marginBottom: "0px",
-																fontSize: "8px",
-															}}
-														>
-															<br />
-														</div>
-													</>
+															<div
+																key={key}
+																style={{
+																	marginTop: "0px",
+																	marginBottom: "0px",
+																	fontSize: "8px",
+																}}
+															>
+																<br />
+															</div>
+														</>
+													);
+
+												const line = item.replace(
+													/\<(.*?)\:(.*?)\>/g,
+													(match: any, p1: any, p2: any) => {
+														// console.log(p2);
+														return `_IMG_$img:${p2}_IMG_`;
+													}
 												);
 
-											const line = item.replace(/\<(.*?)\:(.*?)\>/g, (match: any, p1: any, p2: any) => {
-												// console.log(p2);
-												return `_IMG_$img:${p2}_IMG_`;
-											});
+												console.log(line);
 
-											console.log(line);
+												const poop = line.split("_IMG_");
 
-											const poop = line.split("_IMG_");
+												console.log(poop);
 
-											console.log(poop);
+												// console.log(line);
+												// console.log(poop);
 
-											// console.log(line);
-											// console.log(poop);
+												// console.log(poop[0] !== "" && poop[0]);
+												// console.log(poop.length);
 
-											// console.log(poop[0] !== "" && poop[0]);
-											// console.log(poop.length);
+												return (
+													<div key={key} className="bodyTextContent">
+														{poop[0] !== "" && poop[0]}
+														{poop.length > 1 &&
+															poop.map((poopitem: string, poopkey: number) => {
+																if (poopkey === 0) return "";
 
-											return (
-												<div key={key} className="bodyTextContent">
-													{poop[0] !== "" && poop[0]}
-													{poop.length > 1 &&
-														poop.map((poopitem: string, poopkey: number) => {
-															if (poopkey === 0) return "";
+																// if (poopitem === "") {
+																// console.log("EMPTY");
 
-															// if (poopitem === "") {
-															// console.log("EMPTY");
+																// 	return "";
+																// }
 
-															// 	return "";
-															// }
+																if (!poopitem.startsWith("$img:")) {
+																	// return <span key={poopkey}>{poopitem}</span>;
+																	return poopitem;
+																}
 
-															if (!poopitem.startsWith("$img:")) {
-																// return <span key={poopkey}>{poopitem}</span>;
-																return poopitem;
-															}
+																// console.log(poopitem);
+																// console.log(poop);
+																// console.log(line);
 
-															// console.log(poopitem);
-															// console.log(poop);
-															// console.log(line);
+																const splittedEmo = poopitem
+																	.replace("$img:", "")
+																	.split(":");
 
-															const splittedEmo = poopitem.replace("$img:", "").split(":");
-
-															return (
-																<span key={poopkey}>
-																	<Tooltip
-																		content={`:${splittedEmo[0]}:`}
-																		shadow={true}
-																		color="invert"
-																		rounded={true}
-																		css={{
-																			borderRadius: "7px",
-																			bg: "#1b1b1b",
-																			"& .nextui-tooltip-arrow": {
-																				//overwrite arrow bg color
+																return (
+																	<span key={poopkey}>
+																		<Tooltip
+																			content={`:${splittedEmo[0]}:`}
+																			shadow={true}
+																			color="invert"
+																			rounded={true}
+																			css={{
+																				borderRadius: "7px",
 																				bg: "#1b1b1b",
-																			},
-																		}}
-																	>
-																		<Image
-																			src={`https://cdn.discordapp.com/emojis/${splittedEmo[1]}.png?size=96`}
-																			alt="Emoji"
-																			width={20}
-																			height={20}
-																			style={{
-																				marginBottom: "-5px",
+																				"& .nextui-tooltip-arrow": {
+																					//overwrite arrow bg color
+																					bg: "#1b1b1b",
+																				},
 																			}}
-																			// loading="eager"
-																			priority={true}
-																		/>
-																	</Tooltip>
-																	{/* {poop[poopkey + 1]} */}
-																</span>
-															);
-														})}
-												</div>
-											);
-										})}
+																		>
+																			<Image
+																				src={`https://cdn.discordapp.com/emojis/${splittedEmo[1]}.png?size=96`}
+																				alt="Emoji"
+																				width={20}
+																				height={20}
+																				style={{
+																					marginBottom: "-5px",
+																				}}
+																				// loading="eager"
+																				priority={true}
+																			/>
+																		</Tooltip>
+																		{/* {poop[poopkey + 1]} */}
+																	</span>
+																);
+															})}
+													</div>
+												);
+											})}
 										{/* </p> */}
 									</div>
 									<div className="bodyTextTitle">MEMBER SINCE</div>
@@ -630,7 +668,9 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 												}}
 											>
 												<Image
-													src={`/discord-mark-${userInfo.theme === "light" ? "black" : "white"}.svg`}
+													src={`/discord-mark-${
+														userInfo.theme === "light" ? "black" : "white"
+													}.svg`}
 													alt="Discord"
 													width={18}
 													height={18}
@@ -641,7 +681,8 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 											{/* Bullet point */}
 											<span
 												style={{
-													color: userInfo.theme === "light" ? "#4c4e5f" : "#b9bbca",
+													color:
+														userInfo.theme === "light" ? "#4c4e5f" : "#b9bbca",
 												}}
 											>
 												•
@@ -668,7 +709,10 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 													loading="eager"
 													style={{
 														// Invert
-														filter: userInfo.theme === "light" ? "invert(0)" : "invert(1)",
+														filter:
+															userInfo.theme === "light"
+																? "invert(0)"
+																: "invert(1)",
 													}}
 												/>
 											</Tooltip>
@@ -682,10 +726,14 @@ export default function Component({ setPage, userInfo }: { setPage: (page: strin
 					</div>
 					<div className={aboutStyles.right}>
 						<p className={aboutStyles.description}>
-							Consectetur dolore velit consectetur irure cillum. In in veniam consectetur ad. Consectetur in qui consectetur sunt minim magna
-							exercitation deserunt tempor aliquip. Amet enim velit elit fugiat eu aliqua minim eiusmod ex amet duis ipsum ut. Laboris ut do
-							reprehenderit consequat sunt quis voluptate nisi. Eu non minim aute nulla ad eiusmod anim sunt esse nostrud duis commodo ut
-							occaecat. Officia sit mollit laborum. Exercitation cupidatat exercitation voluptate amet culpa qui consectetur esse enim.
+							Consectetur dolore velit consectetur irure cillum. In in veniam
+							consectetur ad. Consectetur in qui consectetur sunt minim magna
+							exercitation deserunt tempor aliquip. Amet enim velit elit fugiat
+							eu aliqua minim eiusmod ex amet duis ipsum ut. Laboris ut do
+							reprehenderit consequat sunt quis voluptate nisi. Eu non minim
+							aute nulla ad eiusmod anim sunt esse nostrud duis commodo ut
+							occaecat. Officia sit mollit laborum. Exercitation cupidatat
+							exercitation voluptate amet culpa qui consectetur esse enim.
 						</p>
 					</div>
 				</div>

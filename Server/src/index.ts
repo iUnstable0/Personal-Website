@@ -17,7 +17,9 @@ console.log(`🔄 [Init] Loading ENV from .env.${process.env.NODE_ENV}...`);
 require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 console.log(`✅ [Init] Loaded ENV from .env.${process.env.NODE_ENV}`);
 
-console.log(`🔄 [Init] Loading ENV from .env.${process.env.NODE_ENV} (GLOBAL)...`);
+console.log(
+	`🔄 [Init] Loading ENV from .env.${process.env.NODE_ENV} (GLOBAL)...`
+);
 require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
 console.log(`✅ [Init] Loaded ENV from .env.${process.env.NODE_ENV} (GLOBAL)`);
 

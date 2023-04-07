@@ -39,7 +39,13 @@ export default class lib_axios {
 		return errorMessages;
 	}
 
-	public static request(options: { method: "POST" | "GET" | "PUT" | "DELETE"; url: string; baseURL?: any; headers?: any; data?: any }) {
+	public static request(options: {
+		method: "POST" | "GET" | "PUT" | "DELETE";
+		url: string;
+		baseURL?: any;
+		headers?: any;
+		data?: any;
+	}) {
 		return new Promise(async (resolve, reject) => {
 			const requestHeaders = options.headers || {};
 

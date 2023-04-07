@@ -16,14 +16,19 @@ export default class query_video {
 			if (cachedVideos.data) {
 				videos = cachedVideos.data;
 			} else {
-				videos = await lib_storage.listFiles(`videos/753ab64c-202f-4e1f-a01f-2a345d09f17e`);
+				videos = await lib_storage.listFiles(
+					`videos/753ab64c-202f-4e1f-a01f-2a345d09f17e`
+				);
 
 				await lib_cache.set(`cache_videos`, videos, 60);
 			}
 		} catch (error) {
 			const referenceCode = lib_error.generateReferenceCode();
 
-			console.error(`🚨 [Video Query] [${referenceCode}] Failed to get videos`, error);
+			console.error(
+				`🚨 [Video Query] [${referenceCode}] Failed to get videos`,
+				error
+			);
 
 			throw new GraphQLError(`Internal server error. Ref: ${referenceCode}`, {
 				extensions: {
