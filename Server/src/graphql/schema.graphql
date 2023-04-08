@@ -1,5 +1,7 @@
 #graphql
 
+# noinspection GraphQLMissingType,GraphQLUnresolvedReference
+
 scalar Date
 scalar Byte
 

@@ -10,6 +10,8 @@
 	},
 	"dependencies": {
 		"@iconscout/react-unicons": "^2.0.2",
+		"@iunstable0/server-libs": "^1.1.5",
+		"@iunstable0/website-libs": "^1.1.3",
 		"@nextui-org/react": "1.0.0-beta.12",
 		"@types/node": "18.15.11",
 		"@types/react": "18.0.33",
