@@ -27,13 +27,25 @@ pipeline {
             steps {
                 echo 'Deploying....'
 
-                sh 'mkdir -p /home/deployments/iUnstable0_Personal-Website/Main'
-                sh 'mv .env* /home/deployments/iUnstable0_Personal-Website/Main/'
+                sh '''
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        pm2 stop "@iUnstable0/Personal-Website/Server";
+                    fi
 
-                sh 'rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/'
-                sh 'mv server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/'
+                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+                    mv .env* /home/deployments/iUnstable0_Personal-Website/Main/;
 
-                sh 'rm -rf *'
+                    rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+                    mv server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        pm2 restart "@iUnstable0/Personal-Website/Server";
+                    else
+                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Server";
+                    fi
+
+                    rm -rf *;
+                '''
             }
         }
     }
