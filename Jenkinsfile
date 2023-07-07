@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent { 
+        label 'iunstable0_personal-website'
+    }
 
     stages {
         stage('Build') {
