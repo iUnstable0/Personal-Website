@@ -12,14 +12,14 @@ pipeline {
             steps {
                 echo 'Installing dependencies..'
 
-                sh 'pnpm install'
+                sh 'cd server && pnpm install'
             }
         }
         stage('Build') {
             steps {
                 echo 'Building..'
 
-                sh 'pnpm run build'
+                sh 'cd server && pnpm build'
             }
         }
         stage('Deploy') {
