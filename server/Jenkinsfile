@@ -12,6 +12,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies..'
 
+                sh 'rm -rf node_modules ci-archive website package.json package-lock.json .gitignore .idea'
                 sh 'cd server && pnpm install'
             }
         }
@@ -26,8 +27,13 @@ pipeline {
             steps {
                 echo 'Deploying....'
 
-                sh 'rsync -av --remove-source-files server/ /home/deployments/iUnstable0_Personal-Website/Server/'
-                sh 'mv .env* /home/deployments/iUnstable0_Personal-Website/Server/'
+                sh 'mkdir -p /home/deployments/iUnstable0_Personal-Website/Main'
+                sh 'mv .env* /home/deployments/iUnstable0_Personal-Website/Main/'
+
+                sh 'rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/'
+                sh 'mv server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/'
+
+                sh 'rm -rf *'
             }
         }
     }
