@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo 'Building..'
 
-                sh 'pnpm build'
+                sh 'pnpm run build'
             }
         }
         stage('Deploy') {
