@@ -41,11 +41,12 @@ pipeline {
                     if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
                         pm2 restart "@iUnstable0/Personal-Website/Server";
                     else
+                        cd /home/deployments/iUnstable0_Personal-Website/Main/Server;
                         FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Server";
                     fi
-
-                    rm -rf *;
                 '''
+
+                sh 'rm -rf *;'
             }
         }
     }
