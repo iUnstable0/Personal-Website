@@ -1,0 +1,28 @@
+pipeline {
+    agent { 
+        label 'iunstable0_personal-website'
+    }
+
+    stages {
+        stage('Build') {
+            // when {
+            //     branch 'main'
+            // }
+
+            steps {
+                echo 'Building..'
+                sh 'echo "hi" > test-website'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
