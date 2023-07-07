@@ -4,24 +4,53 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Install') {
             // when {
             //     branch 'main'
             // }
 
             steps {
-                echo 'Building..'
-                sh 'echo "hi" > test-website'
+                echo 'Installing dependencies..'
+
+                sh 'rm -rf node_modules ci-archive server package.json package-lock.json .gitignore .idea'
+                sh 'cd website && pnpm install'
             }
         }
-        stage('Test') {
+        stage('Build') {
             steps {
-                echo 'Testing..'
+                echo 'Building..'
+
+                sh '''
+                    cd website;
+
+                    if [ -d /home/deployments/iUnstable0_Personal-Website/Main/Website/.next ]; then
+                        echo "Copying .next from production";
+
+                        error=false;
+
+                        cp -a /home/deployments/iUnstable0_Personal-Website/Main/Website/.next .next || error=true;
+
+                        [ $error = true ] && echo "Failed to copy .next from production";
+                        [ $error = false ] && echo "Copied .next from production";
+                    else
+                        echo "No .next found in production";
+                    fi
+                '''
+                
+                sh 'cd website && pnpm build'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+
+                sh 'mkdir -p /home/deployments/iUnstable0_Personal-Website/Main'
+                sh 'mv .env* /home/deployments/iUnstable0_Personal-Website/Main/'
+
+                sh 'rsync -aP website/ /home/deployments/iUnstable0_Personal-Website/Main/Website/'
+                sh 'mv website/.env* /home/deployments/iUnstable0_Personal-Website/Main/Website/'
+
+                sh 'rm -rf *'
             }
         }
     }
