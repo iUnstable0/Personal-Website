@@ -5,6 +5,10 @@ pipeline {
 
     stages {
         stage('Build') {
+            // when {
+            //     branch 'main'
+            // }
+
             steps {
                 echo 'Building..'
                 sh 'echo "hi" > test.txt'
