@@ -11,7 +11,7 @@ pipeline {
 
             steps {
                 echo 'Building..'
-                sh 'echo "hi" > test'
+                sh 'echo "hi" > test-server'
             }
         }
         stage('Test') {
