@@ -22,7 +22,7 @@ pipeline {
                         }
                     }
 
-                    // Proceed if changes in node_1 directory
+                    // Proceed if changes in directory
                     def proceed = changedFiles.any { it.startsWith('server/') }
 
                     if (!proceed) {

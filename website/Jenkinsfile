@@ -22,11 +22,11 @@ pipeline {
                         }
                     }
 
-                    // Proceed if changes in node_1 directory
-                    def proceed = changedFiles.any { it.startsWith('server/') }
+                    // Proceed if changes in directory
+                    def proceed = changedFiles.any { it.startsWith('website/') }
 
                     if (!proceed) {
-                        error('No changes in server, skipping deploy.')
+                        error('No changes in website, skipping deploy.')
                     }
                 }
             }
