@@ -1,0 +1,80 @@
+pipeline {
+    agent { 
+        label 'iunstable0_personal-website'
+    }
+
+    stages {
+        stage('Install') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Installing dependencies..'
+
+                sh 'rm -rf node_modules ci-archive server package.json package-lock.json .gitignore .idea'
+                sh 'cd website && pnpm install'
+            }
+        }
+
+        stage('Build') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Building..'
+
+                sh '''
+                    cd website;
+
+                    if [ -d /home/deployments/iUnstable0_Personal-Website/Main/Website/.next ]; then
+                        echo "Copying .next from production";
+
+                        error=false;
+
+                        cp -a /home/deployments/iUnstable0_Personal-Website/Main/Website/.next .next || error=true;
+
+                        [ $error = true ] && echo "Failed to copy .next from production";
+                        [ $error = false ] && echo "Copied .next from production";
+                    else
+                        echo "No .next found in production";
+                    fi
+
+                    pnpm build;
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Deploying....'
+
+                sh '''
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
+                        pm2 stop "@iUnstable0/Personal-Website/Website";
+                    fi
+
+                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+                    mv .env* /home/deployments/iUnstable0_Personal-Website/Main/;
+
+                    rsync -aP website/ /home/deployments/iUnstable0_Personal-Website/Main/Website/;
+                    mv website/.env* /home/deployments/iUnstable0_Personal-Website/Main/Website/;
+
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
+                        pm2 restart "@iUnstable0/Personal-Website/Website";
+                    else
+                        cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
+                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Website";
+                    fi
+                '''
+
+                sh 'rm -rf *;'
+            }
+        }
+    }
+}

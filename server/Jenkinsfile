@@ -1,0 +1,63 @@
+pipeline {
+    agent { 
+        label 'iunstable0_personal-website'
+    }
+
+    stages {
+        stage('Install') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Installing dependencies..'
+
+                sh 'rm -rf node_modules ci-archive website package.json package-lock.json .gitignore .idea'
+                sh 'cd server && pnpm install'
+            }
+        }
+
+        stage('Build') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Building..'
+
+                sh 'cd server && pnpm build'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Deploying....'
+
+                sh '''
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        pm2 stop "@iUnstable0/Personal-Website/Server";
+                    fi
+
+                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+                    mv .env* /home/deployments/iUnstable0_Personal-Website/Main/;
+
+                    rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+                    mv server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        pm2 restart "@iUnstable0/Personal-Website/Server";
+                    else
+                        cd /home/deployments/iUnstable0_Personal-Website/Main/Server;
+                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Server";
+                    fi
+                '''
+
+                sh 'rm -rf *;'
+            }
+        }
+    }
+}
