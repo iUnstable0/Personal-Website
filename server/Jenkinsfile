@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies..'
 
-                sh 'rm -rf node_modules ci-archive website package.json package-lock.json .gitignore .idea'
+                sh 'find . -type f ! -path "./server/*" -delete'
                 sh 'cd server && pnpm install'
             }
         }
