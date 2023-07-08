@@ -4,6 +4,34 @@ pipeline {
     }
 
     stages {
+        stage('Filter') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                script {
+                    // Get list of changes from last successful build
+                    def changeLogSets = currentBuild.changeSets
+                    def changedFiles = []
+                    changeLogSets.each { set ->
+                        set.each { entry ->
+                            entry.affectedFiles.each { file ->
+                                changedFiles.add(file.path)
+                            }
+                        }
+                    }
+
+                    // Proceed if changes in node_1 directory
+                    def proceed = changedFiles.any { it.startsWith('server/') }
+
+                    if (!proceed) {
+                        error('No changes in server, skipping deploy.')
+                    }
+                }
+            }
+        }
+
         stage('Install') {
             when {
                 branch 'main'
