@@ -28,16 +28,16 @@ export default function Component({
           <br />
           This website is hosted using my own server
           <br />
-          (Ubuntu 22.04 LTS) behind NGINX reverse proxy
+          (Debian 11 Bullseye) behind Caddy server
           <br />
           and Cloudflare for caching and security
           <br />
           <br />
           Domain bought off Namecheap
           <br />
-          Automatic deployment with CI/CD (CircleCI & GitHub Actions)
+          Automatic deployment with CI/CD (Jenkins)
           <br />
-          Self-hosted actions runner obv
+          Everything is self-hosted
           {/*<br />*/}
           {/*<br />*/}
           {/*VPS provider: Contabo (abt $11.99 a month + $2.99 for 250gb of S3*/}
