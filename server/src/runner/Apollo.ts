@@ -16,6 +16,7 @@ import { GraphQLError } from "graphql";
 
 // @ts-ignore
 import depthLimit from "graphql-depth-limit";
+
 import fs from "fs";
 
 import Resolver from "../graphql/resolver";
