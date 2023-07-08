@@ -71,10 +71,10 @@ pipeline {
                     fi
 
                     mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
-                    mv .env* /home/deployments/iUnstable0_Personal-Website/Main/;
+                    mv -f .env* /home/deployments/iUnstable0_Personal-Website/Main/;
 
                     rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/;
-                    mv server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+                    mv -f server/.env* /home/deployments/iUnstable0_Personal-Website/Main/Server/;
 
                     if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
                         pm2 restart "@iUnstable0/Personal-Website/Server";
