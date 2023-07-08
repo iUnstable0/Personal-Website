@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies..'
 
-                sh 'find . -type f ! -path "./server/*" -delete'
+                sh 'for item in ./* ./.*; do if [[ $item != "./server" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then rm -rf "$item"; fi; done'
                 sh 'cd server && pnpm install'
             }
         }
