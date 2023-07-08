@@ -11,7 +11,7 @@ export default function Component({
         <h1 className={styles.title}>Contact me</h1>
 
         <p className={styles.description}>
-          Hmu on Discord (top right corner) or email me big@gang.email
+          Hmu on Discord (top right corner) or email me admin@gang.email
           <br />
           <br />
           If you{"'"}re my friend and want an @gang.email address (self-hosted
