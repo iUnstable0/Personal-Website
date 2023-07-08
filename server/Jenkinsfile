@@ -16,14 +16,24 @@ pipeline {
                 sh 'cd server && pnpm install'
             }
         }
+
         stage('Build') {
+            when {
+                branch 'main'
+            }
+
             steps {
                 echo 'Building..'
 
                 sh 'cd server && pnpm build'
             }
         }
+
         stage('Deploy') {
+            when {
+                branch 'main'
+            }
+
             steps {
                 echo 'Deploying....'
 
