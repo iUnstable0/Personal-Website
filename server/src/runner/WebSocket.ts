@@ -31,9 +31,6 @@ io.on("connection", (socket) => {
   socket.join(channel);
 });
 
-// socketRedis.subscribe("userUpdate");
-// socketRedis.subscribe("executionResult");
-
 redis.on("message", (redisChannel: any, options: any) => {
   options = JSON.parse(options);
 
