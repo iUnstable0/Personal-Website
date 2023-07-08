@@ -5,9 +5,9 @@ pipeline {
 
     stages {
         stage('Install') {
-            // when {
-            //     branch 'main'
-            // }
+            when {
+                branch 'main'
+            }
 
             steps {
                 echo 'Installing dependencies..'
