@@ -18,8 +18,8 @@ dependencies:
     specifier: ^10.0.4
     version: 10.0.4(graphql@16.7.1)
   '@iunstable0/server-libs':
-    specifier: ^1.1.8
-    version: 1.1.8
+    specifier: ^1.1.9
+    version: 1.1.9
   ansi-colors:
     specifier: ^4.1.3
     version: 4.1.3
@@ -974,8 +974,8 @@ packages:
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
     dev: false
 
-  /@iunstable0/server-libs@1.1.8:
-    resolution: {integrity: sha512-xkm1rFK3sMxZOoV53r+omrJmC+rJXynAg9xD3XjwSeaUEJmo1RTU9TeJDWTG8x1ynV1fKYTH2TEgh+jnsDqUTw==}
+  /@iunstable0/server-libs@1.1.9:
+    resolution: {integrity: sha512-OzFiy3H6CpNwGrsOFMSfjbsiiXQBJ9V2i4CwoZZv0nHSbassx3igT3pju2KJ/EFUUid1Hlj+tWEdyIGw8WVjVQ==}
     dependencies:
       '@aws-sdk/client-s3': 3.383.0
       '@aws-sdk/s3-request-presigner': 3.383.0
