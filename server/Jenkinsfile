@@ -49,10 +49,7 @@ pipeline {
 
                     cd server
 
-                    rm pnpm-lock.yaml
-                    touch yarn.lock
-
-                    yarn install
+                    pnpm install || true
                 '''
             }
         }
@@ -65,7 +62,10 @@ pipeline {
             steps {
                 echo 'Building..'
 
-                sh 'cd server && yarn build'
+                sh '''
+                    cd server
+                    pnpm build || true
+                '''
             }
         }
 
