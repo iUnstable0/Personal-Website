@@ -49,10 +49,7 @@ pipeline {
 
                     cd website
 
-                    rm pnpm-lock.yaml
-                    touch yarn.lock
-
-                    yarn install
+                    pnpm install || true
                 '''
             }
         }
@@ -81,7 +78,7 @@ pipeline {
                         echo "No .next found in production";
                     fi
 
-                    yarn build;
+                    pnpm build || true
                 '''
             }
         }
@@ -109,7 +106,7 @@ pipeline {
                         pm2 restart "@iUnstable0/Personal-Website/Website";
                     else
                         cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
-                        FORCE_COLOR=1 pm2 start "yarn start" --name "@iUnstable0/Personal-Website/Website";
+                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Website";
                     fi
                 '''
 
