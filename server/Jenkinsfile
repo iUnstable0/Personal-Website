@@ -40,8 +40,19 @@ pipeline {
             steps {
                 echo 'Installing dependencies..'
 
-                sh 'for item in ./* ./.*; do if [[ $item != "./server" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then rm -rf "$item"; fi; done'
-                sh 'cd server && pnpm install'
+                sh '''
+                    #!/bin/bash
+
+                    for item in ./* ./.*; do
+                      if [[ $item != "./server" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then
+                        rm -rf "$item";
+                      fi;
+                    done
+
+                    cd server
+
+                    pnpm install
+                '''
             }
         }
 
