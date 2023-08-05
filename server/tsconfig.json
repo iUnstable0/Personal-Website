@@ -2,14 +2,14 @@
 	"compilerOptions": {
 		"rootDirs": ["src"],
 		"outDir": "build",
-		"lib": ["ESNext"],
+		"lib": ["ESNext", "dom"],
 		"target": "ESNext",
 		// "module": "esnext",
 		"module": "commonjs",
 		"moduleResolution": "NodeNext",
 		"esModuleInterop": true,
 		"types": ["node"],
-		"watch": true,
+//		"watch": true,
 		"resolveJsonModule": true,
 		"baseUrl": "src",
 		"incremental": true

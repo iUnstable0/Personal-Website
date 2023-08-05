@@ -18,14 +18,11 @@ import Home from "components/pages/home";
 import About from "components/pages/about";
 import Contact from "components/pages/contact";
 
-// Types
-
-// import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-
-export const getServerSideProps = async (context) => {
+export async function getServerSideProps(context: any) {
   return lib_axios
     .request({
       method: "POST",
+      url: "/gql",
       baseURL: process.env.NEXT_PUBLIC_GQL,
       headers: {
         "Content-Type": "application/json",
@@ -42,9 +39,6 @@ export const getServerSideProps = async (context) => {
         [data[i], data[j]] = [data[j], data[i]];
       }
 
-      // console.log("DHEfbguhdaicuybh");
-      // console.log(data);
-
       return {
         props: {
           firstTimeVisit: !context.req.headers.referer
@@ -57,10 +51,9 @@ export const getServerSideProps = async (context) => {
     })
     .catch((error: any) => {
       console.log(error);
-
-      return null;
     });
-};
+}
+
 export default function Page({
   firstTimeVisit,
   userInfo,
