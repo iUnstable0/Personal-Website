@@ -41,15 +41,16 @@ pipeline {
                 echo 'Installing dependencies..'
 
                 sh '''
-                    #!/bin/bash
-
                     for item in ./* ./.*; do
-                      if [[ $item != "./website" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then
-                        rm -rf "$item";
-                      fi;
+                        if [ "$item" != "./website" ] && [ "$item" != "./." ] && [ "$item" != "./.." ] && ! echo "$item" | grep -q '.env'; then
+                            rm -rf "$item";
+                        fi;
                     done
 
                     cd website
+
+                    rm pnpm-lock.yaml
+                    touch yarn.lock
 
                     yarn install
                 '''
