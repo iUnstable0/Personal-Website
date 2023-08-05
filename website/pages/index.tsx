@@ -22,7 +22,7 @@ import Contact from "components/pages/contact";
 
 // import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context: any) => {
   return lib_axios
     .request({
       method: "POST",
