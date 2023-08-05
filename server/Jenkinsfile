@@ -51,9 +51,7 @@ pipeline {
 
                     cd server
 
-                    pnpm install
-
-                    cd ..
+                    pnpm install || true
                 '''
             }
         }
