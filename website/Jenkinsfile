@@ -41,7 +41,7 @@ pipeline {
                 echo 'Installing dependencies..'
 
                 sh 'for item in ./* ./.*; do if [[ $item != "./website" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then rm -rf "$item"; fi; done'
-                sh 'cd website && pnpm install'
+                sh 'cd website && pnpm install --max-old-space-size=8192'
             }
         }
 
