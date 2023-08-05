@@ -48,11 +48,9 @@ pipeline {
                         rm -rf "$item";
                       fi;
                     done
-
-                    cd server
-
-                    pnpm install || true
                 '''
+
+                sh 'cd server && yarn install'
             }
         }
 
@@ -64,7 +62,7 @@ pipeline {
             steps {
                 echo 'Building..'
 
-                sh 'cd server && pnpm build'
+                sh 'cd server && yarn build'
             }
         }
 
@@ -91,7 +89,7 @@ pipeline {
                         pm2 restart "@iUnstable0/Personal-Website/Server";
                     else
                         cd /home/deployments/iUnstable0_Personal-Website/Main/Server;
-                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Server";
+                        FORCE_COLOR=1 pm2 start "yarn start" --name "@iUnstable0/Personal-Website/Server";
                     fi
                 '''
 
