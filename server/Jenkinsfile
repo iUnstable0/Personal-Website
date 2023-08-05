@@ -41,16 +41,19 @@ pipeline {
                 echo 'Installing dependencies..'
 
                 sh '''
-                    #!/bin/bash
-
                     for item in ./* ./.*; do
-                      if [[ $item != "./server" && $item != "./." && $item != "./.." && $item != ./.env* ]]; then
-                        rm -rf "$item";
-                      fi;
+                        if [ "$item" != "./server" ] && [ "$item" != "./." ] && [ "$item" != "./.." ] && ! echo "$item" | grep -q '.env'; then
+                            rm -rf "$item";
+                        fi;
                     done
-                '''
 
-                sh 'cd server && yarn install'
+                    cd server
+
+                    rm pnpm-lock.yaml
+                    touch yarn.lock
+
+                    yarn install
+                '''
             }
         }
 
