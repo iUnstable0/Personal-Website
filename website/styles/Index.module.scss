@@ -305,7 +305,7 @@
 
   z-index: -1;
 
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.35);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -313,11 +313,11 @@
   -o-backdrop-filter: blur(12px);
   -ms-backdrop-filter: blur(12px);
 
-  // backdrop-filter: blur(8px);
-  // -webkit-backdrop-filter: blur(8px);
-  // -moz-backdrop-filter: blur(8px);
-  // -o-backdrop-filter: blur(8px);
-  // -ms-backdrop-filter: blur(8px);
+  //backdrop-filter: blur(8px);
+  //-webkit-backdrop-filter: blur(8px);
+  //-moz-backdrop-filter: blur(8px);
+  //-o-backdrop-filter: blur(8px);
+  //-ms-backdrop-filter: blur(8px);
 
   // backdrop-filter: blur(100px);
   // -webkit-backdrop-filter: blur(100px);
