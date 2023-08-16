@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for file in $(find ./** -name "*.development.env");
+do
+  dir=$(dirname $file)
+  filename=$(basename $file)
+
+  filename="${filename%.*}"
+
+  cp $file $dir/$filename
+done
