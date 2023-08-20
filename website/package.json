@@ -3,9 +3,9 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "env-cmd -f ../.env env-cmd -f ../.env.development next dev -p 4104",
-		"build": "env-cmd -f ../.env env-cmd -f ../.env.production next build",
-		"start": "env-cmd -f ../.env env-cmd -f ../.env.production next start -p 4104",
+		"dev": "doppler run -- next dev -p 4104",
+		"build": "next build",
+		"start": "next start -p 4104",
 		"lint": "next lint"
 	},
 	"dependencies": {

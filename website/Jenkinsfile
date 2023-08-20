@@ -3,6 +3,10 @@ pipeline {
         label 'iunstable0_personal-website'
     }
 
+    environment {
+        DOPPLER_TOKEN = credentials('DOPPLER_TOKEN')
+    }
+
     stages {
         stage('Filter') {
             when {
@@ -103,10 +107,10 @@ pipeline {
                     mv -f website/.env* /home/deployments/iUnstable0_Personal-Website/Main/Website/;
 
                     if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
-                        pm2 restart "@iUnstable0/Personal-Website/Website";
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Website" --update-env;
                     else
                         cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
-                        FORCE_COLOR=1 pm2 start "pnpm start" --name "@iUnstable0/Personal-Website/Website";
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start bin/doppler-run.sh --name "@iUnstable0/Personal-Website/Website";
                     fi
                 '''
 

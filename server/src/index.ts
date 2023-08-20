@@ -7,33 +7,33 @@ process.send = process.send || function () {};
 
 require("better-logging")(console);
 
-console.log(chalk.blue(`[Init]`), `Loading ENV from .env...`);
-require("dotenv").config({ path: ".env" });
-console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env`);
+// console.log(chalk.blue(`[Init]`), `Loading ENV from .env...`);
+// require("dotenv").config({ path: ".env" });
+// console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env`);
 
-console.log(chalk.blue(`[Init]`), `Loading ENV from .env (GLOBAL)...`);
-require("dotenv").config({ path: "../.env" });
-console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env (GLOBAL)`);
+// console.log(chalk.blue(`[Init]`), `Loading ENV from .env (GLOBAL)...`);
+// require("dotenv").config({ path: "../.env" });
+// console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env (GLOBAL)`);
 
-console.log(
-  chalk.blue(`[Init]`),
-  `Loading ENV from .env.${process.env.NODE_ENV}...`
-);
-require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
-console.log(
-  chalk.magenta(`[Init]`),
-  `Loaded ENV from .env.${process.env.NODE_ENV}`
-);
+// console.log(
+//   chalk.blue(`[Init]`),
+//   `Loading ENV from .env.${process.env.NODE_ENV}...`
+// );
+// require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
+// console.log(
+//   chalk.magenta(`[Init]`),
+//   `Loaded ENV from .env.${process.env.NODE_ENV}`
+// );
 
-console.log(
-  chalk.blue(`[Init]`),
-  `Loading ENV from .env.${process.env.NODE_ENV} (GLOBAL)...`
-);
-require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
-console.log(
-  chalk.magenta(`[Init]`),
-  `Loaded ENV from .env.${process.env.NODE_ENV} (GLOBAL)`
-);
+// console.log(
+//   chalk.blue(`[Init]`),
+//   `Loading ENV from .env.${process.env.NODE_ENV} (GLOBAL)...`
+// );
+// require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
+// console.log(
+//   chalk.magenta(`[Init]`),
+//   `Loaded ENV from .env.${process.env.NODE_ENV} (GLOBAL)`
+// );
 
 import Fastify from "./runner/Fastify";
 import Apollo from "./runner/Apollo";

@@ -1,0 +1,7 @@
+setup:
+  - project: personal-website_server
+    config: dev
+    path: server/
+  - project: personal-website_website
+    config: dev
+    path: website/
