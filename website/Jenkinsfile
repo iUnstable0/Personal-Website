@@ -89,7 +89,7 @@ pipeline {
             }
 
             environment {
-                DOPPLER_TOKEN = credentials('DOPPLER_TOKEN')
+                DOPPLER_TOKEN = credentials('c2423ab3-f04f-44b6-b634-4703f7846c3f')
             }
 
             steps {
