@@ -1,0 +1,119 @@
+pipeline {
+    agent { 
+        label 'iunstable0_personal-website'
+    }
+
+    stages {
+        stage('Filter') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                script {
+                    // Get list of changes from last successful build
+                    def changeLogSets = currentBuild.changeSets
+                    def changedFiles = []
+                    changeLogSets.each { set ->
+                        set.each { entry ->
+                            entry.affectedFiles.each { file ->
+                                changedFiles.add(file.path)
+                            }
+                        }
+                    }
+
+                    // Proceed if changes in directory
+                    def proceed = changedFiles.any { it.startsWith('website/') }
+
+                    if (!proceed) {
+                        error('No changes in website, skipping deploy.')
+                    }
+                }
+            }
+        }
+
+        stage('Install') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Installing dependencies..'
+
+                sh '''
+                    for item in ./* ./.*; do
+                        if [ "$item" != "./website" ] && [ "$item" != "./." ] && [ "$item" != "./.." ]; then
+                            rm -rf "$item";
+                        fi;
+                    done
+
+                    cd website
+
+                    pnpm install || true
+                '''
+            }
+        }
+
+        stage('Build') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Building..'
+
+                sh '''
+                    cd website;
+
+                    if [ -d /home/deployments/iUnstable0_Personal-Website/Main/Website/.next ]; then
+                        echo "Copying .next from production";
+
+                        error=false;
+
+                        cp -a /home/deployments/iUnstable0_Personal-Website/Main/Website/.next .next || error=true;
+
+                        [ $error = true ] && echo "Failed to copy .next from production";
+                        [ $error = false ] && echo "Copied .next from production";
+                    else
+                        echo "No .next found in production";
+                    fi
+
+                    pnpm build || true
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+
+            environment {
+                DOPPLER_TOKEN = credentials('c2423ab3-f04f-44b6-b634-4703f7846c3f')
+            }
+
+            steps {
+                echo 'Deploying....'
+
+                sh '''
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
+                        pm2 stop "@iUnstable0/Personal-Website/Website";
+                    fi
+
+                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+
+                    rsync -aP website/ /home/deployments/iUnstable0_Personal-Website/Main/Website/;
+
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Website" --update-env;
+                    else
+                        cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start bin/doppler-run.sh --name "@iUnstable0/Personal-Website/Website";
+                    fi
+                '''
+
+                sh 'rm -rf *;'
+            }
+        }
+    }
+}

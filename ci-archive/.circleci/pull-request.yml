@@ -1,0 +1,39 @@
+version: 2.1
+
+orbs:
+  simple-pull-requests: taarstadvold/simple-pull-requests@1.0.0
+
+parameters:
+  pull-request:
+    type: boolean
+    default: false
+
+workflows:
+  pull-request:
+    when:
+      or:
+        - equal: [ << pipeline.parameters.pull-request >>, true ]
+    jobs:
+      - create-pull-request:
+          runner: workflow
+          filters:
+            branches:
+              only:
+                - dev
+
+jobs:
+  create-pull-request:
+    parameters:
+      runner:
+        type: string
+
+    machine: true
+    resource_class: iunstable0/personal-website_<< parameters.runner >>
+
+    steps:
+      - simple-pull-requests/merge-with-pull-request:
+          from: "dev"
+          into: "main"
+          branch_prefix: "merge"
+          github_username: iUnstable0
+# VS Code Extension Version: 1.5.1

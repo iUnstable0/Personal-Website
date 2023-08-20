@@ -1,0 +1,105 @@
+pipeline {
+    agent { 
+        label 'iunstable0_personal-website'
+    }
+
+    stages {
+        stage('Filter') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                script {
+                    // Get list of changes from last successful build
+                    def changeLogSets = currentBuild.changeSets
+                    def changedFiles = []
+                    changeLogSets.each { set ->
+                        set.each { entry ->
+                            entry.affectedFiles.each { file ->
+                                changedFiles.add(file.path)
+                            }
+                        }
+                    }
+
+                    // Proceed if changes in directory
+                    def proceed = changedFiles.any { it.startsWith('server/') }
+
+                    if (!proceed) {
+                        error('No changes in server, skipping deploy.')
+                    }
+                }
+            }
+        }
+
+        stage('Install') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Installing dependencies..'
+
+                sh '''
+                    for item in ./* ./.*; do
+                        if [ "$item" != "./server" ] && [ "$item" != "./." ] && [ "$item" != "./.." ]; then
+                            rm -rf "$item";
+                        fi;
+                    done
+
+                    cd server
+
+                    pnpm install || true
+                '''
+            }
+        }
+
+        stage('Build') {
+            when {
+                branch 'main'
+            }
+
+            steps {
+                echo 'Building..'
+
+                sh '''
+                    cd server
+                    pnpm build || true
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+
+            environment {
+                DOPPLER_TOKEN = credentials('73adca38-0b56-499c-99b1-89ea088fc7c2')
+            }
+
+            steps {
+                echo 'Deploying....'
+
+                sh '''
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        pm2 stop "@iUnstable0/Personal-Website/Server";
+                    fi
+
+                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+
+                    rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+
+                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Server" --update-env;
+                    else
+                        cd /home/deployments/iUnstable0_Personal-Website/Main/Server;
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start bin/doppler-run.sh --name "@iUnstable0/Personal-Website/Server";
+                    fi
+                '''
+
+                sh 'rm -rf *;'
+            }
+        }
+    }
+}

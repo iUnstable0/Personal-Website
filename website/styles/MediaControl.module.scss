@@ -1,0 +1,356 @@
+.container {
+  // background: #13386e;
+  // background: #000000c9;
+  border-radius: 12px 12px 0 0;
+  height: 90px;
+
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  // opacity: 0.8;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.middle {
+  // Column
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 20px;
+
+  border-radius: 10px;
+
+  width: auto;
+
+  background: #0000007c;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+}
+
+.title {
+  // Make it unselectable
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                         supported by Chrome and Opera */
+
+  // position: fixed;
+
+  // bottom: 52px;
+
+  // margin-bottom: 10px;
+}
+
+.playback {
+  // margin-bottom: 10px;
+  // position: fixed;
+
+  // bottom: 26px;
+  // margin-top: 30px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.play {
+  // position: fixed;
+  margin: 0 12px;
+  width: 20px;
+  height: 20px;
+
+  transition: all 0.25s;
+}
+
+.pause {
+  // position: fixed;
+  margin: 0 10px;
+  width: 24px;
+  height: 24px;
+
+  transition: all 0.25s;
+}
+
+.prev {
+  // Next to the play/pause button
+  // position: fixed;
+  // right: 55%;
+  margin: 0 10px;
+  width: 27px;
+  height: 27px;
+
+  transition: all 0.25s;
+}
+
+.skip {
+  // Next to the play/pause button
+  // position: fixed;
+  // left: 55%;
+  margin: 0 10px;
+  width: 27px;
+  height: 27px;
+
+  transition: all 0.25s;
+}
+
+.toggleContentContainer {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  background: #0000007c;
+
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+
+  transition: all 0.25s;
+}
+
+.toggleContent {
+  width: 42px;
+  height: 42px;
+
+  padding: 9px;
+
+  transition: all 0.25s;
+}
+
+.toggleVideo {
+  // position: fixed;
+  // left: 28px;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 11px;
+
+  border-radius: 10px;
+
+  background: #0000007c;
+
+  transition: all 0.25s;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+}
+
+.toggleQueueContainer {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  margin-right: 6px;
+
+  background: #0000007c;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+
+  transition: all 0.25s;
+}
+
+.toggleQueue {
+  width: 42px;
+  height: 42px;
+
+  padding: 9px;
+
+  //border-radius: 10px;
+
+  // background: #000000c9;
+
+  //background: #0000007c;
+  //
+  //backdrop-filter: blur(10px);
+  //-webkit-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
+
+  transition: all 0.25s;
+}
+
+.toggleControls {
+  // position: fixed;
+  // right: 28px;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 5px;
+
+  border-radius: 10px;
+
+  // background: #000000c9;
+
+  background: #0000007c;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+
+  transition: all 0.25s;
+}
+
+.playbackDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.queue {
+  // all: unset;
+  background-color: #0000009c !important;
+  padding: 0 16px;
+
+  // max-height: 350px;
+
+  border-radius: 15px;
+
+  overflow-y: auto;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -moz-backdrop-filter: blur(10px);
+  -o-backdrop-filter: blur(10px);
+  -ms-backdrop-filter: blur(10px);
+}
+
+.queueTitle {
+  // all: unset;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+  margin-left: 6px;
+}
+
+.queueContent {
+  max-height: 300px;
+
+  overflow-y: auto;
+
+  margin-bottom: 20px;
+}
+
+.queueItem {
+  // all: unset;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 5px 10px;
+
+  margin-bottom: 2px;
+
+  border-radius: 10px;
+  margin-right: 20px;
+
+  transition: all 0.25s;
+
+  transform: scale(0.98);
+}
+
+.queueItem:hover:not(.queueItemActive) {
+  background: #70707059;
+  transform: scale(1);
+}
+
+.queueItem:active:not(.queueItemActive) {
+  transform: scale(0.98);
+}
+
+.queueItemActive {
+  background: #4673ce41;
+  transform: scale(1);
+}
+
+.queueItemTitle {
+  // all: unset;
+  font-size: 15px;
+  // font-weight: 500;
+  text-align: left;
+  // eclipse text
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 500px;
+}
+
+.queuePlay {
+  // margin: 0 12px;
+  width: 12px;
+  height: 12px;
+
+  transition: all 0.25s;
+}
+
+.queuePause {
+  // margin: 0 10px;
+  width: 15px;
+  height: 15px;
+
+  transition: all 0.25s;
+}
+
+.play:hover,
+.pause:hover,
+.prev:hover,
+.skip:hover {
+  // width: 24px;
+  // height: 24px;
+  scale: 1.175;
+}
+
+.toggleControls:hover,
+.toggleContentContainer:hover,
+.toggleQueueContainer:hover,
+.toggleVideo:hover {
+  // background: #232323;
+  background: #3d3d3d7c;
+  scale: 1.1;
+}
+
+.play:active,
+.pause:active,
+.prev:active,
+.skip:active {
+  // width: 24px;
+  // height: 24px;
+  scale: 1;
+}
+
+.toggleControls:active,
+.toggleContentContainer:active,
+.toggleQueueContainer:active,
+.toggleVideo:active {
+  // background: #232323;
+  scale: 1;
+}
