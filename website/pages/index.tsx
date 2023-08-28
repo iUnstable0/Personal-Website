@@ -18,6 +18,10 @@ import Home from "components/pages/home";
 import About from "components/pages/about";
 import Contact from "components/pages/contact";
 
+// Styles
+
+import styles from "styles/Index.module.scss";
+
 // Types
 
 // import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
@@ -32,6 +36,13 @@ export const getServerSideProps = async (context: any) => {
 			},
 			data: {
 				query: lib_gqlSchema.query.getVideos,
+				variables: {
+					format:
+						// // If firefox then webm or else mp4
+						context.req.headers["user-agent"].toLowerCase().includes("firefox")
+							? "webm"
+							: "mp4",
+				},
 			},
 		})
 		.then((response: any) => {
@@ -50,7 +61,7 @@ export const getServerSideProps = async (context: any) => {
 				.then((response: any) => {
 					const data2 = response.data;
 
-					console.log(data2);
+					// console.log(data2);
 
 					return {
 						props: {
@@ -70,11 +81,12 @@ export const getServerSideProps = async (context: any) => {
 				});
 		})
 		.catch((error: any) => {
-			console.log(error);
+			console.log(lib_axios.parseError(error));
 
 			return null;
 		});
 };
+
 export default function Page({
 	firstTimeVisit,
 	userInfo,
@@ -113,24 +125,19 @@ export default function Page({
 			{contentVisible && (
 				<motion.div
 					key={"content"}
-					initial="pageInitial"
-					animate="pageAnimate"
-					exit="pageExit"
-					variants={{
-						pageInitial: {
-							opacity: 0,
-							// display: "none",
-						},
-						pageAnimate: {
-							opacity: 1,
-							// display: "block",
-							// transition: {
-							// 	delay: delayTime,
-							// },
-						},
-						pageExit: {
-							opacity: 0,
-						},
+					initial={{
+						opacity: 0,
+						// display: "none",
+					}}
+					animate={{
+						opacity: 1,
+						// display: "block",
+						// transition: {
+						// 	delay: delayTime,
+						// },
+					}}
+					exit={{
+						opacity: 0,
 					}}
 					transition={{
 						duration: durationTime,
@@ -146,97 +153,84 @@ export default function Page({
 						webring={webring}
 					/>
 
-					<AnimatePresence>
-						{page === "home" && (
-							<motion.div
-								key={page}
-								initial="pageInitial"
-								animate="pageAnimate"
-								exit="pageExit"
-								variants={{
-									pageInitial: {
+					<div className={styles.pageContainer}>
+						<AnimatePresence>
+							{page === "home" && (
+								<motion.div
+									key={page}
+									initial={{
 										opacity: 0,
 										display: "none",
-									},
-									pageAnimate: {
+									}}
+									animate={{
 										opacity: 1,
 										display: "block",
 										transition: {
 											delay: delayTime,
 										},
-									},
-									pageExit: {
+									}}
+									exit={{
 										opacity: 0,
-									},
-								}}
-								transition={{
-									duration: durationTime,
-								}}
-							>
-								<Home setPage={setPage} />
-							</motion.div>
-						)}
+									}}
+									transition={{
+										duration: durationTime,
+									}}
+								>
+									<Home setPage={setPage} />
+								</motion.div>
+							)}
 
-						{page === "about" && (
-							<motion.div
-								key={page}
-								initial="pageInitial"
-								animate="pageAnimate"
-								exit="pageExit"
-								variants={{
-									pageInitial: {
+							{page === "about" && (
+								<motion.div
+									key={page}
+									initial={{
 										opacity: 0,
 										display: "none",
-									},
-									pageAnimate: {
+									}}
+									animate={{
 										opacity: 1,
 										display: "block",
 										transition: {
 											delay: delayTime,
 										},
-									},
-									pageExit: {
+									}}
+									exit={{
 										opacity: 0,
-									},
-								}}
-								transition={{
-									duration: durationTime,
-								}}
-							>
-								<About setPage={setPage} />
-							</motion.div>
-						)}
+									}}
+									transition={{
+										duration: durationTime,
+									}}
+								>
+									<About setPage={setPage} />
+								</motion.div>
+							)}
 
-						{page === "contact" && (
-							<motion.div
-								key={page}
-								initial="pageInitial"
-								animate="pageAnimate"
-								exit="pageExit"
-								variants={{
-									pageInitial: {
+							{page === "contact" && (
+								<motion.div
+									key={page}
+									initial={{
 										opacity: 0,
 										display: "none",
-									},
-									pageAnimate: {
+									}}
+									animate={{
 										opacity: 1,
 										display: "block",
 										transition: {
 											delay: delayTime,
 										},
-									},
-									pageExit: {
+									}}
+									exit={{
 										opacity: 0,
-									},
-								}}
-								transition={{
-									duration: durationTime,
-								}}
-							>
-								<Contact setPage={setPage} />
-							</motion.div>
-						)}
-					</AnimatePresence>
+									}}
+									transition={{
+										duration: durationTime,
+									}}
+								>
+									<Contact setPage={setPage} />
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</div>
 				</motion.div>
 			)}
 		</AnimatePresence>

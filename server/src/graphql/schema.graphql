@@ -11,7 +11,7 @@ type Video {
 }
 
 type Query {
-	getVideos: [Video!]! @rateLimit(limit: 60, duration: 10)
+	getVideos(format: String): [Video!]! @rateLimit(limit: 60, duration: 10)
 }
 
 # Mutations ###########################################################################################################################################################################

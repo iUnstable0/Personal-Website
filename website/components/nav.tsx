@@ -24,6 +24,9 @@ export default function NavBar({
 
 	const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
 
+	const [cornerLeftHover, setCornerLeftHover] = useState<boolean>(false),
+		[cornerRightHover, setCornerRightHover] = useState<boolean>(false);
+
 	const pageName = page
 		? page.substring(0, 1).toUpperCase() + page.substring(1)
 		: "Home";
@@ -39,8 +42,18 @@ export default function NavBar({
 			</Head>
 
 			<div className={navStyles.container}>
-				<div className={clsx(navStyles.corner, navStyles.corner_left)}>
-					<div className={navStyles.webring_container}>
+				<div
+					className={clsx(
+						navStyles.corner,
+						navStyles.corner_left,
+						cornerLeftHover ? navStyles.corner_left_hover : "",
+					)}
+				>
+					<div
+						className={navStyles.corner_container}
+						onMouseEnter={() => setCornerLeftHover(true)}
+						onMouseLeave={() => setCornerLeftHover(false)}
+					>
 						<a
 							className={navStyles.webring_anchor}
 							onClick={() => {
@@ -65,10 +78,17 @@ export default function NavBar({
 						>
 							<UilAngleLeft />
 						</a>
-						<a
+						{/* <a
 							href="https://webring.hackclub.com/"
 							className={navStyles.webring_logo}
-						></a>
+						></a> */}
+						<Image
+							src="/icon-progress-rounded.svg"
+							alt="HackClub Logo"
+							width={30}
+							height={48}
+							className={navStyles.webring_logo}
+						/>
 						<a
 							className={navStyles.webring_anchor}
 							onClick={() => {
@@ -108,39 +128,51 @@ export default function NavBar({
 						</li>
 					</ul>
 				</nav>
-				<div className={clsx(navStyles.corner, navStyles.corner_right)}>
-					<a
-						title="My Github"
-						href="https://github.com/iUnstable0"
-						className={navStyles.cornerSocialLink}
-						target="_blank"
-						rel="noopener noreferrer"
+				<div
+					className={clsx(
+						navStyles.corner,
+						navStyles.corner_right,
+						cornerRightHover ? navStyles.corner_right_hover : "",
+					)}
+				>
+					<div
+						className={navStyles.corner_container}
+						onMouseEnter={() => setCornerRightHover(true)}
+						onMouseLeave={() => setCornerRightHover(false)}
 					>
-						<Image
-							src="/github-mark-white.svg"
-							alt="GitHub"
-							width={28}
-							height={28}
-							className={navStyles.cornerImg}
-							priority={true}
-						/>
-					</a>
-					<a
-						title="My Discord"
-						href="https://discord.com/users/938705972350840882"
-						className={navStyles.cornerSocialLink}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Image
-							src="/discord-mark-white.svg"
-							alt="Discord"
-							width={28}
-							height={28}
-							className={navStyles.cornerImg}
-							priority={true}
-						/>
-					</a>
+						<a
+							title="My Github"
+							href="https://github.com/iUnstable0"
+							className={navStyles.cornerSocialLink}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<Image
+								src="/github-mark-white.svg"
+								alt="GitHub"
+								width={28}
+								height={28}
+								className={navStyles.cornerImg}
+								priority={true}
+							/>
+						</a>
+						<a
+							title="My Discord"
+							href="https://discord.com/users/938705972350840882"
+							className={navStyles.cornerSocialLink}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<Image
+								src="/discord-mark-white.svg"
+								alt="Discord"
+								width={28}
+								height={28}
+								className={navStyles.cornerImg}
+								priority={true}
+							/>
+						</a>
+					</div>
 				</div>
 			</div>
 		</>

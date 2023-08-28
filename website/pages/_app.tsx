@@ -135,10 +135,19 @@ export default function App({ Component, pageProps }: AppProps) {
 
 					setVideoPage(targetPage);
 
-					videoRef.current.src = videos[targetPage].path;
-					videoRef.current.type = `video/${videos[targetPage].path
+					// sourceRef.current.src = `/video.mp4`;
+					sourceRef.current.src = videos[targetPage].path;
+					// sourceRef.current.src = `https://objects.iunstable0.com/videos/3f67611c-a883-4303-a479-c15a15714221-video/video.webm`;
+					// sourceRef.current.type = `video/mp4`;
+					sourceRef.current.type = `video/${videos[targetPage].path
 						.split(".")
 						.pop()}`;
+
+					// videoRef.current.src = "/video.webm";
+					// videoRef.current.type = "video/webm";
+
+					// sourceRef.current.src = "/video.webm";
+					// sourceRef.current.type = "video/webm";
 
 					if (videoRef.current && videoRef.current.currentTime !== undefined)
 						videoRef.current.currentTime = 0;
@@ -217,10 +226,20 @@ export default function App({ Component, pageProps }: AppProps) {
 									clearInterval(interval);
 
 									// videoRef.current.fastSeek(0);
-									videoRef.current.src = videos[0].path;
-									videoRef.current.type = `video/${videos[0].path
+									// sourceRef.current.src = `/video.mp4`;
+									// sourceRef.current.src = `https://objects.iunstable0.com/videos/3f67611c-a883-4303-a479-c15a15714221-video/video.webm`;
+									sourceRef.current.src = videos[0].path;
+									// sourceRef.current.type = `video/mp4`;
+									sourceRef.current.type = `video/${videos[0].path
 										.split(".")
 										.pop()}`;
+
+									// videoRef.current.src = "/video.webm";
+									// videoRef.current.type = "video/webm";
+
+									// sourceRef.current.src = "/video.webm";
+									// sourceRef.current.type = "video/webm";
+
 									if (
 										videoRef.current &&
 										videoRef.current.currentTime !== undefined
@@ -243,6 +262,16 @@ export default function App({ Component, pageProps }: AppProps) {
 						<h1 className={styles.welcomeTitle}>Welcome!</h1>
 						<h2 className={styles.welcomeDescription}>
 							This website is still under development. Expect bugs!
+						</h2>
+						<h2 className={styles.welcomeDescription}>
+							Note that this website doesnt work on Firefox (it sucks)
+							<br />
+							Theres also an issue with blurring on Chrome and other
+							chromium-based browsers.
+						</h2>
+						<h2 className={styles.welcomeDescription}>
+							The only browser that works perfectly is Safari (and other
+							browsers if you{"'"}re on iOS).
 						</h2>
 						<h2 className={styles.welcomeHint}>Click anywhere to enter.</h2>
 					</motion.div>
@@ -386,7 +415,10 @@ export default function App({ Component, pageProps }: AppProps) {
 						>
 							<source
 								src={videos[videoPage].path}
+								// src="/video.mp4"
 								type={`video/${videos[videoPage].path.split(".").pop()}`}
+								// src="/video.webm"
+								// type="video/webm"
 								ref={sourceRef}
 							/>
 						</video>
@@ -520,7 +552,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						width: "100%",
 						justifyContent: "space-between",
 						height: "50px",
-						padding: "0 6px",
+						padding: "0 16px",
 					}}
 				>
 					{/* <div
@@ -533,7 +565,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						style={{
 							pointerEvents: "all",
 							display: "flex",
-							marginBottom: "5px",
+							marginBottom: "16px",
 							// alignItems: "center",
 						}}
 					>
@@ -620,7 +652,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						style={{
 							pointerEvents: "all",
 							display: "flex",
-							marginBottom: "5px",
+							marginBottom: "16px",
 							// alignItems: "center",
 						}}
 					>

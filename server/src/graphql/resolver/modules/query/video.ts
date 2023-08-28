@@ -5,13 +5,17 @@ import lib_storage from "@iunstable0/server-libs/build/storage";
 import lib_error from "@iunstable0/server-libs/build/error";
 
 export default class query_video {
-	public static async getVideos(args: any) {
+	public static async getVideos(args: any, contextValue: any) {
+		const { format } = args;
+
 		// console.log("getting vid");
 		let videos: any;
 
+		// console.log("useragent", contextValue.req.headers["user-agent"]);
+
 		try {
 			const videoDirList = (await lib_storage.listFiles("videos")).filter(
-				(filename) => filename.includes("-video"),
+				(filename) => filename.includes(`-video`),
 			);
 
 			// console.log(videoDirList);
