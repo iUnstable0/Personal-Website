@@ -108,7 +108,7 @@ pipeline {
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Website" --update-env;
                     else
                         cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start bin/doppler-run.sh --name "@iUnstable0/Personal-Website/Website";
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "@iUnstable0/Personal-Website/Website";
                     fi
                 '''
 
