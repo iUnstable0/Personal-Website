@@ -92,7 +92,6 @@ export default function Page({
 	userInfo,
 	contentVisible, // From _app.tsx
 	webring,
-	F,
 }: {
 	firstTimeVisit: boolean;
 	userInfo: any;
