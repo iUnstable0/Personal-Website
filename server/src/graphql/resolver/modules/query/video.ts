@@ -8,52 +8,35 @@ export default class query_video {
 	public static async getVideos(args: any, contextValue: any) {
 		const { format } = args;
 
+		// console.log(format)
+
 		// console.log("getting vid");
 		let videos: any;
 
 		// console.log("useragent", contextValue.req.headers["user-agent"]);
 
 		try {
-			const videoDirList = (await lib_storage.listFiles("videos")).filter(
+			const videoDirList = (await lib_storage.listFiles("")).filter(
 				(filename) => filename.includes(`-video`),
 			);
 
-			// console.log(videoDirList);
+			// console.log(videoDirList)
 
-			// console.log("viddor");
+			const webm = videoDirList.filter((filename) =>
+				filename.includes(`-webm-video`),
+			);
 
-			let currentVideoDir = videoDirList[0];
+			// console.log(webm)
 
-			// console.log(currentVideoDir);
+			const mp4 = videoDirList.filter((filename) =>
+				filename.includes(`-mp4-video`),
+			);
 
-			if (videoDirList.length > 1) {
-				// console.log("viddor3");
-				//   Compare the number of children in each directory, and get the one with the most children
-				//   This is to prevent the case where the video directory is empty
+			// console.log(mp4)
 
-				let maxChildren = 0;
+			const currentVideoDir = format === "webm" ? webm[0] : mp4[0];
 
-				// console.log(videoDirList);
-
-				for (const videoDir of videoDirList) {
-					// console.log("viddor3", videoDir);
-					const children = await lib_storage.listFiles(`videos/${videoDir}`);
-
-					// console.log("viddor3", children);
-
-					if (children.length > maxChildren) {
-						// console.log("viddor3oass");
-
-						maxChildren = children.length;
-						currentVideoDir = videoDir;
-					} else if (children.length === maxChildren) {
-						// console.log("viddor3fail");
-						currentVideoDir = videoDir;
-					}
-				}
-
-				// console.log("viddor4");
-			}
+			// console.log(currentVideoDir)
 
 			const cachedVideos: any = await lib_cache.get(
 				`cache_videos_${currentVideoDir}`,
@@ -70,6 +53,8 @@ export default class query_video {
 
 				// console.log("viddor6");
 			}
+
+			// console.log(videos)
 
 			// console.log("viddor7");
 		} catch (error) {
@@ -102,11 +87,11 @@ export default class query_video {
 		// video name could contain dot as well, so we split by dot remove last element and join them back
 
 		return videos.map((video: string) => {
-			const name = video.split(`/`).slice(2).join(`/`);
+			const name = video.split(`/`).slice(1).join(`/`);
 
 			return {
 				title: name.split(`.`).slice(0, -1).join(`.`),
-				path: encodeURI(`https://objects.iunstable0.com/${video}`),
+				path: encodeURI(`${process.env[`${process.env.S3_PROVIDER.toUpperCase()}_S3_CUSTOM_DOMAIN`]}/${video}`),
 			};
 		});
 	}

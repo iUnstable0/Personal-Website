@@ -110,7 +110,6 @@ export default function App({ Component, pageProps }: AppProps) {
 					if (videoRef.current) {
 						clearInterval(interval);
 
-						// setActualVideoLoading(true);
 						setActualVideoLoading(videoRef.current.readyState < 3);
 					}
 				}, 1);
@@ -120,45 +119,37 @@ export default function App({ Component, pageProps }: AppProps) {
 		}
 	}, [videoLoading]);
 
-	// Create nextVideo function
+	const initVideo = async (targetPage: number) => {
+		const interval = setInterval(async () => {
+			if (videoRef.current && videos && videos.length) {
+				clearInterval(interval);
 
-	const changeVideo = async (targetPage: number) => {
+				setVideoPage(targetPage);
+
+				sourceRef.current.src = videos[targetPage].path;
+				sourceRef.current.type = `video/${videos[targetPage].path
+					.split(".")
+					.pop()}`;
+
+				if (videoRef.current && videoRef.current.currentTime !== undefined)
+					videoRef.current.currentTime = 0;
+
+				await videoRef.current.load();
+				await videoRef.current.play();
+
+				if (videoRef.current && videoRef.current.currentTime !== undefined)
+					videoRef.current.currentTime = 0;
+			}
+		}, 1);
+	};
+
+	const changeVideo = (targetPage: number) => {
 		setVideoVisible(false);
 
 		setTimeout(() => {
-			console.log("Prev vid lol");
 			setVideoVisible(true);
 
-			const interval = setInterval(async () => {
-				if (videoRef.current && videos && videos.length) {
-					clearInterval(interval);
-
-					setVideoPage(targetPage);
-
-					// sourceRef.current.src = `/video.mp4`;
-					sourceRef.current.src = videos[targetPage].path;
-					// sourceRef.current.src = `https://objects.iunstable0.com/videos/3f67611c-a883-4303-a479-c15a15714221-video/video.webm`;
-					// sourceRef.current.type = `video/mp4`;
-					sourceRef.current.type = `video/${videos[targetPage].path
-						.split(".")
-						.pop()}`;
-
-					// videoRef.current.src = "/video.webm";
-					// videoRef.current.type = "video/webm";
-
-					// sourceRef.current.src = "/video.webm";
-					// sourceRef.current.type = "video/webm";
-
-					if (videoRef.current && videoRef.current.currentTime !== undefined)
-						videoRef.current.currentTime = 0;
-
-					await videoRef.current.load();
-					await videoRef.current.play();
-
-					if (videoRef.current && videoRef.current.currentTime !== undefined)
-						videoRef.current.currentTime = 0;
-				}
-			}, 1);
+			void initVideo(targetPage);
 		}, 550);
 	};
 
@@ -195,84 +186,41 @@ export default function App({ Component, pageProps }: AppProps) {
 				{welcomeBlurVisible && (
 					<motion.div
 						key={`blur_${router.pathname}`}
-						initial="pageInitial"
-						animate="pageAnimate"
-						exit="pageExit"
-						variants={{
-							pageInitial: {
-								opacity: 0,
-							},
-							pageAnimate: {
-								opacity: 1,
-							},
-							pageExit: {
-								opacity: 0,
-							},
+						className={styles.welcomeBlur}
+						initial={{
+							opacity: 0,
+						}}
+						animate={{
+							opacity: 1,
+						}}
+						exit={{
+							opacity: 0,
 						}}
 						transition={{
 							duration: 0.15,
 						}}
-						className={styles.welcomeBlur}
 						onClick={() => {
 							setWelcomeBlurVisible(false);
 
-							// setTimeout(() => {
 							setVideoVisible(true);
 
-							const interval = setInterval(async () => {
-								if (videoRef.current) {
-									// videoRef.current.fastSeek(0);
-
-									clearInterval(interval);
-
-									// videoRef.current.fastSeek(0);
-									// sourceRef.current.src = `/video.mp4`;
-									// sourceRef.current.src = `https://objects.iunstable0.com/videos/3f67611c-a883-4303-a479-c15a15714221-video/video.webm`;
-									sourceRef.current.src = videos[0].path;
-									// sourceRef.current.type = `video/mp4`;
-									sourceRef.current.type = `video/${videos[0].path
-										.split(".")
-										.pop()}`;
-
-									// videoRef.current.src = "/video.webm";
-									// videoRef.current.type = "video/webm";
-
-									// sourceRef.current.src = "/video.webm";
-									// sourceRef.current.type = "video/webm";
-
-									if (
-										videoRef.current &&
-										videoRef.current.currentTime !== undefined
-									)
-										videoRef.current.currentTime = 0;
-
-									await videoRef.current.load();
-									await videoRef.current.play();
-
-									if (
-										videoRef.current &&
-										videoRef.current.currentTime !== undefined
-									)
-										videoRef.current.currentTime = 0;
-								}
-							}, 1);
-							// }, 1000);
+							void initVideo(0);
 						}}
 					>
 						<h1 className={styles.welcomeTitle}>Welcome!</h1>
 						<h2 className={styles.welcomeDescription}>
 							This website is still under development. Expect bugs!
 						</h2>
-						<h2 className={styles.welcomeDescription}>
-							Note that this website doesnt work on Firefox (it sucks)
-							<br />
-							Theres also an issue with blurring on Chrome and other
-							chromium-based browsers.
-						</h2>
-						<h2 className={styles.welcomeDescription}>
-							The only browser that works perfectly is Safari (and other
-							browsers if you{"'"}re on iOS).
-						</h2>
+						{/*<h2 className={styles.welcomeDescription}>*/}
+						{/*	Note that this website doesnt work on Firefox (it sucks)*/}
+						{/*	<br />*/}
+						{/*	Theres also an issue with blurring on Chrome and other*/}
+						{/*	chromium-based browsers.*/}
+						{/*</h2>*/}
+						{/*<h2 className={styles.welcomeDescription}>*/}
+						{/*	The only browser that works perfectly is Safari (and other*/}
+						{/*	browsers if you{"'"}re on iOS).*/}
+						{/*</h2>*/}
 						<h2 className={styles.welcomeHint}>Click anywhere to enter.</h2>
 					</motion.div>
 				)}
@@ -291,76 +239,51 @@ export default function App({ Component, pageProps }: AppProps) {
 					<motion.div
 						key={`video_${router.pathname}`}
 						className={styles.videoContainer}
-						initial="pageInitial"
-						animate="pageAnimate"
-						exit="pageExit"
-						variants={{
-							pageInitial: {
-								opacity: 0,
-							},
-							pageAnimate: {
-								opacity: 1,
-							},
-							pageExit: {
-								opacity: 0,
-							},
+						initial={{
+							opacity: 0,
+						}}
+						animate={{
+							opacity: 1,
+						}}
+						exit={{
+							opacity: 0,
 						}}
 						transition={{
 							duration: 0.5,
 						}}
 					>
-						{/* <div
-				className={styles.videoContainer}
-				style={{
-					opacity: videoVisible ? 1 : 0,
-					transition: "all 0.5s",
-				}}
-			> */}
-
-						{/* <div>HELFEJNMKOIWDUHIBJKNDBFJ DHWNIHBHLDYGVUKDLWBHDYGHFEVKWYDGEIFGBEVFOIGVFIEGFVIEFGVVG</div> */}
-
 						<AnimatePresence>
-							{contentVisible && (
-								<motion.div
-									key={`contentblur_${router.pathname}`}
-									className={styles.videoBlur}
-									initial="pageInitial"
-									animate="pageAnimate"
-									exit="pageExit"
-									variants={{
-										pageInitial: {
-											opacity: 0,
-										},
-										pageAnimate: {
-											opacity: 1,
-										},
-										pageExit: {
-											opacity: 0,
-										},
-									}}
-									transition={{
-										duration: 0.15,
-									}}
-								/>
-							)}
+							{/*{contentVisible && (*/}
+							{/*	<motion.div*/}
+							{/*		key={`contentblur_${router.pathname}`}*/}
+							{/*		className={styles.videoBlur}*/}
+							{/*		initial={{*/}
+							{/*			opacity: 0,*/}
+							{/*		}}*/}
+							{/*		animate={{*/}
+							{/*			opacity: 1,*/}
+							{/*		}}*/}
+							{/*		exit={{*/}
+							{/*			opacity: 0,*/}
+							{/*		}}*/}
+							{/*		transition={{*/}
+							{/*			duration: 0.15,*/}
+							{/*		}}*/}
+							{/*	/>*/}
+							{/*)}*/}
 
 							{actualVideoLoading && (
 								<motion.div
 									key={`loadingvid_${router.pathname}`}
 									// className={styles.videoBlur}
-									initial="pageInitial"
-									animate="pageAnimate"
-									exit="pageExit"
-									variants={{
-										pageInitial: {
-											opacity: 0,
-										},
-										pageAnimate: {
-											opacity: 1,
-										},
-										pageExit: {
-											opacity: 0,
-										},
+									initial={{
+										opacity: 0,
+									}}
+									animate={{
+										opacity: 1,
+									}}
+									exit={{
+										opacity: 0,
 									}}
 									transition={{
 										duration: 0.25,
@@ -392,6 +315,7 @@ export default function App({ Component, pageProps }: AppProps) {
 							preload="auto"
 							// Set time
 							playsInline
+							disablePictureInPicture
 							// controls={true}
 							// loop
 							onPlay={() => {
@@ -415,10 +339,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						>
 							<source
 								src={videos[videoPage].path}
-								// src="/video.mp4"
 								type={`video/${videos[videoPage].path.split(".").pop()}`}
-								// src="/video.webm"
-								// type="video/webm"
 								ref={sourceRef}
 							/>
 						</video>
@@ -449,34 +370,25 @@ export default function App({ Component, pageProps }: AppProps) {
 						<motion.div
 							key={`controls_${router.pathname}`}
 							className={mediaControlStyles.container}
-							initial="pageInitial"
-							animate="pageAnimate"
-							exit="pageExit"
-							variants={{
-								pageInitial: {
-									// opacity: 0,
-									y: 90,
-								},
-								pageAnimate: {
-									// opacity: 1,
-									y: 0,
-								},
-								pageExit: {
-									// opacity: 0,
-									// Calculate y position and minus by 40px
-									y: 90,
-								},
+							initial={{
+								// opacity: 0,
+								y: 90,
+							}}
+							animate={{
+								// opacity: 1,
+								y: 0,
+							}}
+							exit={{
+								// opacity: 0,
+								// Calculate y position and minus by 40px
+								y: 90,
 							}}
 							transition={{
-								duration: 0.25,
+								type: "spring",
+								damping: 20,
+								stiffness: 250,
 							}}
 						>
-							{/* {contentVisible ? (
-								<Unicons.UilEyeSlash className={mediaControlStyles.toggleContent} onClick={() => setContentVisible(false)} />
-							) : (
-								<Unicons.UilEye className={mediaControlStyles.toggleContent} onClick={() => setContentVisible(true)} />
-							)} */}
-
 							<div className={mediaControlStyles.middle}>
 								<div className={mediaControlStyles.title}>
 									{noVideo ? "No music playing" : `${videos[videoPage].title}`}
@@ -606,19 +518,14 @@ export default function App({ Component, pageProps }: AppProps) {
 							<motion.div
 								key={`hidecontento_${router.pathname}`}
 								className={mediaControlStyles.toggleContentContainer}
-								initial="pageInitial"
-								animate="pageAnimate"
-								exit="pageExit"
-								variants={{
-									pageInitial: {
-										opacity: 0,
-									},
-									pageAnimate: {
-										opacity: 1,
-									},
-									pageExit: {
-										opacity: 0,
-									},
+								initial={{
+									opacity: 0,
+								}}
+								animate={{
+									opacity: 1,
+								}}
+								exit={{
+									opacity: 0,
 								}}
 								transition={{
 									duration: 0.25,
@@ -672,25 +579,24 @@ export default function App({ Component, pageProps }: AppProps) {
 								// style={{
 								// 	all: "unset",
 								// }}
-								initial="pageInitial"
-								animate="pageAnimate"
-								exit="pageExit"
-								variants={{
-									pageInitial: {
-										opacity: 0,
-									},
-									pageAnimate: {
-										opacity: 1,
-									},
-									pageExit: {
-										opacity: 0,
-									},
+								initial={{
+									opacity: 0,
+								}}
+								animate={{
+									opacity: 1,
+								}}
+								exit={{
+									opacity: 0,
 								}}
 								transition={{
 									duration: 0.25,
 								}}
 							>
-								<Popover placement="top-end" className={styles.popover}>
+								<Popover
+									placement="top-end"
+									className={styles.popover}
+									isKeyboardDismissDisabled={true}
+								>
 									<PopoverTrigger>
 										<button
 											style={{

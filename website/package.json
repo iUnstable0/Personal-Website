@@ -10,10 +10,10 @@
 	},
 	"dependencies": {
 		"@iconscout/react-unicons": "^2.0.2",
-		"@iunstable0/server-libs": "^1.1.9",
+		"@iunstable0/server-libs": "^1.2.0",
 		"@iunstable0/website-libs": "^1.1.7",
 		"@nextui-org/react": "2.1.12",
-		"@types/node": "20.6.0",
+		"@types/node": "20.6.2",
 		"@types/react": "18.2.21",
 		"@types/react-dom": "18.2.7",
 		"axios": "^1.5.0",
@@ -31,7 +31,7 @@
 		"react-hot-toast": "^2.4.1",
 		"react-icons": "^4.11.0",
 		"react-spinners": "^0.13.8",
-		"sass": "^1.66.1",
+		"sass": "^1.67.0",
 		"typescript": "5.2.2",
 		"typewriter-effect": "^2.20.1"
 	},
