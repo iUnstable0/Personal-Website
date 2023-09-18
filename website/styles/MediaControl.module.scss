@@ -33,16 +33,16 @@
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 }
 
 .title {
   // Make it unselectable
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
+  //-khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
@@ -118,9 +118,9 @@
 
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 
   transition: all 0.25s;
 }
@@ -151,9 +151,9 @@
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 }
 
 .toggleQueueContainer {
@@ -168,9 +168,9 @@
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 
   transition: all 0.25s;
 }
@@ -213,9 +213,9 @@
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 
   transition: all 0.25s;
 }
@@ -237,11 +237,11 @@
 
   overflow-y: auto;
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //backdrop-filter: blur(10px);
+  //-webkit-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 }
 
 .queueTitle {

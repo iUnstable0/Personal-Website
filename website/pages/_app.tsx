@@ -12,12 +12,15 @@ import NextProgress from "next-progress";
 
 // pages/_app.js
 
-import {
-	NextUIProvider,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-} from "@nextui-org/react";
+// import {
+// 	NextUIProvider,
+// 	Popover,
+// 	PopoverTrigger,
+// 	PopoverContent,
+// } from "@nextui-org/react";
+
+import { MantineProvider, Popover } from "@mantine/core";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 import { FaPlay } from "react-icons/fa";
@@ -31,7 +34,7 @@ import { IoClose } from "react-icons/io5";
 // @ts-ignore
 import * as Unicons from "@iconscout/react-unicons";
 
-import ScaleLoader from "react-spinners/ScaleLoader";
+// import ScaleLoader from "react-spinners/ScaleLoader";
 import BarLoader from "react-spinners/BarLoader";
 
 // Types
@@ -63,8 +66,8 @@ export default function App({ Component, pageProps }: AppProps) {
 		[noVideo, setNoVideo] = useState<any>(null),
 		// [videos, setVideos] = useState<any>(pageProps.videos),
 		[videoLoading, setVideoLoading] = useState<any>(false),
-		[actualVideoLoading, setActualVideoLoading] = useState<any>(false),
-		[videoQueueVisible, setVideoQueueVisible] = useState<any>(false);
+		[actualVideoLoading, setActualVideoLoading] = useState<any>(false);
+	// [videoQueueVisible, setVideoQueueVisible] = useState<any>(false);
 
 	const videos = pageProps.videos;
 
@@ -72,13 +75,9 @@ export default function App({ Component, pageProps }: AppProps) {
 		sourceRef = useRef<any>(null);
 
 	useEffect(() => {
-		setContentVisible(
-			localStorage.getItem("contentVisible") === "false" ? false : true,
-		);
-		setControlsVisible(
-			localStorage.getItem("controlsVisible") === "false" ? false : true,
-		);
-		setNoVideo(localStorage.getItem("noVideo") === "true" ? true : false);
+		setContentVisible(localStorage.getItem("contentVisible") === "true");
+		setControlsVisible(localStorage.getItem("controlsVisible") === "true");
+		setNoVideo(localStorage.getItem("noVideo") === "true");
 
 		const gradient = new Gradient();
 
@@ -174,7 +173,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	};
 
 	return (
-		<NextUIProvider>
+		<MantineProvider>
 			<NextProgress
 				delay={250}
 				options={{ showSpinner: false }}
@@ -372,7 +371,7 @@ export default function App({ Component, pageProps }: AppProps) {
 							className={mediaControlStyles.container}
 							initial={{
 								// opacity: 0,
-								y: 90,
+								y: 100,
 							}}
 							animate={{
 								// opacity: 1,
@@ -381,7 +380,7 @@ export default function App({ Component, pageProps }: AppProps) {
 							exit={{
 								// opacity: 0,
 								// Calculate y position and minus by 40px
-								y: 90,
+								y: 100,
 							}}
 							transition={{
 								type: "spring",
@@ -575,7 +574,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						{!noVideo && (
 							<motion.div
 								key={`queuemusique_${router.pathname}`}
-								className={mediaControlStyles.toggleQueueContainer}
+								// className={mediaControlStyles.toggleQueueContainer}
 								// style={{
 								// 	all: "unset",
 								// }}
@@ -593,27 +592,40 @@ export default function App({ Component, pageProps }: AppProps) {
 								}}
 							>
 								<Popover
-									placement="top-end"
-									className={styles.popover}
-									isKeyboardDismissDisabled={true}
+									position="top-end"
+									keepMounted
+									// className={styles.popover}
+									// isKeyboardDismissDisabled={true}
 								>
-									<PopoverTrigger>
-										<button
-											style={{
-												all: "unset",
-											}}
-										>
-											<MdQueueMusic
-												className={mediaControlStyles.toggleQueue}
-												//onClick={() => setContentVisible(true)}
+									<Popover.Target>
+										<div className={mediaControlStyles.toggleQueueContainer}>
+											<button
 												style={{
-													// pointerEvents: "all",
-													marginRight: "5px",
+													all: "unset",
 												}}
-											/>
-										</button>
-									</PopoverTrigger>
-									<PopoverContent className={styles.popover_content}>
+											>
+												<MdQueueMusic
+													className={mediaControlStyles.toggleQueue}
+													//onClick={() => setContentVisible(true)}
+													style={{
+														// pointerEvents: "all",
+														marginRight: "5px",
+													}}
+												/>
+											</button>
+										</div>
+									</Popover.Target>
+									<Popover.Dropdown
+										// className={styles.popover_content}
+										style={{
+											backgroundColor: "transparent",
+											border: "none",
+											backdropFilter: "blur(10px)",
+											WebkitBackdropFilter: "blur(10px)",
+											padding: "0",
+											borderRadius: "15px",
+										}}
+									>
 										<div className={mediaControlStyles.queue}>
 											<h1 className={mediaControlStyles.queueTitle}>
 												Playlist
@@ -676,8 +688,94 @@ export default function App({ Component, pageProps }: AppProps) {
 													))}
 											</div>
 										</div>
-									</PopoverContent>
+									</Popover.Dropdown>
 								</Popover>
+								{/*<Popover*/}
+								{/*	placement="top-end"*/}
+								{/*	className={styles.popover}*/}
+								{/*	isKeyboardDismissDisabled={true}*/}
+								{/*>*/}
+								{/*	<PopoverTrigger>*/}
+								{/*		<button*/}
+								{/*			style={{*/}
+								{/*				all: "unset",*/}
+								{/*			}}*/}
+								{/*		>*/}
+								{/*			<MdQueueMusic*/}
+								{/*				className={mediaControlStyles.toggleQueue}*/}
+								{/*				//onClick={() => setContentVisible(true)}*/}
+								{/*				style={{*/}
+								{/*					// pointerEvents: "all",*/}
+								{/*					marginRight: "5px",*/}
+								{/*				}}*/}
+								{/*			/>*/}
+								{/*		</button>*/}
+								{/*	</PopoverTrigger>*/}
+								{/*	<PopoverContent className={styles.popover_content}>*/}
+								{/*		<div className={mediaControlStyles.queue}>*/}
+								{/*			<h1 className={mediaControlStyles.queueTitle}>*/}
+								{/*				Playlist*/}
+								{/*			</h1>*/}
+
+								{/*			<div className={mediaControlStyles.queueContent}>*/}
+								{/*				{videos &&*/}
+								{/*					videos.length &&*/}
+								{/*					videos.map((video: any, index: any) => (*/}
+								{/*						<div*/}
+								{/*							key={index}*/}
+								{/*							className={`${mediaControlStyles.queueItem} ${*/}
+								{/*								videoPage === index*/}
+								{/*									? mediaControlStyles.queueItemActive*/}
+								{/*									: ""*/}
+								{/*							}`}*/}
+								{/*							onClick={() => {*/}
+								{/*								// setVideoPage(index);*/}
+								{/*								changeVideo(index);*/}
+								{/*								// setContentVisible(true);*/}
+								{/*							}}*/}
+								{/*						>*/}
+								{/*							<div*/}
+								{/*								className={mediaControlStyles.queueItemTitle}*/}
+								{/*							>*/}
+								{/*								{video.title}*/}
+								{/*							</div>*/}
+								{/*							/!* <div className={mediaControlStyles.queueItemArtist}>{video.artist}</div> *!/*/}
+
+								{/*							<AnimatePresence>*/}
+								{/*								{videoPage === index && (*/}
+								{/*									<motion.img*/}
+								{/*										key={`playinggggg_${index}`}*/}
+								{/*										src="/playing.gif"*/}
+								{/*										className={mediaControlStyles.queuePause}*/}
+								{/*										initial="pageInitial"*/}
+								{/*										animate="pageAnimate"*/}
+								{/*										exit="pageExit"*/}
+								{/*										variants={{*/}
+								{/*											pageInitial: {*/}
+								{/*												opacity: 0,*/}
+								{/*											},*/}
+								{/*											pageAnimate: {*/}
+								{/*												opacity: 1,*/}
+								{/*											},*/}
+								{/*											pageExit: {*/}
+								{/*												opacity: 0,*/}
+								{/*											},*/}
+								{/*										}}*/}
+								{/*										transition={{*/}
+								{/*											duration: 0.25,*/}
+								{/*										}}*/}
+								{/*									/>*/}
+								{/*								)}*/}
+								{/*							</AnimatePresence>*/}
+								{/*							/!* {videoPage === index && <GiPauseButton className={mediaControlStyles.queuePause} />} *!/*/}
+
+								{/*							/!* {videoPage !== index && <FaPlay className={mediaControlStyles.queuePlay} />} *!/*/}
+								{/*						</div>*/}
+								{/*					))}*/}
+								{/*			</div>*/}
+								{/*		</div>*/}
+								{/*	</PopoverContent>*/}
+								{/*</Popover>*/}
 							</motion.div>
 						)}
 
@@ -703,6 +801,6 @@ export default function App({ Component, pageProps }: AppProps) {
 					{/* </div> */}
 				</div>
 			</div>
-		</NextUIProvider>
+		</MantineProvider>
 	);
 }

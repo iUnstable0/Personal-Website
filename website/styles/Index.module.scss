@@ -258,9 +258,9 @@
 
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  -moz-backdrop-filter: blur(32px);
-  -o-backdrop-filter: blur(32px);
-  -ms-backdrop-filter: blur(32px);
+  //-moz-backdrop-filter: blur(32px);
+  //-o-backdrop-filter: blur(32px);
+  //-ms-backdrop-filter: blur(32px);
 
   display: flex;
   align-items: center;
@@ -333,21 +333,26 @@
 }
 
 .pageContainer {
-  background: #0000007c;
+  //background: #0000007c;
 
-  margin-top: 140px;
+  //margin-top: 140px;
 
-  margin: 10px 16px;
+  //margin: -50px 16px;
 
-  border-radius: 10px;
+  //border-radius: 10px;
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  -moz-backdrop-filter: blur(12px);
-  -o-backdrop-filter: blur(12px);
-  -ms-backdrop-filter: blur(12px);
+  //backdrop-filter: blur(12px);
+  //-webkit-backdrop-filter: blur(12px);
+  //-moz-backdrop-filter: blur(12px);
+  //-o-backdrop-filter: blur(12px);
+  //-ms-backdrop-filter: blur(12px);
 
-  height: 90vh;
+  //margin: 10px 14px;
+  //height: calc(100vh - 20px);
+
+  height: 100vh;
+
+  transition: all 0.25s;
 }
 
 // .video {

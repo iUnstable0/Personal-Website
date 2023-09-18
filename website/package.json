@@ -9,10 +9,16 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.11.1",
+		"@emotion/server": "^11.11.0",
+		"@emotion/styled": "^11.11.0",
 		"@iconscout/react-unicons": "^2.0.2",
-		"@iunstable0/server-libs": "^1.2.0",
+		"@iunstable0/server-libs": "^1.2.1",
 		"@iunstable0/website-libs": "^1.1.7",
-		"@nextui-org/react": "2.1.12",
+		"@mantine/core": "^6.0.21",
+		"@mantine/hooks": "^6.0.21",
+		"@mantine/next": "^6.0.21",
+		"@nextui-org/react": "2.1.13",
 		"@types/node": "20.6.2",
 		"@types/react": "18.2.21",
 		"@types/react-dom": "18.2.7",

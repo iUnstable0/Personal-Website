@@ -35,9 +35,9 @@ export const getServerSideProps = async (context: any) => {
 				"Content-Type": "application/json",
 			},
 			data: {
-				query: lib_gqlSchema.query.getVideos,
+				query: lib_gqlSchema.query.getData,
 				variables: {
-					format:
+					videoFormat:
 						// // If firefox then webm or else mp4
 						context.req.headers["user-agent"].toLowerCase().includes("firefox")
 							? "webm"
@@ -46,39 +46,25 @@ export const getServerSideProps = async (context: any) => {
 			},
 		})
 		.then((response: any) => {
-			const data = response.data.data.getVideos;
+			const data = response.data.data.getData;
 
-			for (let i = data.length - 1; i > 0; i--) {
+			const videos = data.videos;
+
+			for (let i = videos.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
-				[data[i], data[j]] = [data[j], data[i]];
+				[videos[i], videos[j]] = [videos[j], videos[i]];
 			}
 
-			return lib_axios
-				.request({
-					method: "GET",
-					url: "https://raw.githubusercontent.com/hackclub/webring/main/members.json",
-				})
-				.then((response: any) => {
-					const data2 = response.data;
-
-					// console.log(data2);
-
-					return {
-						props: {
-							firstTimeVisit: !context.req.headers.referer
-								? true
-								: !context.req.headers.referer.includes("iunstable0.com"),
-							videos: data,
-							userInfo: null,
-							webring: data2,
-						},
-					};
-				})
-				.catch((error: any) => {
-					console.log(error);
-
-					return null;
-				});
+			return {
+				props: {
+					firstTimeVisit: !context.req.headers.referer
+						? true
+						: !context.req.headers.referer.includes("iunstable0.com"),
+					videos,
+					userInfo: null,
+					webring: data.webring,
+				},
+			};
 		})
 		.catch((error: any) => {
 			console.log(lib_axios.parseError(error));
@@ -88,13 +74,13 @@ export const getServerSideProps = async (context: any) => {
 };
 
 export default function Page({
-	firstTimeVisit,
-	userInfo,
+	// firstTimeVisit,
+	// userInfo,
 	contentVisible, // From _app.tsx
 	webring,
 }: {
-	firstTimeVisit: boolean;
-	userInfo: any;
+	// firstTimeVisit: boolean;
+	// userInfo: any;
 	contentVisible: boolean;
 	webring: Array<any>;
 }) {
@@ -121,118 +107,114 @@ export default function Page({
 	}, []);
 
 	return (
-		<AnimatePresence>
-			{contentVisible && (
-				<motion.div
-					key={"content"}
-					initial={{
-						opacity: 0,
-						// display: "none",
-					}}
-					animate={{
-						opacity: 1,
-						// display: "block",
-						// transition: {
-						// 	delay: delayTime,
-						// },
-					}}
-					exit={{
-						opacity: 0,
-					}}
-					transition={{
-						duration: durationTime,
-					}}
-				>
-					<Nav
-						page={page}
-						setPage={(page: string) => {
-							setPage(page);
+		<motion.div
+			key={"masteros"}
+			className={styles.pageContainer}
+			style={{
+				backgroundColor: contentVisible ? "#0000007c" : "transparent",
+				backdropFilter: contentVisible ? "blur(10px)" : "none",
+				WebkitBackdropFilter: contentVisible ? "blur(10px)" : "none",
+			}}
+			initial={{
+				opacity: 0,
+			}}
+			animate={{
+				opacity: 1,
+			}}
+			// exit={{
+			// 	opacity: 0,
+			// }}
+			transition={{
+				duration: 0.15,
+			}}
+		>
+			<Nav
+				page={page}
+				setPage={(page: string) => {
+					setPage(page);
 
-							localStorage.setItem("page", page);
+					localStorage.setItem("page", page);
+				}}
+				webring={webring}
+				contentVisible={contentVisible}
+			/>
+
+			<AnimatePresence>
+				{contentVisible && page === "home" && (
+					<motion.div
+						key={"WOWGAYSEx"}
+						initial={{
+							opacity: 0,
+							display: "none",
 						}}
-						webring={webring}
-					/>
+						animate={{
+							opacity: 1,
+							display: "block",
+							transition: {
+								delay: delayTime,
+							},
+						}}
+						exit={{
+							opacity: 0,
+						}}
+						transition={{
+							duration: durationTime,
+						}}
+					>
+						<Home setPage={setPage} />
+					</motion.div>
+				)}
 
-					<div className={styles.pageContainer}>
-						<AnimatePresence>
-							{page === "home" && (
-								<motion.div
-									key={page}
-									initial={{
-										opacity: 0,
-										display: "none",
-									}}
-									animate={{
-										opacity: 1,
-										display: "block",
-										transition: {
-											delay: delayTime,
-										},
-									}}
-									exit={{
-										opacity: 0,
-									}}
-									transition={{
-										duration: durationTime,
-									}}
-								>
-									<Home setPage={setPage} />
-								</motion.div>
-							)}
+				{contentVisible && page === "about" && (
+					<motion.div
+						key={"OMGGAYSEX"}
+						initial={{
+							opacity: 0,
+							display: "none",
+						}}
+						animate={{
+							opacity: 1,
+							display: "block",
+							transition: {
+								delay: delayTime,
+							},
+						}}
+						exit={{
+							opacity: 0,
+						}}
+						transition={{
+							duration: durationTime,
+						}}
+					>
+						<About setPage={setPage} />
+					</motion.div>
+				)}
 
-							{page === "about" && (
-								<motion.div
-									key={page}
-									initial={{
-										opacity: 0,
-										display: "none",
-									}}
-									animate={{
-										opacity: 1,
-										display: "block",
-										transition: {
-											delay: delayTime,
-										},
-									}}
-									exit={{
-										opacity: 0,
-									}}
-									transition={{
-										duration: durationTime,
-									}}
-								>
-									<About setPage={setPage} />
-								</motion.div>
-							)}
-
-							{page === "contact" && (
-								<motion.div
-									key={page}
-									initial={{
-										opacity: 0,
-										display: "none",
-									}}
-									animate={{
-										opacity: 1,
-										display: "block",
-										transition: {
-											delay: delayTime,
-										},
-									}}
-									exit={{
-										opacity: 0,
-									}}
-									transition={{
-										duration: durationTime,
-									}}
-								>
-									<Contact setPage={setPage} />
-								</motion.div>
-							)}
-						</AnimatePresence>
-					</div>
-				</motion.div>
-			)}
-		</AnimatePresence>
+				{contentVisible && page === "contact" && (
+					<motion.div
+						key={page}
+						initial={{
+							opacity: 0,
+							display: "none",
+						}}
+						animate={{
+							opacity: 1,
+							display: "block",
+							transition: {
+								delay: delayTime,
+							},
+						}}
+						exit={{
+							opacity: 0,
+						}}
+						transition={{
+							duration: durationTime,
+						}}
+					>
+						<Contact setPage={setPage} />
+					</motion.div>
+				)}
+			</AnimatePresence>
+		</motion.div>
 	);
 }

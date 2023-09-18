@@ -15,14 +15,16 @@ export default function NavBar({
 	page,
 	setPage,
 	webring,
+	contentVisible,
 }: {
 	page: string;
 	setPage: (page: string) => void;
 	webring: Array<any>;
+	contentVisible: boolean;
 }) {
 	const router = useRouter();
 
-	const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
+	// const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
 
 	const [cornerLeftHover, setCornerLeftHover] = useState<boolean>(false),
 		[cornerRightHover, setCornerRightHover] = useState<boolean>(false);
@@ -38,7 +40,7 @@ export default function NavBar({
 			<Head>
 				<title>{title}</title>
 				<meta name="description" content="Welcome to my website!" />
-				<link rel="icon" href="/favicon.ico" />
+				{/*<link rel="icon" href="/favicon.ico" />*/}
 			</Head>
 
 			<div className={navStyles.container}>
@@ -115,7 +117,13 @@ export default function NavBar({
 						</a>
 					</div>
 				</div>
-				<nav className={navStyles.navBar}>
+				<div
+					className={navStyles.navBar}
+					style={{
+						// background: contentVisible ? "transparent" : "#0000007c",
+						opacity: contentVisible ? 1 : 0,
+					}}
+				>
 					<ul>
 						<li className={page === "home" ? navStyles.active : ""}>
 							<button onClick={() => setPage("home")}>Home</button>
@@ -127,7 +135,7 @@ export default function NavBar({
 							<button onClick={() => setPage("contact")}>Contact</button>
 						</li>
 					</ul>
-				</nav>
+				</div>
 				<div
 					className={clsx(
 						navStyles.corner,

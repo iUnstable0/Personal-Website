@@ -1,11 +1,16 @@
 export default class lib_gqlSchema {
 	public static query = {
-		getVideos: `
-        query ($format: String) {
-            getVideos (format: $format) {
-                title
-                path
-            }
+		getData: `
+        query ($videoFormat: String!) {
+					getData (videoFormat: $videoFormat) {
+						webring {
+							url
+						}
+						videos {
+							title
+							path
+						}
+					}
         }
     `,
 	};
