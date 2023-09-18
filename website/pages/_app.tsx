@@ -139,8 +139,8 @@ export default function App({ Component, pageProps }: AppProps) {
 		sourceRef = useRef<any>(null);
 
 	useEffect(() => {
-		setContentVisible(localStorage.getItem("contentVisible") === "true");
-		setControlsVisible(localStorage.getItem("controlsVisible") === "true");
+		setContentVisible(localStorage.getItem("contentVisible") !== "false");
+		setControlsVisible(localStorage.getItem("controlsVisible") !== "false");
 		setNoVideo(localStorage.getItem("noVideo") === "true");
 
 		const gradient = new Gradient();
