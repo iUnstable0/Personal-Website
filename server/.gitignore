@@ -18,3 +18,5 @@
 # typescript
 *.tsbuildinfo
 .vscode
+
+/data
