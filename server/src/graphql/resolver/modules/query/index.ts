@@ -11,6 +11,7 @@ import lib_axios from "@iunstable0/server-libs/build/axios";
 
 import lib_data from "@/modules/data";
 import lib_color from "@/modules/color";
+import lib_discord from "@/modules/discord";
 
 export default class query {
 	// GitHub sometimes return EHOSTUNREACH error, so we retry 3 times
@@ -140,7 +141,7 @@ export default class query {
 			discordInfo = cachedDiscordInfo.data;
 		} else {
 			try {
-				discordInfo = (
+				const data = (
 					await axios.get(
 						`https://discord.com/api/v9/users/${process.env.DISCORD_USER_ID}/profile?with_mutual_guilds=false&with_mutual_friends_count=false`,
 						{
@@ -151,6 +152,65 @@ export default class query {
 						},
 					)
 				).data;
+
+				const primaryColor = `#${lib_color.fix(
+					data.user_profile.theme_colors[0].toString(16),
+				)}`;
+
+				const secondaryColor = `#${lib_color.fix(
+					data.user_profile.theme_colors[1].toString(16),
+				)}`;
+
+				const tinycolorPrimary = tinycolor(primaryColor);
+				const tinycolorSecondary = tinycolor(secondaryColor);
+
+				const processedPrimary = tinycolorPrimary.isLight()
+						? lib_color.addWhiteOverlay(tinycolorPrimary, 0.6)
+						: lib_color.addBlackOverlay(tinycolorPrimary, 0.6),
+					processedSecondary = tinycolorSecondary.isLight()
+						? lib_color.addWhiteOverlay(tinycolorSecondary, 0.6)
+						: lib_color.addBlackOverlay(tinycolorSecondary, 0.6);
+
+				const discordAvatar = `https://cdn.discordapp.com/avatars/${
+					data.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
+				}/${data.user.avatar}.${
+					data.user.avatar.startsWith("a_") ? "gif" : "png"
+				}?size=2048`;
+
+				const discordBanner = data.user_profile.banner
+					? `https://cdn.discordapp.com/banners/${data.user.id}/${
+							data.user_profile.banner
+					  }.${
+							data.user_profile.banner.startsWith("a_") ? "gif" : "png"
+					  }?size=4096`
+					: null;
+
+				discordInfo = {
+					id: data.user.id, // Same here ;p
+					username: data.user.username,
+					avatar: discordAvatar,
+					avatarDecoration: data.user.avatar_decoration,
+					discriminator: data.user.discriminator,
+					banner: discordBanner,
+					theme: tinycolorPrimary.isLight() ? "light" : "dark",
+					customActivity: await lib_discord.getCustomActivity(),
+					seperatorColor: lib_color.getColorFromGradientPoint(
+						processedPrimary,
+						processedSecondary,
+						0.15,
+					),
+					themeColors: {
+						primary: {
+							original: primaryColor,
+							processed: processedPrimary,
+						},
+						secondary: {
+							original: secondaryColor,
+							processed: processedSecondary,
+						},
+					},
+					bio: data.user_profile.bio,
+				};
 
 				await lib_data.writeFile(localDiscordInfoFile, discordInfo);
 
@@ -184,75 +244,6 @@ export default class query {
 				discordInfo = await lib_data.readFile(localDiscordInfoFile);
 			}
 		}
-
-		const primaryColor = `#${lib_color.fix(
-			discordInfo.user_profile.theme_colors[0].toString(16),
-		)}`;
-
-		const secondaryColor = `#${lib_color.fix(
-			discordInfo.user_profile.theme_colors[1].toString(16),
-		)}`;
-
-		const tinycolorPrimary = tinycolor(primaryColor);
-		const tinycolorSecondary = tinycolor(secondaryColor);
-
-		const processedPrimary = tinycolorPrimary.isLight()
-				? lib_color.addWhiteOverlay(tinycolorPrimary, 0.6)
-				: lib_color.addBlackOverlay(tinycolorPrimary, 0.6),
-			processedSecondary = tinycolorSecondary.isLight()
-				? lib_color.addWhiteOverlay(tinycolorSecondary, 0.6)
-				: lib_color.addBlackOverlay(tinycolorSecondary, 0.6);
-
-		const discordAvatar = `https://cdn.discordapp.com/avatars/${
-			discordInfo.user.id
-		}/${discordInfo.user.avatar}.${
-			discordInfo.user.avatar.startsWith("a_") ? "gif" : "png"
-		}?size=2048`;
-
-		const discordBanner = discordInfo.user_profile.banner
-			? `https://cdn.discordapp.com/banners/${discordInfo.user.id}/${
-					discordInfo.user_profile.banner
-			  }.${
-					discordInfo.user_profile.banner.startsWith("a_") ? "gif" : "png"
-			  }?size=4096`
-			: null;
-
-		const processedDiscordInfo = {
-			id: discordInfo.user.id,
-			username: discordInfo.user.username,
-			avatar: discordAvatar,
-			avatar_decoration: discordInfo.user.avatar_decoration,
-			discriminator: discordInfo.user.discriminator,
-			banner: discordBanner,
-			theme: tinycolorPrimary.isLight() ? "light" : "dark",
-			// customActivity:
-			// 	member.presence &&
-			// 	member.presence?.activities &&
-			// 	member.presence?.activities.length > 0
-			// 		? {
-			// 				state: member.presence.activities[0].state,
-			// 				emoji: member.presence.activities[0].emoji,
-			// 		  }
-			// 		: null,
-			seperatorColor: lib_color.getColorFromGradientPoint(
-				processedPrimary,
-				processedSecondary,
-				0.15,
-			),
-			theme_colors: {
-				primary: {
-					original: primaryColor,
-					processed: processedPrimary,
-				},
-				secondary: {
-					original: secondaryColor,
-					processed: processedSecondary,
-				},
-			},
-			bio: discordInfo.user_profile.bio,
-		};
-
-		console.log(processedDiscordInfo);
 
 		let videos: any;
 
@@ -316,6 +307,7 @@ export default class query {
 				};
 			}),
 			webring,
+			discordInfo,
 		};
 	}
 }

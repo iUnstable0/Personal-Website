@@ -6,21 +6,60 @@ scalar Date
 scalar Byte
 
 type Video {
-	title: String!
-	path: String!
+    title: String!
+    path: String!
 }
 
 type Webring {
-	url: String!
+    url: String!
+}
+
+type ThemeColor {
+    original: String!
+    processed: String!
+}
+
+type ThemeColors {
+    primary: ThemeColor!
+    secondary: ThemeColor!
+}
+
+type Emoji {
+    animated: Boolean!
+    name: String!
+    id: String!
+    createdTimestamp: String!
+    url: String!
+    identifier: String!
+}
+
+type CustomActivity {
+    state: String!
+    emoji: Emoji
+}
+
+type DiscordInfo {
+    id: String!
+    username: String!
+    avatar: String!
+    avatarDecoration: String
+    discriminator: String!
+    banner: String!
+    theme: String!
+    customActivity: CustomActivity
+    seperatorColor: String!
+    themeColors: ThemeColors!
+    bio: String!
 }
 
 type Data {
-	webring: [Webring!]!
-	videos: [Video!]!
+    videos: [Video!]!
+    webring: [Webring!]!
+    discordInfo: DiscordInfo!
 }
 
 type Query {
-	getData(videoFormat: String!): Data! @rateLimit(limit: 60, duration: 10)
+    getData(videoFormat: String!): Data! @rateLimit(limit: 60, duration: 10)
 }
 
 # Mutations ###########################################################################################################################################################################

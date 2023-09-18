@@ -3,12 +3,44 @@ export default class lib_gqlSchema {
 		getData: `
         query ($videoFormat: String!) {
 					getData (videoFormat: $videoFormat) {
-						webring {
-							url
-						}
 						videos {
 							title
 							path
+						}
+						webring {
+							url
+						}
+						discordInfo {
+							id
+							username
+							avatar
+							avatarDecoration
+							discriminator
+							banner
+							theme
+							customActivity {
+								state
+								emoji {
+									animated
+									name
+									id
+									createdTimestamp
+									url
+									identifier
+								}
+							}
+							seperatorColor
+							themeColors {
+								primary {
+									original
+									processed
+								}
+								secondary {
+									original
+									processed
+								}
+							}
+							bio
 						}
 					}
         }

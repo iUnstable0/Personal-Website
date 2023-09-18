@@ -1,5 +1,3 @@
-const chalk = require("ansi-colors");
-
 import Fastify from "fastify";
 import fastifyRateLimit from "@fastify/rate-limit";
 
@@ -14,9 +12,10 @@ const publicFastify = Fastify({
 const redis = lib_redis.get();
 
 export default class FastifyRunner {
-	public static async start() {
-		return new Promise(async (resolve, reject) => {
+	public static async start(chalk: any) {
+		return new Promise(async (resolve) => {
 			// reject) => {
+
 			console.log(chalk.blue(`[Fastify]`), `Starting Public Fastify...`);
 
 			await publicFastify.register(fastifyRateLimit, {
@@ -68,8 +67,8 @@ export default class FastifyRunner {
 		});
 	}
 
-	public static async stop() {
-		return new Promise((resolve) => {
+	public static async stop(chalk: any) {
+		return new Promise(async (resolve) => {
 			console.log(chalk.blue(`[Fastify]`), `Stopping Public Fastify...`);
 
 			publicFastify.close().then(() => {

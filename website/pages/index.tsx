@@ -63,6 +63,7 @@ export const getServerSideProps = async (context: any) => {
 					videos,
 					userInfo: null,
 					webring: data.webring,
+					discordInfo: data.discordInfo,
 				},
 			};
 		})
@@ -78,11 +79,13 @@ export default function Page({
 	// userInfo,
 	contentVisible, // From _app.tsx
 	webring,
+	discordInfo,
 }: {
 	// firstTimeVisit: boolean;
 	// userInfo: any;
 	contentVisible: boolean;
 	webring: Array<any>;
+	discordInfo: any;
 }) {
 	const router = useRouter();
 
@@ -136,6 +139,7 @@ export default function Page({
 					localStorage.setItem("page", page);
 				}}
 				webring={webring}
+				discordInfo={discordInfo}
 				contentVisible={contentVisible}
 			/>
 

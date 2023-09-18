@@ -1,16 +1,14 @@
-const chalk = require("ansi-colors");
-
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const {
-  ApolloServerPluginLandingPageProductionDefault,
+	ApolloServerPluginLandingPageProductionDefault,
 } = require("@apollo/server/plugin/landingPage/default");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 
 import { rateLimitDirective } from "graphql-rate-limit-directive";
 
 const { rateLimitDirectiveTypeDefs, rateLimitDirectiveTransformer } =
-  rateLimitDirective();
+	rateLimitDirective();
 
 import { GraphQLError } from "graphql";
 
@@ -26,172 +24,175 @@ import lib_error from "@iunstable0/server-libs/build/error";
 const plugins = [];
 
 if (process.env.NODE_ENV === "production") {
-  plugins.push(
-    ApolloServerPluginLandingPageProductionDefault({
-      embed: true,
-      graphRef: "iunstable0s-team-5t8xap@main",
-    })
-  );
+	plugins.push(
+		ApolloServerPluginLandingPageProductionDefault({
+			embed: true,
+			graphRef: "iunstable0s-team-5t8xap@main",
+		}),
+	);
 }
 
 let schema = makeExecutableSchema({
-  typeDefs: [
-    rateLimitDirectiveTypeDefs,
-    fs.readFileSync("./src/graphql/schema.graphql", "utf8"),
-  ],
-  resolvers: Resolver,
+	typeDefs: [
+		rateLimitDirectiveTypeDefs,
+		fs.readFileSync("./src/graphql/schema.graphql", "utf8"),
+	],
+	resolvers: Resolver,
 });
 
 schema = rateLimitDirectiveTransformer(schema);
 
 const server = new ApolloServer({
-  schema,
+	schema,
 
-  csrfPrevention: true,
-  introspection: true,
+	csrfPrevention: true,
+	introspection: true,
 
-  validationRules: [depthLimit(14)],
+	validationRules: [depthLimit(14)],
 
-  plugins,
+	plugins,
 
-  formatError: (formattedError: any, error: any) => {
-    if (error.extensions.http)
-      return {
-        message: error.message,
-        code: error.extensions.code,
-      };
+	formatError: async (formattedError: any, error: any) => {
+		if (error.extensions.http)
+			return {
+				message: error.message,
+				code: error.extensions.code,
+			};
 
-    if (error.message.includes("Too many requests"))
-      return {
-        message: error.message,
-        code: "TOO_MANY_REQUESTS",
-      };
-    const referenceCode = lib_error.generateReferenceCode();
+		if (error.message.includes("Too many requests"))
+			return {
+				message: error.message,
+				code: "TOO_MANY_REQUESTS",
+			};
 
-    console.log(chalk.red(`[Apollo]`), `[${referenceCode}] ${error.message}`);
+		const chalk = await import("chalk").then((module) => module.default);
 
-    return {
-      message: `Internal server error. Ref: ${referenceCode}`,
-      code: "INTERNAL_SERVER_ERROR",
-    };
-  },
+		const referenceCode = lib_error.generateReferenceCode();
+
+		console.log(chalk.red(`[Apollo]`), `[${referenceCode}] ${error.message}`);
+
+		return {
+			message: `Internal server error. Ref: ${referenceCode}`,
+			code: "INTERNAL_SERVER_ERROR",
+		};
+	},
 });
 
 export default class ApolloRunner {
-  public static async start() {
-    return new Promise((resolve) => {
-      console.log(chalk.blue(`[Apollo]`), `Starting Apollo Server...`);
+	public static async start(chalk: any) {
+		return new Promise(async (resolve) => {
+			console.log(chalk.blue(`[Apollo]`), `Starting Apollo Server...`);
 
-      startStandaloneServer(server, {
-        listen: { port: process.env.APOLLO_PORT },
-        context: async ({ req }) => {
-          // @ts-ignore
-          const body = req.body;
+			startStandaloneServer(server, {
+				listen: { port: process.env.APOLLO_PORT },
+				context: async ({ req }) => {
+					// @ts-ignore
+					const body = req.body;
 
-          if (body) {
-            const data = JSON.stringify(body);
+					if (body) {
+						const data = JSON.stringify(body);
 
-            if (
-              data.includes("IntrospectionQuery") &&
-              data.includes("__schema")
-            ) {
-              const introspectionKey = req.headers["authorization"];
+						if (
+							data.includes("IntrospectionQuery") &&
+							data.includes("__schema")
+						) {
+							const introspectionKey = req.headers["authorization"];
 
-              // console.log(req.headers);
-              // console.log(introspectionKey);
-              // console.log(typeof introspectionKey);
-              // console.log(typeof process.env.INTROSPECTION_KEY);
-              // console.log(
-              // 	introspectionKey !==
-              // 		process.env.INTROSPECTION_KEY
-              // );
-              // console.log(process.env.NODE_ENV !== "development");
-              // console.log(
-              // 	introspectionKey !==
-              // 		process.env.INTROSPECTION_KEY &&
-              // 		process.env.NODE_ENV !== "development"
-              // );
+							// console.log(req.headers);
+							// console.log(introspectionKey);
+							// console.log(typeof introspectionKey);
+							// console.log(typeof process.env.INTROSPECTION_KEY);
+							// console.log(
+							// 	introspectionKey !==
+							// 		process.env.INTROSPECTION_KEY
+							// );
+							// console.log(process.env.NODE_ENV !== "development");
+							// console.log(
+							// 	introspectionKey !==
+							// 		process.env.INTROSPECTION_KEY &&
+							// 		process.env.NODE_ENV !== "development"
+							// );
 
-              if (
-                introspectionKey !== process.env.INTROSPECTION_KEY &&
-                process.env.NODE_ENV !== "development"
-              )
-                throw new GraphQLError(
-                  "GraphQL introspection not authorized!",
-                  {
-                    extensions: {
-                      code: "UNAUTHORIZED",
-                      http: { status: 401 },
-                    },
-                  }
-                );
+							if (
+								introspectionKey !== process.env.INTROSPECTION_KEY &&
+								process.env.NODE_ENV !== "development"
+							)
+								throw new GraphQLError(
+									"GraphQL introspection not authorized!",
+									{
+										extensions: {
+											code: "UNAUTHORIZED",
+											http: { status: 401 },
+										},
+									},
+								);
 
-              // console.log("📄 [Apollo] Responded to introspection query!");
-            }
-          }
+							// console.log("📄 [Apollo] Responded to introspection query!");
+						}
+					}
 
-          // let token = req.headers["authorization"];
+					// let token = req.headers["authorization"];
 
-          // token = token ? token.replaceAll("Bearer ", "") : null;
+					// token = token ? token.replaceAll("Bearer ", "") : null;
 
-          // let result;
+					// let result;
 
-          // if (token && !token.includes("Introspection")) {
-          // 	result = await lib_token.validateToken(
-          // 		token,
-          // 		"account",
-          // 		(account: any, decodedToken: any) => {
-          // 			if (account.passwordSession === decodedToken.passwordSession && account.accountSession === decodedToken.accountSession) {
-          // 				return true;
-          // 			}
+					// if (token && !token.includes("Introspection")) {
+					// 	result = await lib_token.validateToken(
+					// 		token,
+					// 		"account",
+					// 		(account: any, decodedToken: any) => {
+					// 			if (account.passwordSession === decodedToken.passwordSession && account.accountSession === decodedToken.accountSession) {
+					// 				return true;
+					// 			}
 
-          // 			return false;
-          // 		},
-          // 		{},
-          // 		"token"
-          // 	);
-          // }
+					// 			return false;
+					// 		},
+					// 		{},
+					// 		"token"
+					// 	);
+					// }
 
-          // const authenticated = result ? (result.account ? true : false) : false;
+					// const authenticated = result ? (result.account ? true : false) : false;
 
-          return {
-            // session: authenticated ? result : null,
-            // authenticated,
-            // token,
-            req,
-          };
-        },
-      }).then(() => {
-        console.log(
-          chalk.magenta(`[Apollo]`),
-          `Apollo Server ready at http://${
-            process.env.NODE_ENV === "production"
-              ? "127.0.0.1"
-              : "fakelocal.com"
-          }:${process.env.APOLLO_PORT}`
-        );
+					return {
+						// session: authenticated ? result : null,
+						// authenticated,
+						// token,
+						req,
+					};
+				},
+			}).then(() => {
+				console.log(
+					chalk.magenta(`[Apollo]`),
+					`Apollo Server ready at http://${
+						process.env.NODE_ENV === "production"
+							? "127.0.0.1"
+							: "fakelocal.com"
+					}:${process.env.APOLLO_PORT}`,
+				);
 
-        resolve(true);
-      });
-    });
-  }
+				resolve(true);
+			});
+		});
+	}
 
-  public static async stop() {
-    return new Promise((resolve) => {
-      console.log(chalk.blue(`[Apollo]`), `Stopping Apollo Server...`);
+	public static async stop(chalk: any) {
+		return new Promise(async (resolve) => {
+			console.log(chalk.blue(`[Apollo]`), `Stopping Apollo Server...`);
 
-      server
-        .stop()
-        .then(() => {
-          console.log(chalk.magenta(`[Apollo]`), `Stopped Apollo Server`);
+			server
+				.stop()
+				.then(() => {
+					console.log(chalk.magenta(`[Apollo]`), `Stopped Apollo Server`);
 
-          resolve(true);
-        })
-        .catch(() => {
-          console.log(chalk.red(`[Apollo]`), `Failed to stop Apollo Server`);
+					resolve(true);
+				})
+				.catch(() => {
+					console.log(chalk.red(`[Apollo]`), `Failed to stop Apollo Server`);
 
-          resolve(true);
-        });
-    });
-  }
+					resolve(true);
+				});
+		});
+	}
 }
