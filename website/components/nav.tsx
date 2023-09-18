@@ -5,9 +5,15 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 import clsx from "clsx";
+import copy from "copy-to-clipboard";
+import toast from "react-hot-toast";
+
+import { Popover, Tooltip } from "@mantine/core";
+
+// import { Tooltip } from "@nextui-org/react";
 
 // @ts-ignore
-import { UilAngleLeft, UilAngleRight } from "@iconscout/react-unicons";
+import { UilAngleLeft, UilAngleRight, UilCopy } from "@iconscout/react-unicons";
 
 import navStyles from "components/styles/Nav.module.scss";
 
@@ -15,11 +21,13 @@ export default function NavBar({
 	page,
 	setPage,
 	webring,
+	discordInfo,
 	contentVisible,
 }: {
 	page: string;
 	setPage: (page: string) => void;
 	webring: Array<any>;
+	discordInfo: any;
 	contentVisible: boolean;
 }) {
 	const router = useRouter();
@@ -28,6 +36,8 @@ export default function NavBar({
 
 	const [cornerLeftHover, setCornerLeftHover] = useState<boolean>(false),
 		[cornerRightHover, setCornerRightHover] = useState<boolean>(false);
+
+	const [copyButtonClicked, setCopyButtonClicked] = useState(false);
 
 	const pageName = page
 		? page.substring(0, 1).toUpperCase() + page.substring(1)
@@ -44,12 +54,230 @@ export default function NavBar({
 			</Head>
 
 			<div className={navStyles.container}>
+				<style global jsx>{`
+					.left {
+						background-color: var(--light-blue-2);
+						position: relative;
+						border-radius: 15px;
+						//margin-right: 5rem;
+						box-sizing: border-box;
+						display: flex;
+						flex-direction: column;
+
+						width: 350px;
+						min-width: 350px;
+						max-width: 350px;
+						height: 650px;
+
+						background: linear-gradient(
+								to bottom,
+								${discordInfo.themeColors.primary.processed} 0%,
+								${discordInfo.themeColors.primary.processed} 30%,
+								${discordInfo.themeColors.secondary.processed} 100%
+							),
+							linear-gradient(
+								to bottom,
+								${discordInfo.themeColors.primary.original} 0%,
+								${discordInfo.themeColors.secondary.original} 100%
+							);
+						z-index: 0;
+						border: double 5px transparent;
+						background-origin: border-box;
+						background-clip: content-box, border-box;
+					}
+
+					.left:before {
+						content: "";
+						z-index: -1;
+						position: absolute;
+						top: 0;
+						right: 0;
+						bottom: 0;
+						left: 0;
+						background: linear-gradient(
+							to bottom,
+							${discordInfo.themeColors.primary.original} 0%,
+							${discordInfo.themeColors.secondary.original} 100%
+						);
+						transform: translate3d(0px, 0px, 0) scale(0.95);
+						filter: blur(65px);
+						opacity: var(0.35);
+						transition: opacity 0.3s;
+						border-radius: inherit;
+					}
+
+					.left::after {
+						content: "";
+						z-index: -1;
+						position: absolute;
+						top: 0;
+						right: 0;
+						bottom: 0;
+						left: 0;
+						background: inherit;
+						border-radius: 10px;
+					}
+
+					.pfpImg {
+						width: 97px;
+						object-fit: cover;
+						border-radius: 100%;
+						margin-left: 1rem;
+						margin-top: 2rem;
+						border: 6px solid transparent;
+					}
+
+					.bannerImg {
+						width: 100%;
+						height: 30%;
+
+						border-radius: 10px 10px 0 0;
+						z-index: 2;
+
+						object-fit: cover;
+
+						mask-image: url("/border.svg");
+
+						mask-position: -1986px -1923px;
+						mask-size: 4100px 4100px;
+
+						mask-repeat: no-repeat;
+					}
+
+					.badges {
+						display: flex;
+						flex-direction: row;
+						justify-content: center;
+						align-items: center;
+						gap: 4px;
+
+						margin: 1rem auto;
+						margin-right: 5%;
+						border-radius: 9px;
+						background: ${discordInfo.theme === "light"
+							? "#ffffff60"
+							: "#00000060"};
+
+						width: 150px;
+						height: 48px;
+
+						z-index: 2;
+					}
+
+					.body {
+						border-radius: 9px;
+						background: ${discordInfo.theme === "light"
+							? "#ffffff95"
+							: // : "#13131395"};
+							  "#00000060"};
+						width: 90%;
+						margin: 0 auto 18px auto;
+						flex-grow: 1;
+						align-self: center;
+					}
+
+					.username {
+						color: ${discordInfo.theme === "light" ? "#1b1b1b" : "#ffffff"};
+						font-weight: 600;
+						font-size: 22px;
+						margin: 0.7rem 0.7rem;
+						font-family: "Source Sans Pro", sans-serif !important;
+						display: flex;
+						flex-direction: row;
+						justify-content: left;
+						align-items: center;
+					}
+
+					.discriminator {
+						color: ${discordInfo.theme === "light" ? "#4c4e5f" : "#c0c0c4"};
+						font-weight: 600;
+						font-size: 22px;
+						font-family: "Work Sans", sans-serif !important;
+					}
+
+					.copyButton {
+						opacity: 0;
+						margin-left: 0.2rem;
+						transition: all 0.2s ease-in-out;
+						color: ${discordInfo.theme === "light" ? "#4c4e5f" : "#c0c0c4"};
+						width: 1.25rem;
+					}
+
+					.copyButton:hover {
+						scale: 1.2;
+					}
+
+					.copyButton:active {
+						scale: 1;
+					}
+
+					.username:hover .copyButton {
+						opacity: 1;
+					}
+
+					.seperator {
+						width: 92%;
+						height: 0.5px;
+						background: ${discordInfo.seperatorColor};
+						margin: 0.7rem auto;
+					}
+
+					.bodyTextContent {
+						color: ${discordInfo.theme === "light"
+							? "var(--text-color-dark)"
+							: "#e2e2e2"};
+						font-weight: 400;
+						font-size: 15px;
+						display: inline-block;
+
+						// margin: 4.8px 11.2px;
+
+						margin-left: 11.2px;
+						// margin-bottom: 0;
+						// margin-bottom: 2px;
+
+						font-family: "PT Sans", sans-serif !important;
+
+						line-height: 20px;
+						letter-spacing: 0;
+
+						word-wrap: break-word;
+					}
+
+					.bodyTextTitle {
+						color: ${discordInfo.theme === "light" ? "#000000" : "#e2e2e2"};
+						font-weight: 500;
+						font-size: 14px;
+						margin: 16px 11.2px 0;
+						font-family: "Secular One", sans-serif !important;
+					}
+
+					.dateText {
+						color: ${discordInfo.theme === "light"
+							? "var(--text-color-dark)"
+							: "#e2e2e2"};
+
+						font-weight: 400;
+						font-size: 16px;
+						font-family: "Metrophobic", sans-serif !important;
+
+						line-height: 18px;
+						letter-spacing: 0;
+
+						word-wrap: break-word;
+					}
+				`}</style>
+
 				<div
 					className={clsx(
 						navStyles.corner,
 						navStyles.corner_left,
 						cornerLeftHover ? navStyles.corner_left_hover : "",
 					)}
+					style={{
+						backdropFilter: contentVisible ? "none" : "blur(10px)",
+						WebkitBackdropFilter: contentVisible ? "none" : "blur(10px)",
+					}}
 				>
 					<div
 						className={navStyles.corner_container}
@@ -142,6 +370,10 @@ export default function NavBar({
 						navStyles.corner_right,
 						cornerRightHover ? navStyles.corner_right_hover : "",
 					)}
+					style={{
+						backdropFilter: contentVisible ? "none" : "blur(10px)",
+						WebkitBackdropFilter: contentVisible ? "none" : "blur(10px)",
+					}}
 				>
 					<div
 						className={navStyles.corner_container}
@@ -166,19 +398,610 @@ export default function NavBar({
 						</a>
 						<a
 							title="My Discord"
-							href="https://discord.com/users/938705972350840882"
+							// href="https://discord.com/users/938705972350840882"
 							className={navStyles.cornerSocialLink}
-							target="_blank"
+							// target="_blank"
 							rel="noopener noreferrer"
 						>
-							<Image
-								src="/discord-mark-white.svg"
-								alt="Discord"
-								width={28}
-								height={28}
-								className={navStyles.cornerImg}
-								priority={true}
-							/>
+							<Popover position="bottom-end" keepMounted>
+								<Popover.Target>
+									<Image
+										src="/discord-mark-white.svg"
+										alt="Discord"
+										width={28}
+										height={28}
+										className={navStyles.cornerImg}
+										priority={true}
+									/>
+								</Popover.Target>
+								<Popover.Dropdown
+									style={{
+										backgroundColor: "transparent",
+										border: "none",
+										marginTop: "10px",
+										// backdropFilter: "blur(10px)",
+										// WebkitBackdropFilter: "blur(10px)",
+										// padding: "0",
+										// borderRadius: "15px",
+									}}
+								>
+									<div className="left">
+										{/* <div> */}
+										{/* <img
+							src="../public/banner.gif"
+							alt="Banner"
+							className={navStyles.bannerImg}
+						/> */}
+										{discordInfo.banner ? (
+											<img
+												src={discordInfo.banner}
+												alt="Profile Banner"
+												className={`${navStyles.banner} bannerImg`}
+											/>
+										) : (
+											// <Image
+											// 	src={banner}
+											// 	alt="Profile Banner"
+											// 	className={navStyles.bannerImg}
+											// 	loading="eager"
+											// />
+											<div
+												className={`${navStyles.banner} bannerImg`}
+												style={{
+													backgroundColor:
+														discordInfo.themeColors.primary.original,
+												}}
+											></div>
+										)}
+										{/* // <Image
+						// 	src={banner}
+						// 	alt="Profile Banner"
+						// 	className={navStyles.bannerImg}
+						// 	loading="eager"
+						// /> */}
+										{/* </div> */}
+										<div className={navStyles.pfp}>
+											{/* <Image
+								className={navStyles.pfpImgBorder}
+								src="/border.svg"
+								alt="Picture of the author"
+								width={160}
+								height={160}
+								loading="eager"
+							/> */}
+
+											{/* {discordInfo.avatar_decoration ? (
+								<div
+									// src="/border.svg"
+									// alt="Picture of the author"
+									className={navStyles.pfpImgDecoBorder}
+								/>
+							) : (
+								<div
+									// src="/border.svg"
+									// alt="Picture of the author"
+									className={navStyles.pfpImgBorder}
+								/>
+							)} */}
+
+											{/* <div
+								// src="/border.svg"
+								// alt="Picture of the author"
+								className={navStyles.pfpImgBorder}
+							/> */}
+
+											<img
+												// src="/profile.webp"
+												src={discordInfo.avatar}
+												alt="Picture of the author"
+												className="pfpImg"
+											/>
+											{/* <img
+								src="/christmas.gif"
+								alt="Picture of the author"
+								className={navStyles.pfpImgMask}
+							/> */}
+										</div>
+										<div className="badges">
+											<Tooltip
+												label={"HypeSquad Balance"}
+												arrowPosition={"center"}
+												arrowSize={6}
+												withArrow={true}
+												// content={"HypeSquad Balance"}
+												// shadow={true}
+												// color="invert"
+												// rounded={"lg"}
+												// radius={"sm"}
+												// css={{
+												// 	borderRadius: "7px",
+												// 	bg: "#1b1b1b",
+												// 	"& .nextui-tooltip-arrow": {
+												// 		//overwrite arrow bg color
+												// 		bg: "#1b1b1b",
+												// 	},
+												// }}
+											>
+												<Image
+													src="/hypesquad_balance.svg"
+													alt="Hypesquad"
+													className={navStyles.badge}
+													width={25}
+													height={25}
+													// loading="eager"
+													priority={true}
+												/>
+											</Tooltip>
+											<Tooltip
+												label={"Active Developer"}
+												arrowPosition={"center"}
+												arrowSize={6}
+												withArrow={true}
+												// shadow={true}
+												// color="invert"
+												// rounded={"lg"}
+												// radius={"sm"}
+												// css={{
+												// 	borderRadius: "7px",
+												// 	bg: "#1b1b1b",
+												// 	"& .nextui-tooltip-arrow": {
+												// 		//overwrite arrow bg color
+												// 		bg: "#1b1b1b",
+												// 	},
+												// }}
+											>
+												<Image
+													src="/active_developer.svg"
+													alt="Active Developer"
+													className={navStyles.badge}
+													width={25}
+													height={25}
+													// loading="eager"
+													priority={true}
+												/>
+											</Tooltip>
+											<Tooltip
+												label={"Subscriber since Dec 8, 2022"}
+												arrowPosition={"center"}
+												arrowSize={6}
+												withArrow={true}
+												// shadow={true}
+												// color="invert"
+												// rounded={"lg"}
+												// radius={"sm"}
+												// css={{
+												// 	borderRadius: "7px",
+												// 	bg: "#1b1b1b",
+												// 	"& .nextui-tooltip-arrow": {
+												// 		//overwrite arrow bg color
+												// 		bg: "#1b1b1b",
+												// 	},
+												// }}
+											>
+												<Image
+													src="/nitro.svg"
+													alt="Nitro"
+													className={navStyles.badge}
+													width={25}
+													height={25}
+													// loading="eager"
+													priority={true}
+												/>
+											</Tooltip>
+											<Tooltip
+												label={"Server boosting since Dec 26, 2022"}
+												arrowPosition={"center"}
+												arrowSize={6}
+												withArrow={true}
+												// shadow={true}
+												// color="invert"
+												// rounded={"lg"}
+												// radius={"sm"}
+												// css={{
+												// 	borderRadius: "7px",
+												// 	bg: "#1b1b1b",
+												// 	"& .nextui-tooltip-arrow": {
+												// 		//overwrite arrow bg color
+												// 		bg: "#1b1b1b",
+												// 	},
+												// }}
+											>
+												<Image
+													src="/boost.svg"
+													alt="Boost"
+													className={navStyles.badge}
+													width={25}
+													height={25}
+													// loading="eager"
+													priority={true}
+												/>
+											</Tooltip>
+											<Tooltip
+												label={"Originally known as iunstable0#0001"}
+												arrowPosition={"center"}
+												arrowSize={6}
+												withArrow={true}
+												// shadow={true}
+												// color="invert"
+												// rounded={"lg"}
+												// radius={"sm"}
+												// css={{
+												// 	borderRadius: "7px",
+												// 	bg: "#1b1b1b",
+												// 	"& .nextui-tooltip-arrow": {
+												// 		//overwrite arrow bg color
+												// 		bg: "#1b1b1b",
+												// 	},
+												// }}
+											>
+												<Image
+													src="/legacy.png"
+													alt="Legacy Name"
+													className={navStyles.badge}
+													width={25}
+													height={25}
+													// loading="eager"
+													priority={true}
+												/>
+											</Tooltip>
+										</div>
+										<div className={navStyles.bodyContainer}>
+											<div className="body">
+												<div className="username">
+													{discordInfo.username}
+													{/*<span className="discriminator">*/}
+													{/*	#{discordInfo.discriminator}*/}
+													{/*</span>*/}
+													{/* <button className={navStyles.copyButton}>
+										Copy
+									</button> */}
+													<UilCopy
+														className="copyButton"
+														onClick={() => {
+															copy(discordInfo.id);
+
+															toast.success("Copied User ID to Clipboard!", {
+																id: "copyButton",
+															});
+
+															setCopyButtonClicked(true);
+
+															setTimeout(() => {
+																setCopyButtonClicked(false);
+															}, 200);
+														}}
+													/>
+												</div>
+
+												{discordInfo.customActivity && (
+													<div className={navStyles.customActivity}>
+														{discordInfo.customActivity.emoji && (
+															<Tooltip
+																label={`:${discordInfo.customActivity.emoji.name}:`}
+																arrowPosition={"center"}
+																arrowSize={6}
+																withArrow={true}
+																// shadow={true}
+																// color="invert"
+																// rounded={true}
+																// css={{
+																// 	borderRadius: "7px",
+																// 	bg: "#1b1b1b",
+																// 	"& .nextui-tooltip-arrow": {
+																// 		//overwrite arrow bg color
+																// 		bg: "#1b1b1b",
+																// 	},
+																// }}
+															>
+																{discordInfo.customActivity.emoji.id ? (
+																	<img
+																		src={`https://cdn.discordapp.com/emojis/${
+																			discordInfo.customActivity.emoji.id
+																		}.${
+																			discordInfo.customActivity.emoji.animated
+																				? "gif"
+																				: "png"
+																		}?size=96`}
+																		alt="Emoji"
+																		style={{
+																			// marginBottom: "-19px",
+																			float: "left",
+																			width: "20px",
+																			height: "20px",
+																			objectFit: "contain",
+																			marginTop: "3px",
+																			marginRight: "5px",
+																		}}
+																	/>
+																) : (
+																	<div
+																		style={{
+																			// marginBottom: "-19px",
+																			float: "left",
+																			width: "20px",
+																			height: "20px",
+																			objectFit: "contain",
+																			marginTop: "0px",
+																			marginRight: "5px",
+																		}}
+																	>
+																		{discordInfo.customActivity.emoji.name}
+																	</div>
+																)}
+															</Tooltip>
+														)}
+														<span
+															style={{
+																color:
+																	discordInfo.theme === "light"
+																		? "var(--text-color-dark)"
+																		: "#e2e2e2",
+																fontWeight: 400,
+																fontSize: "15px",
+
+																// margin-left: 11.2px;
+																// margin-bottom: 2px;
+
+																fontFamily: "PT Sans, sans-serif !important",
+
+																lineHeight: "20px",
+																letterSpacing: 0,
+
+																wordWrap: "break-word",
+															}}
+														>
+															{discordInfo.customActivity.state}
+														</span>
+													</div>
+												)}
+
+												<div className="seperator" />
+												<div className={navStyles.bodyText}>
+													<div className="bodyTextTitle">ABOUT ME</div>
+													<div>
+														{/* <p
+											className={
+												navStyles.bodyTextContent
+											}
+										> */}
+														{/* tjzcgt8696@privaterelay.appleid.com
+											<br />
+											0-curl.annoyed@icloud.com
+											<br />
+											mail@biggybig.xyz
+											<br />
+											<br />
+											matrix: @iunstable0:matrix.org
+											<br />
+											session:
+											05e54486ba05faa5a31d197cb2818fffb4d7797080c43a8d186822166f8a8b5152 */}
+														{console.log(discordInfo.bio.split("\n"))}
+														{discordInfo.bio
+															.split("\n")
+															.map((item: string, key: string) => {
+																// console.log(item);
+																if (item === "")
+																	return (
+																		<>
+																			{/* <div key={key} className="bodyTextContent" />
+														<div key={key} className="bodyTextContent" /> */}
+																			<div
+																				key={key}
+																				style={{
+																					marginTop: "0px",
+																					marginBottom: "0px",
+																					fontSize: "8px",
+																				}}
+																			>
+																				<br />
+																			</div>
+																		</>
+																	);
+
+																const line = item.replace(
+																	/\<(.*?)\:(.*?)\>/g,
+																	(match: any, p1: any, p2: any) => {
+																		// console.log(p2);
+																		return `_IMG_$img:${
+																			p1 === "" ? "" : `${p1}:`
+																		}${p2}_IMG_`;
+																	},
+																);
+
+																console.log(line);
+
+																const poop = line.split("_IMG_");
+
+																console.log(poop);
+
+																// console.log(line);
+																// console.log(poop);
+
+																// console.log(poop[0] !== "" && poop[0]);
+																// console.log(poop.length);
+
+																return (
+																	<div key={key} className="bodyTextContent">
+																		{poop[0] !== "" && poop[0]}
+																		{poop.length > 1 &&
+																			poop.map(
+																				(poopitem: string, poopkey: number) => {
+																					if (poopkey === 0) return "";
+
+																					// if (poopitem === "") {
+																					// console.log("EMPTY");
+
+																					// 	return "";
+																					// }
+
+																					if (!poopitem.startsWith("$img:")) {
+																						// return <span key={poopkey}>{poopitem}</span>;
+																						return poopitem;
+																					}
+
+																					// console.log(poopitem);
+																					// console.log(poop);
+																					// console.log(line);
+
+																					const splittedEmo = poopitem
+																						.replace("$img:", "")
+																						.split(":");
+
+																					const animated =
+																						splittedEmo.length > 2
+																							? true
+																							: false;
+
+																					const emoName = animated
+																						? splittedEmo[1]
+																						: splittedEmo[0];
+
+																					const emoID = animated
+																						? splittedEmo[2]
+																						: splittedEmo[1];
+
+																					return (
+																						<span key={poopkey}>
+																							<Tooltip
+																								label={`:${emoName}:`}
+																								arrowPosition={"center"}
+																								arrowSize={6}
+																								withArrow={true}
+																								// shadow={true}
+																								// color="invert"
+																								// rounded={true}
+																								// css={{
+																								// 	borderRadius: "7px",
+																								// 	bg: "#1b1b1b",
+																								// 	"& .nextui-tooltip-arrow": {
+																								// 		//overwrite arrow bg color
+																								// 		bg: "#1b1b1b",
+																								// 	},
+																								// }}
+																							>
+																								<Image
+																									src={`https://cdn.discordapp.com/emojis/${emoID}.${
+																										animated ? "gif" : "png"
+																									}?size=96`}
+																									alt="Emoji"
+																									width={20}
+																									height={20}
+																									style={{
+																										marginBottom: "-5px",
+																									}}
+																									// loading="eager"
+																									priority={true}
+																								/>
+																							</Tooltip>
+																							{/* {poop[poopkey + 1]} */}
+																						</span>
+																					);
+																				},
+																			)}
+																	</div>
+																);
+															})}
+														{/* </p> */}
+													</div>
+													<div className="bodyTextTitle">MEMBER SINCE</div>
+													<div>
+														{/* <p
+											className={
+												navStyles.bodyTextContent
+											}
+										> */}
+														<div className={navStyles.date}>
+															<Tooltip
+																label={"Discord"}
+																arrowPosition={"center"}
+																arrowSize={6}
+																withArrow={true}
+																// shadow={true}
+																// color="invert"
+																// rounded={true}
+																// css={{
+																// 	borderRadius: "7px",
+																// 	bg: "#1b1b1b",
+																// 	"& .nextui-tooltip-arrow": {
+																// 		//overwrite arrow bg color
+																// 		bg: "#1b1b1b",
+																// 	},
+																// }}
+															>
+																<Image
+																	src={`/discord-mark-${
+																		discordInfo.theme === "light"
+																			? "black"
+																			: "white"
+																	}.svg`}
+																	alt="Discord"
+																	width={18}
+																	height={18}
+																	loading="eager"
+																/>
+															</Tooltip>
+															<span className="dateText">Feb 03, 2022</span>
+															{/* Bullet point */}
+															<span
+																style={{
+																	color:
+																		discordInfo.theme === "light"
+																			? "#4c4e5f"
+																			: "#b9bbca",
+																}}
+															>
+																•
+															</span>
+															<Tooltip
+																label={"Planet Earth"}
+																arrowPosition={"center"}
+																arrowSize={6}
+																withArrow={true}
+																// shadow={true}
+																// color="invert"
+																// rounded={true}
+																// css={{
+																// 	borderRadius: "7px",
+																// 	bg: "#1b1b1b",
+																// 	"& .nextui-tooltip-arrow": {
+																// 		//overwrite arrow bg color
+																// 		bg: "#1b1b1b",
+																// 	},
+																// }}
+															>
+																<Image
+																	src="/world.svg"
+																	alt="Planet Earth"
+																	width={18}
+																	height={18}
+																	loading="eager"
+																	style={{
+																		// Invert
+																		filter:
+																			discordInfo.theme === "light"
+																				? "invert(0)"
+																				: "invert(1)",
+																	}}
+																/>
+															</Tooltip>
+															<span className="dateText">Apr 08, 2007</span>
+														</div>
+														{/* </p> */}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</Popover.Dropdown>
+							</Popover>
+							{/*<Image*/}
+							{/*	src="/discord-mark-white.svg"*/}
+							{/*	alt="Discord"*/}
+							{/*	width={28}*/}
+							{/*	height={28}*/}
+							{/*	className={navStyles.cornerImg}*/}
+							{/*	priority={true}*/}
+							{/*/>*/}
 						</a>
 					</div>
 				</div>

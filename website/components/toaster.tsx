@@ -11,6 +11,7 @@ export default function Component() {
 					background: "#002f5c",
 					color: "#e5e5e5",
 					fontFamily: "Ubuntu",
+					fontWeight: "600",
 				},
 				success: {
 					duration: 5000,

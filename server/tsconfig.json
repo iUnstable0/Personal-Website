@@ -1,43 +1,32 @@
 {
-	"compilerOptions": {
-		"rootDirs": ["src"],
-		"outDir": "build",
-		"lib": ["ESNext", "dom"],
-		"target": "ESNext",
-		// "module": "esnext",
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"esModuleInterop": true,
-		"types": ["node"],
-//		"watch": true,
-		"resolveJsonModule": true,
-		"baseUrl": "src",
-		"incremental": true
-	},
-
-	"include": ["./src"],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "ESNext",
+    "outDir": "build",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": [
+      "node"
+    ],
+    "resolveJsonModule": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
-
-// {
-//     "compilerOptions": {
-//         "target": "ES2022",
-//         "watch": true,
-//         "module": "commonjs",
-//         "moduleResolution": "node",
-//         "resolveJsonModule": true,
-//         "esModuleInterop": true,
-//         "removeComments": true,
-//         "strict": true,
-//         "strictNullChecks": false,
-//         "rootDir": "./src",
-//         "outDir": "./build",
-//         "skipLibCheck": true,
-//         "baseUrl": "./src",
-//         "incremental": true,
-//         "isolatedModules": true
-//     },
-
-//     "include": ["./src"],
-//     "exclude": ["node_modules"]
-// }

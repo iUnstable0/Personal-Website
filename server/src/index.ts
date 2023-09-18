@@ -1,4 +1,6 @@
-const chalk = require("ansi-colors");
+if (process.env.NODE_ENV === "production") {
+	require("module-alias/register");
+}
 
 let time = Date.now();
 
@@ -7,66 +9,49 @@ process.send = process.send || function () {};
 
 require("better-logging")(console);
 
-// console.log(chalk.blue(`[Init]`), `Loading ENV from .env...`);
-// require("dotenv").config({ path: ".env" });
-// console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env`);
+import WebSocket from "@/runner/WebSocket";
+import Fastify from "@/runner/Fastify";
+import Discord from "@/runner/Discord";
+import Apollo from "@/runner/Apollo";
 
-// console.log(chalk.blue(`[Init]`), `Loading ENV from .env (GLOBAL)...`);
-// require("dotenv").config({ path: "../.env" });
-// console.log(chalk.magenta(`[Init]`), `Loaded ENV from .env (GLOBAL)`);
+(async () => {
+	const chalk = await import("chalk").then((module) => module.default);
 
-// console.log(
-//   chalk.blue(`[Init]`),
-//   `Loading ENV from .env.${process.env.NODE_ENV}...`
-// );
-// require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
-// console.log(
-//   chalk.magenta(`[Init]`),
-//   `Loaded ENV from .env.${process.env.NODE_ENV}`
-// );
+	WebSocket.start(chalk);
 
-// console.log(
-//   chalk.blue(`[Init]`),
-//   `Loading ENV from .env.${process.env.NODE_ENV} (GLOBAL)...`
-// );
-// require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
-// console.log(
-//   chalk.magenta(`[Init]`),
-//   `Loaded ENV from .env.${process.env.NODE_ENV} (GLOBAL)`
-// );
+	Fastify.start(chalk).then(() => {
+		Discord.start(chalk).then(() => {
+			Apollo.start(chalk).then(async () => {
+				console.log(
+					chalk.green(`[Init]`),
+					`Server online! Took ${Date.now() - time}ms`,
+				);
 
-import Fastify from "./runner/Fastify";
-import Apollo from "./runner/Apollo";
-import WebSocket from "./runner/WebSocket";
-
-WebSocket.start();
-
-Fastify.start().then(() => {
-  Apollo.start().then(() => {
-    console.log(
-      chalk.green(`[Init]`),
-      `Server online! Took ${Date.now() - time}ms`
-    );
-
-    process.send("ready");
-  });
-});
+				process.send("ready");
+			});
+		});
+	});
+})();
 
 process.on("SIGINT", async () => {
-  time = Date.now();
+	const chalk = await import("chalk").then((module) => module.default);
 
-  console.log(chalk.red(`[Init]`), `Stopping server...`);
+	time = Date.now();
 
-  Apollo.stop().then(() => {
-    Fastify.stop().then(() => {
-      WebSocket.stop();
+	console.log(chalk.red(`[Init]`), `Stopping server...`);
 
-      console.log(
-        chalk.green(`[Init]`),
-        `Ready to exit! Took ${Date.now() - time}ms`
-      );
+	Apollo.stop(chalk).then(() => {
+		Discord.stop(chalk).then(() => {
+			Fastify.stop(chalk).then(() => {
+				WebSocket.stop(chalk);
 
-      process.exit(0);
-    });
-  });
+				console.log(
+					chalk.green(`[Init]`),
+					`Ready to exit! Took ${Date.now() - time}ms`,
+				);
+
+				process.exit(0);
+			});
+		});
+	});
 });
