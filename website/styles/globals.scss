@@ -12,25 +12,25 @@
 
 html,
 body {
-	padding: 0;
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-	color-scheme: dark;
-	color: white;
-	/* background: var(--medium-blue); */
-	background-color: transparent;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color-scheme: dark;
+  color: white;
+  /* background: var(--medium-blue); */
+  background-color: transparent;
 }
 
 a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 * {
-	box-sizing: border-box !important;
-	/* font-family: "quicksand", sans-serif; */
-	font-family: "Open Sans", sans-serif !important;
+  box-sizing: border-box !important;
+  /* font-family: "quicksand", sans-serif; */
+  font-family: "Open Sans", sans-serif !important;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -44,41 +44,41 @@ a {
 } */
 
 :root {
-	/* font-family: "Quicksand", sans-serif; */
-	/* --font: "Open Sans", sans-serif; */
-	--pure-white: #ffffff;
-	/* --background-color: #121d2e; */
-	--heading-color: #ffffff;
-	--text-color: #cccccc;
-	--column-width: 42rem;
-	--column-margin-top: 4rem;
+  /* font-family: "Quicksand", sans-serif; */
+  /* --font: "Open Sans", sans-serif; */
+  --pure-white: #ffffff;
+  /* --background-color: #121d2e; */
+  --heading-color: #ffffff;
+  --text-color: #cccccc;
+  --column-width: 42rem;
+  --column-margin-top: 4rem;
 
-	--medium-blue: #121d2e;
-	--medium-blue-2: #0b3a67;
-	--medium-blue-3: #082c4f;
+  --medium-blue: #121d2e;
+  --medium-blue-2: #0b3a67;
+  --medium-blue-3: #082c4f;
 
-	--deep-blue: #041322;
-	--deep-blue-2: #041525;
+  --deep-blue: #041322;
+  --deep-blue-2: #041525;
 
-	--light-blue: #1d2e3e;
-	--light-blue-2: #12223a;
-	/* --light-blue-3: #1a2b44; */
+  --light-blue: #1d2e3e;
+  --light-blue-2: #12223a;
+  /* --light-blue-3: #1a2b44; */
 
-	--link-color: #0ea5e9;
+  --link-color: #0ea5e9;
 
-	--text-color-dark: #3f3f46;
-	--accent-color: #ffc107;
+  --text-color-dark: #3f3f46;
+  --accent-color: #ffc107;
 
-	--nextui-tooltip-arrow-color: #ffffff;
+  --nextui-tooltip-arrow-color: #ffffff;
 }
 
 #gradient-canvas {
-	width: 100%;
-	height: 100%;
-	--gradient-color-1: #121d2e;
-	--gradient-color-2: #12223a;
-	--gradient-color-3: #162a49;
-	--gradient-color-4: #122c3a;
+  width: 100%;
+  height: 100%;
+  --gradient-color-1: #121d2e;
+  --gradient-color-2: #12223a;
+  --gradient-color-3: #162a49;
+  --gradient-color-4: #122c3a;
 }
 
 /* #gradient-canvas {

@@ -2,7 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   //position: relative;
+
   width: 100%;
   margin: 0 auto;
 }
@@ -50,8 +52,7 @@
   position: absolute;
   z-index: 1;
 
-  padding-left: 4px;
-  padding-right: 4px;
+  background: #0000007c;
 
   //margin: 30px;
 
@@ -61,26 +62,49 @@
 
   margin-top: 16px;
 
-  background: #0000007c;
+  //backdrop-filter: blur(10px);
+  //-webkit-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  transition: all 0.25s;
 }
 
 .corner_left {
   left: 0;
   margin-left: 16px;
 
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+
+  min-width: 106px;
+  max-width: 106px;
+}
+
+.corner_left_hover {
+  margin-left: 13px;
+
+  min-width: 114px;
+  max-width: 114px;
 }
 
 .corner_right {
   right: 0;
   margin-right: 16px;
+
+  padding-left: 4px;
+  padding-right: 4px;
+
+  min-width: 96px;
+  max-width: 96px;
+}
+
+.corner_right_hover {
+  margin-right: 13px;
+
+  min-width: 104px;
+  max-width: 104px;
 }
 
 .cornerSocialLink {
@@ -114,6 +138,8 @@
   //justify-content: center;
   //align-items: center;
 
+  background: #0000007c;
+
   height: 48px;
 
   // padding: 0px 0px;
@@ -124,13 +150,11 @@
 
   border-radius: 10px;
 
-  background: #0000007c;
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
+  //backdrop-filter: blur(10px);
+  //-webkit-backdrop-filter: blur(10px);
+  //-moz-backdrop-filter: blur(10px);
+  //-o-backdrop-filter: blur(10px);
+  //-ms-backdrop-filter: blur(10px);
 
   overflow: hidden;
 }
@@ -144,6 +168,7 @@
   justify-content: center;
   align-items: center;
   list-style: none;
+
   /* background: var(--background); */
   /* background-size: contain; */
   /* border-radius: 1em; */
@@ -172,7 +197,7 @@
   height: 100%;
   align-items: center;
   padding: 0 1em;
-  color: var(--heading-color);
+  //color: var(--heading-color);
   font-weight: 700;
   font-size: 16px;
   font-family: "quicksand", sans-serif !important;
@@ -198,39 +223,59 @@
   font-size: 16px;
 }
 
-.webring_container {
+.corner_container {
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
+  // space between
+  justify-content: space-evenly;
+
+  width: 100%;
 }
 
 .webring_anchor {
   color: #b7b7b7;
   text-decoration: none;
-  transform: scale(1.1);
-  margin-top: 4px;
+  transform: scale(1.2);
+  // margin-top: 24px;
   transition: all 0.25s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 48px;
 }
 
 .webring_logo {
-  background-image: url(https://assets.hackclub.com/icon-rounded.svg);
-  background-repeat: no-repeat;
-  background-position: top left;
-  background-size: contain;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin: 0 4px;
-  vertical-align: middle;
+  // background-image: url(https://assets.hackclub.com/icon-rounded.svg);
+  // background-repeat: no-repeat;
+  // background-position: top left;
+  // background-size: contain;
+  // -webkit-flex-shrink: 0;
+  // -ms-flex-negative: 0;
+  // flex-shrink: 0;
+  // display: inline-block;
+  // width: 30px;
+  // height: 48px;
+  // margin: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // vertical-align: middle;
   transition: all 0.25s;
 }
 
 .webring_anchor:hover {
   color: #eaeaea;
-  transform: scale(1.2);
+  transform: scale(1.6);
+}
+
+.webring_anchor:active {
+  color: #eaeaea;
+  transform: scale(1.5);
 }
 
 .webring_logo:hover {

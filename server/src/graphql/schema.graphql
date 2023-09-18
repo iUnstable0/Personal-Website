@@ -10,8 +10,17 @@ type Video {
 	path: String!
 }
 
+type Webring {
+	url: String!
+}
+
+type Data {
+	webring: [Webring!]!
+	videos: [Video!]!
+}
+
 type Query {
-	getVideos: [Video!]! @rateLimit(limit: 60, duration: 10)
+	getData(videoFormat: String!): Data! @rateLimit(limit: 60, duration: 10)
 }
 
 # Mutations ###########################################################################################################################################################################

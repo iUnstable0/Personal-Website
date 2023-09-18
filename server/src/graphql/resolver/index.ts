@@ -2,14 +2,14 @@
 
 import { ByteResolver, DateResolver } from "graphql-scalars";
 
-import query_video from "./modules/query/video";
+import query from "./modules/query";
 
 type argsType = [parent: any, args: any, contextValue: any];
 
 export default {
-  Query: {
-    getVideos: (...args: argsType) => query_video.getVideos(args[1]),
-  },
-  Date: DateResolver,
-  Byte: ByteResolver,
+	Query: {
+		getData: (...args: argsType) => query.getData(args[1]), //, args[2]),
+	},
+	Date: DateResolver,
+	Byte: ByteResolver,
 };
