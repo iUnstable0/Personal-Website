@@ -26,6 +26,10 @@ export default function Component({
 					<br />
 					<br />I also want to get into reverse engineering and some
 					cybersecurity cuz it{"'"}s cool
+					<br />
+					<br />
+					Btw, this website is fully open source and you can find the source
+					code on my GitHub (top right)
 					{/*<br />*/}
 					{/*<br />*/}
 					{/*VPS provider: Contabo (abt $11.99 a month + $2.99 for 250gb of S3*/}
