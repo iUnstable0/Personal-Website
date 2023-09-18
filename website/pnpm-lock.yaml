@@ -14,7 +14,37 @@ dependencies:
   '@emotion/styled':
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.22)(react@18.2.0)
+  '@fontsource/arimo':
+    specifier: ^5.0.12
+    version: 5.0.12
+  '@fontsource/metrophobic':
+    specifier: ^5.0.12
+    version: 5.0.12
+  '@fontsource/noto-sans':
+    specifier: ^5.0.12
+    version: 5.0.12
+  '@fontsource/open-sans':
+    specifier: ^5.0.12
+    version: 5.0.12
+  '@fontsource/pt-sans':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/quicksand':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/roboto':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/secular-one':
+    specifier: ^5.0.13
+    version: 5.0.13
+  '@fontsource/source-sans-pro':
+    specifier: ^5.0.8
+    version: 5.0.8
   '@fontsource/ubuntu':
+    specifier: ^5.0.8
+    version: 5.0.8
+  '@fontsource/work-sans':
     specifier: ^5.0.8
     version: 5.0.8
   '@iconscout/react-unicons':
@@ -997,8 +1027,48 @@ packages:
     resolution: {integrity: sha512-qprfWkn82Iw821mcKofJ5Pk9wgioHicxcQMxx+5zt5GSKoqdWvgG5AxVmpmUUjzTLPVSH5auBrhI93Deayn/DA==}
     dev: false
 
+  /@fontsource/arimo@5.0.12:
+    resolution: {integrity: sha512-HFDBQBQRnsEZgTSsz4z4quhfpEJkTj+oHtpIj8mo84QQT3hxHAAVXwNzPV/nkNdnk4vyz8FGXxas7q5S4GoTIw==}
+    dev: false
+
+  /@fontsource/metrophobic@5.0.12:
+    resolution: {integrity: sha512-mSejujVZ996+9tXIkv74fFN4anmbmLZB43DVAq96WhMKmzMjkDtj2IDoGlJkHEPJK0Mjz+t0EWLGzsucNnjsyg==}
+    dev: false
+
+  /@fontsource/noto-sans@5.0.12:
+    resolution: {integrity: sha512-6qMnrAeCsjqI4tT2zWb1EQ/AeWr42iacn+QOV74pY1Ytm/0OY9jzSXlh4nK4mc9CbTmEZn1Iofa/SzvvKNMcpA==}
+    dev: false
+
+  /@fontsource/open-sans@5.0.12:
+    resolution: {integrity: sha512-Ptri5McmTGEJkQ5nvGQeJX8YdGbZpOT6V03By1pISIPZygO/ps4bQIvwPO+X/WtBY+2C1xKeyqx7LX+3fxlo2A==}
+    dev: false
+
+  /@fontsource/pt-sans@5.0.8:
+    resolution: {integrity: sha512-YCn2rcHLdQUNcTzrrHpPzzLqMat2s1TUTcBDXIHgHpUNar3jkrZ9U0wNGczu0C0WgFzUFShDtRUl3PehDi9P+g==}
+    dev: false
+
+  /@fontsource/quicksand@5.0.8:
+    resolution: {integrity: sha512-yckyBMWMerElcJq23yBZ8MOYLN3cJQFbb+bVQOhRrt68qRMDpselnF+/IYR078eHHmYOzNAfQaopFEeHaXrGyw==}
+    dev: false
+
+  /@fontsource/roboto@5.0.8:
+    resolution: {integrity: sha512-XxPltXs5R31D6UZeLIV1td3wTXU3jzd3f2DLsXI8tytMGBkIsGcc9sIyiupRtA8y73HAhuSCeweOoBqf6DbWCA==}
+    dev: false
+
+  /@fontsource/secular-one@5.0.13:
+    resolution: {integrity: sha512-jIgLz6Dozi01DnEa1TMD6fbQhP6Argfjh+CCzIjZbeFQuEEyzjXwq0FMDVTg6J/Wr9rPoeSdNDbxO3uyEq2Gag==}
+    dev: false
+
+  /@fontsource/source-sans-pro@5.0.8:
+    resolution: {integrity: sha512-5U2UvIYRkCMozZ388gCE73PEpa2MFgN/0t9O4a1FF7bGT/MIneQWSL1XpWZ8iMVYdh6ntxRf3iFA6slCIuFgkg==}
+    dev: false
+
   /@fontsource/ubuntu@5.0.8:
     resolution: {integrity: sha512-lZY64hVXrnkt/+5jRfm0uMiRv+lmrIdnATAnDj1SPqebmI2UDf3KC9p4rOkIYsBOjOsD6seJ82GIQE067DSvWw==}
+    dev: false
+
+  /@fontsource/work-sans@5.0.8:
+    resolution: {integrity: sha512-goUwxyoQwwv5KeeZ1R9bdq3fL7YMzkFZr3YskJaMBqs/6IcqJyQpTQzfSQzbdLjz/zObWZUPQose9LpTGG/lkg==}
     dev: false
 
   /@formatjs/ecma402-abstract@1.17.2:

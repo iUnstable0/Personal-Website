@@ -37,10 +37,10 @@ export default function Component({
 			prefix: "Bo",
 			suffixes: ["m dia", "a tarde", "a noite"],
 		},
-		russian: {
-			prefix: "Доб",
-			suffixes: ["рое утро", "рый день", "рый вечер"],
-		},
+		// russian: {
+		// 	prefix: "Доб",
+		// 	suffixes: ["рое утро", "рый день", "рый вечер"],
+		// }, // No comment on this one
 		chinese: {
 			prefix: "",
 			suffixes: ["早上好", "下午好", "晚上好"],
@@ -53,10 +53,10 @@ export default function Component({
 			prefix: "",
 			suffixes: ["굿모닝", "안녕", "안녕"],
 		},
-		thai: {
-			prefix: "สวัสดีตอน",
-			suffixes: ["เช้า", "บ่าย", "เย็น"],
-		},
+		// thai: {
+		// 	prefix: "สวัสดีตอน",
+		// 	suffixes: ["เช้า", "บ่าย", "เย็น"],
+		// }, // Glitches on some devices
 	};
 
 	const getGreetingTime = (language: string) => {
@@ -105,7 +105,7 @@ export default function Component({
 			// "Hej",
 			// "你好",
 			...Object.keys(times).map((key) => getGreetingTime(key)),
-		].map((greeting) => `${greeting}!`)
+		].map((greeting) => `${greeting}!`),
 	);
 
 	const getAge = () => {
