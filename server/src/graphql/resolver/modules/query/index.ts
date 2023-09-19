@@ -188,6 +188,7 @@ export default class query {
 				discordInfo = {
 					id: data.user.id, // Same here ;p
 					username: data.user.username,
+					globalName: data.user.global_name,
 					avatar: discordAvatar,
 					avatarDecoration: data.user.avatar_decoration,
 					discriminator: data.user.discriminator,

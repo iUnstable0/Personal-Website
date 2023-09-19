@@ -89,3 +89,78 @@ a {
 	--gradient-color-3: #122257;
 	--gradient-color-4: #123332;
 } */
+
+
+@font-face {
+  font-family: "Whitney";
+  font-weight: 400;
+  font-style: normal;
+
+  src: url("/fonts/whitney/whitney-book.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-weight: 500;
+  font-style: normal;
+
+  src: url("/fonts/whitney/whitney-medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-weight: 600;
+  font-style: normal;
+
+  src: url("/fonts/whitney/whitney-semibold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-weight: 700;
+  font-style: normal;
+
+  src: url("/fonts/whitney/whitney-bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "gg sans";
+  font-weight: 400;
+  font-style: normal;
+
+  src: url("/fonts/gg-sans/gg_sans_Normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "gg sans";
+  font-weight: 500;
+  font-style: normal;
+
+  src: url("/fonts/gg-sans/gg_sans_Medium.ttf") format("truetype");
+}
+
+//•	﻿100: Thin, Hairline, Ultra Light
+//•	﻿200: Extra Light, Light
+//•	﻿300: Book, Demi Light
+//•	﻿400: Normal, Regular, Plain, Roman
+//•	﻿500: Medium
+//•	﻿600: Semi Bold, Demi Bold
+//•	﻿700: Bold
+//•	﻿800: Extra Bold, Ultra Bold
+//•	﻿900: Black, Heavy, Ultra, Poster
+
+@font-face {
+  font-family: "gg sans";
+  font-weight: 600;
+  font-style: normal;
+
+  src: url("/fonts/gg-sans/gg_sans_Semibold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "gg sans";
+  font-weight: 700;
+  font-style: normal;
+
+  src: url("/fonts/gg-sans/gg_sans_Bold.ttf") format("truetype");
+}
