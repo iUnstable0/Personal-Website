@@ -39,18 +39,18 @@ type CustomActivity {
 }
 
 type DiscordInfo {
-    id: String!
-    username: String!
-    globalName: String!
-    avatar: String!
+    id: String
+    username: String
+    globalName: String
+    avatar: String
     avatarDecoration: String
-    discriminator: String!
-    banner: String!
-    theme: String!
+    discriminator: String
+    banner: String
+    theme: String
     customActivity: CustomActivity
-    seperatorColor: String!
-    themeColors: ThemeColors!
-    bio: String!
+    seperatorColor: String
+    themeColors: ThemeColors
+    bio: String
 }
 
 type Data {
