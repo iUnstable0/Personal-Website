@@ -41,6 +41,7 @@ type CustomActivity {
 type DiscordInfo {
     id: String!
     username: String!
+    globalName: String!
     avatar: String!
     avatarDecoration: String
     discriminator: String!

@@ -13,6 +13,7 @@ export default class lib_gqlSchema {
 						discordInfo {
 							id
 							username
+							globalName
 							avatar
 							avatarDecoration
 							discriminator
