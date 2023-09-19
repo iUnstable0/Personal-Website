@@ -165,11 +165,12 @@ export default class query {
 				const tinycolorSecondary = tinycolor(secondaryColor);
 
 				const processedPrimary = tinycolorPrimary.isLight()
-						? lib_color.addWhiteOverlay(tinycolorPrimary, 0.6)
-						: lib_color.addBlackOverlay(tinycolorPrimary, 0.6),
-					processedSecondary = tinycolorSecondary.isLight()
-						? lib_color.addWhiteOverlay(tinycolorSecondary, 0.6)
-						: lib_color.addBlackOverlay(tinycolorSecondary, 0.6);
+					? lib_color.addWhiteOverlay(tinycolorPrimary, 0.6)
+					: lib_color.addBlackOverlay(tinycolorPrimary, 0.6);
+
+				const processedSecondary = tinycolorPrimary.isLight()
+					? lib_color.addWhiteOverlay(tinycolorSecondary, 0.6)
+					: lib_color.addBlackOverlay(tinycolorSecondary, 0.6);
 
 				const discordAvatar = `https://cdn.discordapp.com/avatars/${
 					data.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
