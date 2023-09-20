@@ -34,7 +34,7 @@ type Emoji {
 }
 
 type CustomActivity {
-    state: String!
+    state: String
     emoji: Emoji
 }
 
