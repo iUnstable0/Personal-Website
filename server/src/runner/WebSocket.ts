@@ -18,7 +18,7 @@ export default class WebSocketRunner {
 			path: "/",
 			cors: {
 				origin: `http://${
-					process.env.NODE_ENV === "production"
+					process.env.NODE_ENV !== "development"
 						? "127.0.0.1"
 						: `fakelocal.com:${process.env.WEBSITE_PORT}`
 				}`,
@@ -48,7 +48,7 @@ export default class WebSocketRunner {
 		console.log(
 			chalk.magenta(`[WebSocket]`),
 			`WebSocket Server ready at ws://${
-				process.env.NODE_ENV === "production" ? "127.0.0.1" : "fakelocal.com"
+				process.env.NODE_ENV !== "development" ? "127.0.0.1" : "fakelocal.com"
 			}:${process.env.WEBSOCKET_PORT}`,
 		);
 	}
