@@ -14,43 +14,45 @@ import Fastify from "@/runner/Fastify";
 import Discord from "@/runner/Discord";
 import Apollo from "@/runner/Apollo";
 
+let chalk: any;
+
 (async () => {
-	const chalk = await import("chalk").then((module) => module.default);
+	chalk = await import("chalk").then((module) => module.default);
 
-	WebSocket.start(chalk);
+	WebSocket.start(chalk).then(() => {
+		Fastify.start(chalk).then(() => {
+			Discord.start(chalk).then(() => {
+				Apollo.start(chalk).then(() => {
+					console.log(
+						chalk.green(`[Init]`),
+						`Server online! Took ${Date.now() - time}ms`,
+					);
 
-	Fastify.start(chalk).then(() => {
-		Discord.start(chalk).then(() => {
-			Apollo.start(chalk).then(async () => {
-				console.log(
-					chalk.green(`[Init]`),
-					`Server online! Took ${Date.now() - time}ms`,
-				);
-
-				process.send("ready");
+					process.send("ready");
+				});
 			});
 		});
 	});
 })();
 
 process.on("SIGINT", async () => {
-	const chalk = await import("chalk").then((module) => module.default);
+	// const chalk = await import("chalk").then((module) => module.default);
 
 	time = Date.now();
 
 	console.log(chalk.red(`[Init]`), `Stopping server...`);
 
-	Apollo.stop(chalk).then(() => {
-		Discord.stop(chalk).then(() => {
-			Fastify.stop(chalk).then(() => {
-				WebSocket.stop(chalk);
+	Apollo.stop().then(() => {
+		Discord.stop().then(() => {
+			Fastify.stop().then(() => {
+				WebSocket.stop().then(() => {
+					console.log(
+						chalk.green(`[Init]`),
+						`Ready to exit! Took ${Date.now() - time}ms`,
+					);
 
-				console.log(
-					chalk.green(`[Init]`),
-					`Ready to exit! Took ${Date.now() - time}ms`,
-				);
-
-				process.exit(0);
+					process.exit(0);
+				});
 			});
 		});
 	});
