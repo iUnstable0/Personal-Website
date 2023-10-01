@@ -145,7 +145,7 @@ pipeline {
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
                     else
                         cd ${DEPLOY_PATH}/Website;
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "${PM2_NAME}" -- pnpm ${PNPM_COMMAND};
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "${PM2_NAME}" -- pnpm run ${PNPM_COMMAND};
                     fi
                 '''
 
