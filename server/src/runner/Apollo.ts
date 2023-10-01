@@ -167,7 +167,7 @@ export default class ApolloRunner {
 				console.log(
 					chalk.magenta(`[Apollo]`),
 					`Apollo Server ready at http://${
-						process.env.NODE_ENV === "production"
+						process.env.NODE_ENV !== "development"
 							? "127.0.0.1"
 							: "fakelocal.com"
 					}:${process.env.APOLLO_PORT}`,

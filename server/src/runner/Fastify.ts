@@ -59,7 +59,7 @@ export default class FastifyRunner {
 					console.log(
 						chalk.magenta(`[Fastify]`),
 						`Public Fastify ready at http://${
-							process.env.NODE_ENV === "production"
+							process.env.NODE_ENV !== "development"
 								? "127.0.0.1"
 								: "fakelocal.com"
 						}:${process.env.PUBLIC_FASTIFY_PORT}`,
