@@ -97,7 +97,7 @@ pipeline {
                         env.DOPPLER_TOKEN = credentials('77c5efa1-2ae8-4865-89eb-073c74ca7b3e')
 
                         env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging'
-                        env.PM2_NAME = "@iUnstable0/Personal-Website/Server/Staging"
+                        env.PM2_NAME = "@iUnstable0/Personal-Website/Staging-Server"
                         env.PNPM_COMMAND = 'staging'
                     } else {
                         env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main'
