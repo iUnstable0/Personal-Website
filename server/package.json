@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "doppler run -- cross-env NODE_ENV=production node .",
+    "staging": "doppler run -- cross-env NODE_ENV=staging node .",
     "dev": "doppler run -- cross-env NODE_ENV=development nodemon"
   },
   "dependencies": {

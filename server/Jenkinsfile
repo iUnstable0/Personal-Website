@@ -6,7 +6,10 @@ pipeline {
     stages {
         stage('Filter') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
@@ -26,7 +29,9 @@ pipeline {
                     def proceed = changedFiles.any { it.startsWith('server/') }
 
                     if (!proceed) {
-                        error('No changes in server, skipping deploy.')
+                        echo 'No changes in server, skipping deploy.'
+                        currentBuild.result = 'SUCCESS'
+                        return
                     }
                 }
             }
@@ -34,7 +39,10 @@ pipeline {
 
         stage('Install') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
@@ -56,7 +64,10 @@ pipeline {
 
         stage('Build') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
@@ -71,7 +82,10 @@ pipeline {
 
         stage('Deploy') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             environment {
@@ -79,22 +93,37 @@ pipeline {
             }
 
             steps {
+                script {
+                    // Override the DOPPLER_TOKEN for the staging branch
+                    if (env.BRANCH_NAME == 'staging') {
+                        env.DOPPLER_TOKEN = credentials('77c5efa1-2ae8-4865-89eb-073c74ca7b3e')
+
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging'
+                        env.PM2_NAME = "@iUnstable0/Personal-Website/Server/Staging"
+                        env.PNPM_COMMAND = 'staging'
+                    } else {
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main'
+                        env.PM2_NAME = "@iUnstable0/Personal-Website/Server"
+                        env.PNPM_COMMAND = 'start'
+                    }
+                }
+
                 echo 'Deploying....'
 
                 sh '''
-                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
-                        pm2 stop "@iUnstable0/Personal-Website/Server";
+                    if pm2 list | grep -q "${PM2_NAME}"; then
+                        pm2 stop "${PM2_NAME}";
                     fi
 
-                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+                    mkdir -p ${DEPLOY_PATH};
 
-                    rsync -aP server/ /home/deployments/iUnstable0_Personal-Website/Main/Server/;
+                    rsync -aP server/ ${DEPLOY_PATH}/Server/;
 
-                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Server"; then
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Server" --update-env;
+                    if pm2 list | grep -q "${PM2_NAME}"; then
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
                     else
-                        cd /home/deployments/iUnstable0_Personal-Website/Main/Server;
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "@iUnstable0/Personal-Website/Server";
+                        cd ${DEPLOY_PATH}/Server;
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "${PM2_NAME}" -- pnpm ${PNPM_COMMAND};
                     fi
                 '''
 
