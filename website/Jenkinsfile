@@ -3,11 +3,6 @@ pipeline {
         label 'iunstable0_personal-website'
     }
 
-    environment {
-        // Initialize a global variable to control execution of subsequent stages
-        SHOULD_PROCEED = 'true'
-    }
-
     stages {
         stage('Filter') {
             when {
@@ -34,8 +29,7 @@ pipeline {
                     def proceed = changedFiles.any { it.startsWith('website/') }
 
                     if (!proceed) {
-                        echo 'No changes in website, skipping deploy.'
-                        env.SHOULD_PROCEED = 'false'
+                        error('No changes in website, skipping deploy.')
                     }
                 }
             }
@@ -43,12 +37,9 @@ pipeline {
 
         stage('Install') {
             when {
-                allOf {
-                    expression { env.SHOULD_PROCEED == 'true' }
-                    anyOf {
-                        branch 'main'
-                        branch 'staging'
-                    }
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
                 }
             }
 
@@ -71,12 +62,9 @@ pipeline {
 
         stage('Build') {
             when {
-                allOf {
-                    expression { env.SHOULD_PROCEED == 'true' }
-                    anyOf {
-                        branch 'main'
-                        branch 'staging'
-                    }
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
                 }
             }
 
@@ -114,12 +102,9 @@ pipeline {
 
         stage('Deploy') {
             when {
-                allOf {
-                    expression { env.SHOULD_PROCEED == 'true' }
-                    anyOf {
-                        branch 'main'
-                        branch 'staging'
-                    }
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
                 }
             }
 
