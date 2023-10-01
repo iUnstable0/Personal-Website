@@ -13,6 +13,7 @@ const nextConfig = {
 				pathname: "/**",
 			},
 		],
+		domains: ["iunstable0.com", "dev.iunstable0.com"],
 	},
 	sassOptions: {
 		includePaths: [

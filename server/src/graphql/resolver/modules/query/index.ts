@@ -7,9 +7,8 @@ import lib_cache from "@iunstable0/server-libs/build/cache";
 import lib_storage from "@iunstable0/server-libs/build/storage";
 import lib_error from "@iunstable0/server-libs/build/error";
 import lib_axios from "@iunstable0/server-libs/build/axios";
-// import lib_data from "@iunstable0/server-libs/build/data";
+import lib_data from "@iunstable0/server-libs/build/data";
 
-import lib_data from "@/modules/data";
 import lib_color from "@/modules/color";
 import lib_discord from "@/modules/discord";
 

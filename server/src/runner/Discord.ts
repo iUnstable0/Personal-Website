@@ -3,7 +3,7 @@ import {
 	GatewayIntentBits,
 	Partials,
 	ChannelType,
-	Events,
+	// Events,
 } from "discord.js";
 
 const client = new Client({
@@ -36,8 +36,12 @@ const client = new Client({
 	],
 });
 
+let chalk: any;
+
 export default class DiscordRunner {
-	public static async start(chalk: any) {
+	public static async start(chalkModule: any) {
+		chalk = chalkModule;
+
 		return new Promise(async (resolve) => {
 			client.on("ready", async () => {
 				console.log(
@@ -58,7 +62,7 @@ export default class DiscordRunner {
 		return client;
 	}
 
-	public static async stop(chalk: any) {
+	public static async stop() {
 		return new Promise(async (resolve) => {
 			console.log(chalk.blue(`[Discord]`), `Logging out of Discord...`);
 

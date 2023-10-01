@@ -11,8 +11,12 @@ const publicFastify = Fastify({
 
 const redis = lib_redis.get();
 
+let chalk: any;
+
 export default class FastifyRunner {
-	public static async start(chalk: any) {
+	public static async start(chalkModule: any) {
+		chalk = chalkModule;
+
 		return new Promise(async (resolve) => {
 			// reject) => {
 
@@ -31,7 +35,7 @@ export default class FastifyRunner {
 				redis: redis,
 			});
 
-			await publicFastify.setNotFoundHandler(
+			publicFastify.setNotFoundHandler(
 				{
 					preHandler: publicFastify.rateLimit({
 						max: 4,
@@ -55,7 +59,7 @@ export default class FastifyRunner {
 					console.log(
 						chalk.magenta(`[Fastify]`),
 						`Public Fastify ready at http://${
-							process.env.NODE_ENV === "production"
+							process.env.NODE_ENV !== "development"
 								? "127.0.0.1"
 								: "fakelocal.com"
 						}:${process.env.PUBLIC_FASTIFY_PORT}`,
@@ -67,7 +71,7 @@ export default class FastifyRunner {
 		});
 	}
 
-	public static async stop(chalk: any) {
+	public static async stop() {
 		return new Promise(async (resolve) => {
 			console.log(chalk.blue(`[Fastify]`), `Stopping Public Fastify...`);
 

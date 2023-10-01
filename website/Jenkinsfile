@@ -6,7 +6,10 @@ pipeline {
     stages {
         stage('Filter') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
@@ -34,7 +37,10 @@ pipeline {
 
         stage('Install') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
@@ -56,21 +62,32 @@ pipeline {
 
         stage('Build') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             steps {
+                script {
+                    if (env.BRANCH_NAME == 'staging') {
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging/Website'
+                    } else {
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main/Website'
+                    }
+                }
+
                 echo 'Building..'
 
                 sh '''
                     cd website;
 
-                    if [ -d /home/deployments/iUnstable0_Personal-Website/Main/Website/.next ]; then
+                    if [ -d ${DEPLOY_PATH}/.next ]; then
                         echo "Copying .next from production";
 
                         error=false;
 
-                        cp -a /home/deployments/iUnstable0_Personal-Website/Main/Website/.next .next || error=true;
+                        cp -a ${DEPLOY_PATH}/.next .next || error=true;
 
                         [ $error = true ] && echo "Failed to copy .next from production";
                         [ $error = false ] && echo "Copied .next from production";
@@ -85,7 +102,10 @@ pipeline {
 
         stage('Deploy') {
             when {
-                branch 'main'
+                anyOf {
+                    branch 'main'
+                    branch 'staging'
+                }
             }
 
             environment {
@@ -93,22 +113,37 @@ pipeline {
             }
 
             steps {
+                script {
+                    // Override the DOPPLER_TOKEN for the staging branch
+                    if (env.BRANCH_NAME == 'staging') {
+                        env.DOPPLER_TOKEN = credentials('ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa')
+
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging'
+                        env.PM2_NAME = "@iUnstable0/Personal-Website/Website/Staging"
+                        env.PNPM_COMMAND = 'staging'
+                    } else {
+                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main'
+                        env.PM2_NAME = "@iUnstable0/Personal-Website/Website"
+                        env.PNPM_COMMAND = 'start'
+                    }
+                }
+
                 echo 'Deploying....'
 
                 sh '''
-                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
-                        pm2 stop "@iUnstable0/Personal-Website/Website";
+                    if pm2 list | grep -q "${PM2_NAME}"; then
+                        pm2 stop "${PM2_NAME}";
                     fi
 
-                    mkdir -p /home/deployments/iUnstable0_Personal-Website/Main;
+                    mkdir -p ${DEPLOY_PATH};
 
-                    rsync -aP website/ /home/deployments/iUnstable0_Personal-Website/Main/Website/;
+                    rsync -aP website/ ${DEPLOY_PATH}/Website/;
 
-                    if pm2 list | grep -q "@iUnstable0/Personal-Website/Website"; then
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "@iUnstable0/Personal-Website/Website" --update-env;
+                    if pm2 list | grep -q "${PM2_NAME}"; then
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
                     else
-                        cd /home/deployments/iUnstable0_Personal-Website/Main/Website;
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start --name "@iUnstable0/Personal-Website/Website";
+                        cd ${DEPLOY_PATH}/Website;
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start "pnpm ${PNPM_COMMAND}" --name "${PM2_NAME}";
                     fi
                 '''
 
