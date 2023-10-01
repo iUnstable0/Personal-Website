@@ -3,6 +3,11 @@ pipeline {
         label 'iunstable0_personal-website'
     }
 
+    environment {
+        // Initialize a global variable to control execution of subsequent stages
+        SHOULD_PROCEED = 'true'
+    }
+
     stages {
         stage('Filter') {
             when {
@@ -30,8 +35,7 @@ pipeline {
 
                     if (!proceed) {
                         echo 'No changes in server, skipping deploy.'
-                        currentBuild.result = 'SUCCESS'
-                        return
+                        env.SHOULD_PROCEED = 'false'
                     }
                 }
             }
@@ -39,9 +43,12 @@ pipeline {
 
         stage('Install') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'staging'
+                allOf {
+                    expression { env.SHOULD_PROCEED == 'true' }
+                    anyOf {
+                        branch 'main'
+                        branch 'staging'
+                    }
                 }
             }
 
@@ -64,9 +71,12 @@ pipeline {
 
         stage('Build') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'staging'
+                allOf {
+                    expression { env.SHOULD_PROCEED == 'true' }
+                    anyOf {
+                        branch 'main'
+                        branch 'staging'
+                    }
                 }
             }
 
@@ -82,9 +92,12 @@ pipeline {
 
         stage('Deploy') {
             when {
-                anyOf {
-                    branch 'main'
-                    branch 'staging'
+                allOf {
+                    expression { env.SHOULD_PROCEED == 'true' }
+                    anyOf {
+                        branch 'main'
+                        branch 'staging'
+                    }
                 }
             }
 
