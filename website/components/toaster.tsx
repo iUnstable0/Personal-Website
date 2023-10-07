@@ -8,10 +8,11 @@ export default function Component() {
 			position="top-right"
 			toastOptions={{
 				style: {
-					background: "#002f5c",
+					background: "#0000006B",
+					backdropFilter: "blur(10px)",
 					color: "#e5e5e5",
 					fontFamily: "Ubuntu",
-					fontWeight: "600",
+					fontWeight: "500",
 				},
 				success: {
 					duration: 5000,

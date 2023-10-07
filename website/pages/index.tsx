@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 
+import lib_gql from "@iunstable0/website-libs/build/gql";
+
 import lib_axios from "@iunstable0/server-libs/build/axios";
 
 import lib_gqlSchema from "modules/gqlSchema";
@@ -27,6 +29,13 @@ import styles from "styles/Index.module.scss";
 // import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 export const getServerSideProps = async (context: any) => {
+	console.log(
+		lib_gql.combineQueries(
+			lib_gqlSchema.query.getData,
+			lib_gqlSchema.query.discordInfo,
+		),
+	);
+
 	return lib_axios
 		.request({
 			method: "POST",
@@ -35,7 +44,10 @@ export const getServerSideProps = async (context: any) => {
 				"Content-Type": "application/json",
 			},
 			data: {
-				query: lib_gqlSchema.query.getData,
+				query: lib_gql.combineQueries(
+					lib_gqlSchema.query.getData,
+					lib_gqlSchema.query.discordInfo,
+				),
 				variables: {
 					videoFormat:
 						// // If firefox then webm or else mp4
@@ -46,7 +58,12 @@ export const getServerSideProps = async (context: any) => {
 			},
 		})
 		.then((response: any) => {
-			const data = response.data.data.getData;
+			const data = {
+				...response.data.data.getData,
+				discordInfo: response.data.data.discordInfo,
+			};
+
+			console.log(data);
 
 			const videos = data.videos;
 
@@ -68,9 +85,10 @@ export const getServerSideProps = async (context: any) => {
 			};
 		})
 		.catch((error: any) => {
+			// console.log(error.response.data);
 			console.log(lib_axios.parseError(error));
 
-			return null;
+			return;
 		});
 };
 
@@ -139,7 +157,7 @@ export default function Page({
 					localStorage.setItem("page", page);
 				}}
 				webring={webring}
-				discordInfo={discordInfo}
+				discordUserInfo={discordInfo}
 				contentVisible={contentVisible}
 			/>
 

@@ -13,6 +13,7 @@ import WebSocket from "@/runner/WebSocket";
 import Fastify from "@/runner/Fastify";
 import Discord from "@/runner/Discord";
 import Apollo from "@/runner/Apollo";
+import Cron from "@/runner/Cron";
 
 let chalk: any;
 
@@ -23,12 +24,14 @@ let chalk: any;
 		Fastify.start(chalk).then(() => {
 			Discord.start(chalk).then(() => {
 				Apollo.start(chalk).then(() => {
-					console.log(
-						chalk.green(`[Init]`),
-						`Server online! Took ${Date.now() - time}ms`,
-					);
+					Cron.start(chalk).then(() => {
+						console.log(
+							chalk.green(`[Init]`),
+							`Server online! Took ${Date.now() - time}ms`,
+						);
 
-					process.send("ready");
+						process.send("ready");
+					});
 				});
 			});
 		});
@@ -42,16 +45,18 @@ process.on("SIGINT", async () => {
 
 	console.log(chalk.red(`[Init]`), `Stopping server...`);
 
-	Apollo.stop().then(() => {
-		Discord.stop().then(() => {
-			Fastify.stop().then(() => {
-				WebSocket.stop().then(() => {
-					console.log(
-						chalk.green(`[Init]`),
-						`Ready to exit! Took ${Date.now() - time}ms`,
-					);
+	Cron.stop().then(() => {
+		Apollo.stop().then(() => {
+			Discord.stop().then(() => {
+				Fastify.stop().then(() => {
+					WebSocket.stop().then(() => {
+						console.log(
+							chalk.green(`[Init]`),
+							`Ready to exit! Took ${Date.now() - time}ms`,
+						);
 
-					process.exit(0);
+						process.exit(0);
+					});
 				});
 			});
 		});

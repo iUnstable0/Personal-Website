@@ -1,50 +1,77 @@
 export default class lib_gqlSchema {
 	public static query = {
 		getData: `
-        query ($videoFormat: String!) {
-					getData (videoFormat: $videoFormat) {
-						videos {
-							title
-							path
-						}
-						webring {
-							url
-						}
-						discordInfo {
-							id
-							username
-							globalName
-							avatar
-							avatarDecoration
-							discriminator
-							banner
-							theme
-							customActivity {
-								state
-								emoji {
-									animated
-									name
-									id
-									createdTimestamp
-									url
-									identifier
-								}
+			query ($videoFormat: String!) {
+				getData (videoFormat: $videoFormat) {
+					videos {
+						title
+						path
+					}
+					webring {
+						url
+					}
+				}
+			}
+    `,
+		discordInfo: `
+			query {
+				discordInfo {
+					id
+					username
+					globalName
+					avatar
+					avatarDecoration
+					banner
+					theme
+					activity {
+						customStatus {
+							state
+							emoji {
+								animated
+								name
+								id
+								createdTimestamp
+								url
+								identifier
 							}
-							seperatorColor
-							themeColors {
-								primary {
-									original
-									processed
-								}
-								secondary {
-									original
-									processed
-								}
+						}
+						activities {
+							name
+							details
+							state
+							applicationId
+							timestamps {
+								start
+								end
 							}
-							bio
+							assets {
+								largeImage
+								largeText
+								smallImage
+								smallText
+							}
+							createdTimestamp
 						}
 					}
-        }
+					seperatorColor
+					themeColors {
+						primary {
+							original
+							processed
+						}
+						secondary {
+							original
+							processed
+						}
+					}
+					bio
+					pronouns
+					badges {
+						id
+						description
+					}
+				}
+			}
     `,
 	};
 

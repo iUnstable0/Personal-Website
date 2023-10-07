@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 
 import lib_redis from "@iunstable0/server-libs/build/redis";
 
-const redis = lib_redis.get(true);
+const redis = lib_redis.get(true); // Ignore pool since pub/sub can't be used with cache store
 
 let io: any;
 let chalk: any;
@@ -53,7 +53,15 @@ export default class WebSocketRunner {
 		);
 	}
 
+	public static getIO() {
+		return io;
+	}
+
 	public static async stop() {
+		// console.log(chalk.blue(`[WebSocket]`), `Stopping cronjob...`);
+		// await job.stop();
+		// console.log(chalk.magenta(`[WebSocket]`), `Stopped cronjob`);
+
 		console.log(chalk.blue(`[WebSocket]`), `Disconnecting from Redis...`);
 		await redis.disconnect();
 		console.log(chalk.magenta(`[WebSocket]`), `Disconnected from Redis`);
