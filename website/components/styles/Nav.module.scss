@@ -676,7 +676,7 @@
   box-sizing: border-box;
   //margin-top: 12px;
 
-  margin-left: 11.2px;
+  margin-left: 12px;
   margin-right: 11.2px;
 
   //display: flex;
@@ -732,8 +732,6 @@
   display: block;
   position: relative;
   z-index: 1;
-
-  mask: url("/activityMask.svg")
 }
 
 .activitySmallImageWrapper {

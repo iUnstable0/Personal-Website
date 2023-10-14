@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-// import { useTimer } from "react-timer-hook";
+import { useStopwatch } from "react-timer-hook";
 
 import * as emoji from "node-emoji";
 
@@ -51,6 +51,30 @@ export default function NavBar({
 	contentVisible: boolean;
 }) {
 	const router = useRouter();
+
+	const curDate = new Date();
+	const timeStp = new Date(
+		discordUserInfo.activity.activities[0].timestamps.start,
+	);
+
+	const diff = curDate.getTime() - timeStp.getTime();
+
+	curDate.setSeconds(curDate.getSeconds() + diff / 1000);
+
+	const {
+		totalSeconds,
+		seconds,
+		minutes,
+		hours,
+		days,
+		isRunning,
+		start,
+		pause,
+		reset,
+	} = useStopwatch({
+		autoStart: true,
+		offsetTimestamp: curDate,
+	});
 
 	// const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
 
@@ -373,6 +397,16 @@ export default function NavBar({
 						}
 
 						.activityState {
+							font-family: "gg sans", sans-serif !important;
+							font-size: 14px;
+							font-weight: 500;
+
+							//margin-top: -2px;
+
+							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
+						}
+
+						.activityTimestamp {
 							font-family: "gg sans", sans-serif !important;
 							font-size: 14px;
 							font-weight: 500;
@@ -753,7 +787,7 @@ export default function NavBar({
 																					marginTop: discordInfo.activity
 																						.customStatus.state
 																						? "0"
-																						: "9px",
+																						: "0px",
 																					// marginBottom: discordInfo.activity
 																					// 	.customStatus.state
 																					// 	? "-1px"
@@ -1038,36 +1072,55 @@ export default function NavBar({
 															</div>
 															{/* </p> */}
 															{/*</div>*/}
-															{discordInfo.activity.activities.map(
-																(activity: any, key: number) => (
-																	<div key={key}>
-																		<div className="bodyTextTitle">
-																			PLAYING A GAME
-																		</div>
-																		<div className={navStyles.activityBox}>
-																			<div className={navStyles.activityAsset}>
+															{/*{discordInfo.activity.activities.map(*/}
+															{/*	(activity: any, key: number) => (*/}
+															{/*		<div key={key}>*/}
+															{discordInfo.activity.activities.length > 0 && (
+																<div>
+																	<div className="bodyTextTitle">
+																		PLAYING A GAME
+																	</div>
+																	<div className={navStyles.activityBox}>
+																		<div className={navStyles.activityAsset}>
+																			<Tooltip
+																				label={
+																					discordInfo.activity.activities[0]
+																						.assets.largeText
+																				}
+																				arrowPosition={"center"}
+																				arrowSize={6}
+																				withArrow={true}
+																			>
+																				<img
+																					src={
+																						discordInfo.activity.activities[0].assets.largeImage.startsWith(
+																							"external",
+																						)
+																							? ""
+																							: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.largeImage}.png`
+																					}
+																					alt={
+																						discordInfo.activity.activities[0]
+																							.assets.largeText
+																					}
+																					className={
+																						navStyles.activityLargeImage
+																					}
+																					style={{
+																						mask: discordInfo.activity
+																							.activities[0].assets.smallText
+																							? `url("/activityMask.svg")`
+																							: "none",
+																					}}
+																				/>
+																			</Tooltip>
+																			{discordInfo.activity.activities[0].assets
+																				.smallText && (
 																				<Tooltip
-																					label={activity.assets.largeText}
-																					arrowPosition={"center"}
-																					arrowSize={6}
-																					withArrow={true}
-																				>
-																					<img
-																						src={
-																							activity.assets.largeImage.startsWith(
-																								"external",
-																							)
-																								? ""
-																								: `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.largeImage}.png`
-																						}
-																						alt={activity.assets.largeText}
-																						className={
-																							navStyles.activityLargeImage
-																						}
-																					/>
-																				</Tooltip>
-																				<Tooltip
-																					label={activity.assets.smallText}
+																					label={
+																						discordInfo.activity.activities[0]
+																							.assets.smallText
+																					}
 																					arrowPosition={"center"}
 																					arrowSize={6}
 																					withArrow={true}
@@ -1079,35 +1132,57 @@ export default function NavBar({
 																					>
 																						<img
 																							src={
-																								activity.assets.smallImage.startsWith(
+																								discordInfo.activity.activities[0].assets.smallImage.startsWith(
 																									"external",
 																								)
 																									? ""
-																									: `https://cdn.discordapp.com/app-assets/${activity.applicationId}/${activity.assets.smallImage}.png`
+																									: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.smallImage}.png`
 																							}
-																							alt={activity.assets.smallText}
+																							alt={
+																								discordInfo.activity
+																									.activities[0].assets
+																									.smallText
+																							}
 																							className={
 																								navStyles.activitySmallImage
 																							}
 																						/>
 																					</div>
 																				</Tooltip>
+																			)}
+																		</div>
+																		<div className={navStyles.activityInfo}>
+																			<div className="activityName">
+																				{
+																					discordInfo.activity.activities[0]
+																						.name
+																				}
 																			</div>
-																			<div className={navStyles.activityInfo}>
-																				<div className="activityName">
-																					{activity.name}
-																				</div>
-																				<div className="activityDetails">
-																					{activity.details}
-																				</div>
-																				<div className="activityState">
-																					{activity.state}
-																				</div>
+																			<div className="activityDetails">
+																				{
+																					discordInfo.activity.activities[0]
+																						.details
+																				}
+																			</div>
+																			<div className="activityState">
+																				{
+																					discordInfo.activity.activities[0]
+																						.state
+																				}
+																			</div>
+																			<div className="activityTimestamp">
+																				{hours < 10 ? "0" : ""}
+																				{hours}:{minutes < 10 ? "0" : ""}
+																				{minutes}:{seconds < 10 ? "0" : ""}
+																				{seconds} elapsed
 																			</div>
 																		</div>
 																	</div>
-																),
+																</div>
 															)}
+
+															{/*	),*/}
+															{/*)}*/}
 														</div>
 													</div>
 												</div>
