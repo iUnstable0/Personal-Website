@@ -1,9 +1,11 @@
 // Packages
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { useStopwatch } from "react-timer-hook";
+import { DateTime } from "luxon";
+
+// import { useStopwatch } from "react-timer-hook";
 
 import * as emoji from "node-emoji";
 
@@ -52,31 +54,33 @@ export default function NavBar({
 }) {
 	const router = useRouter();
 
-	const curDate = new Date();
-	const timeStp = new Date(
-		discordUserInfo.activity.activities[0].timestamps.start,
-	);
+	// const curDate = new Date();
+	// const timeStp = new Date(
+	// 	discordUserInfo.activity.activities[0].timestamps.start,
+	// );
 
-	const diff = curDate.getTime() - timeStp.getTime();
+	// const diff = curDate.getTime() - timeStp.getTime();
 
-	curDate.setSeconds(curDate.getSeconds() + diff / 1000);
+	// curDate.setSeconds(curDate.getSeconds() + diff / 1000);
 
-	const {
-		totalSeconds,
-		seconds,
-		minutes,
-		hours,
-		days,
-		isRunning,
-		start,
-		pause,
-		reset,
-	} = useStopwatch({
-		autoStart: true,
-		offsetTimestamp: curDate,
-	});
+	// const {
+	// 	totalSeconds,
+	// 	seconds,
+	// 	minutes,
+	// 	hours,
+	// 	days,
+	// 	isRunning,
+	// 	start,
+	// 	pause,
+	// 	reset,
+	// } = useStopwatch({
+	// 	autoStart: true,
+	// 	offsetTimestamp: curDate,
+	// });
 
 	// const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
+
+	const [time, setTime] = useState<any>("00:00");
 
 	const [cornerLeftHover, setCornerLeftHover] = useState<boolean>(false),
 		[cornerRightHover, setCornerRightHover] = useState<boolean>(false);
@@ -117,6 +121,37 @@ export default function NavBar({
 				});
 		},
 	});
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (
+				!discordInfo.activity.activities ||
+				discordInfo.activity.activities.length < 1
+			) {
+				clearInterval(interval);
+
+				return;
+			}
+
+			const curDate = DateTime.now();
+			const timeStp = DateTime.fromISO(
+				discordInfo.activity.activities[0].timestamps.start,
+			);
+			const diff = curDate
+				.diff(timeStp, ["hours", "minutes", "seconds", "milliseconds"])
+				.toObject() as any;
+
+			setTime(
+				`${
+					diff.hours > 0 ? diff.hours.toString().padStart(2, "0") + ":" : ""
+				}${diff.minutes.toString().padStart(2, "0")}:${diff.seconds
+					.toString()
+					.padStart(2, "0")}`,
+			);
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [discordInfo]);
 
 	return (
 		<>
@@ -378,42 +413,41 @@ export default function NavBar({
 							word-wrap: break-word;
 						}
 
-						.activityName {
+						.activityLabel {
 							font-family: "gg sans", sans-serif !important;
 							font-size: 14px;
-							font-weight: 700;
+
+							overflow: hidden;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+
+							max-width: 90%;
 
 							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
+						}
+
+						.activityName {
+							font-weight: 700;
+
+							margin-bottom: 4px;
 						}
 
 						.activityDetails {
-							font-family: "gg sans", sans-serif !important;
-							font-size: 14px;
 							font-weight: 500;
 
 							margin-top: -4px;
-
-							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
 						}
 
 						.activityState {
-							font-family: "gg sans", sans-serif !important;
-							font-size: 14px;
-							font-weight: 500;
-
-							//margin-top: -2px;
-
-							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
-						}
-
-						.activityTimestamp {
-							font-family: "gg sans", sans-serif !important;
-							font-size: 14px;
 							font-weight: 500;
 
 							margin-top: -4px;
+						}
 
-							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
+						.activityTimestamp {
+							font-weight: 500;
+
+							margin-top: -4px;
 						}
 					`}</style>
 				)}
@@ -609,9 +643,17 @@ export default function NavBar({
 															navStyles.banner,
 															navStyles.bannerImg,
 														)}
-														// className={`${navStyles.banner} ${navStyles.bannerImg}`}
 													/>
 												) : (
+													// <img
+													// 	src={discordInfo.banner}
+													// 	alt="Profile Banner"
+													// 	className={clsx(
+													// 		navStyles.banner,
+													// 		navStyles.bannerImg,
+													// 	)}
+													// 	// className={`${navStyles.banner} ${navStyles.bannerImg}`}
+													// />
 													// <Image
 													// 	src={banner}
 													// 	alt="Profile Banner"
@@ -739,133 +781,134 @@ export default function NavBar({
 															{discordInfo.pronouns}
 														</div>
 
-														{discordInfo.activity.customStatus && (
-															<div className={navStyles.customStatus}>
-																{discordInfo.activity.customStatus.emoji && (
-																	<Tooltip
-																		label={`:${
-																			emoji.has(
-																				discordInfo.activity.customStatus.emoji
-																					.name,
-																			)
-																				? emoji.which(
+														{discordInfo.activity &&
+															discordInfo.activity.customStatus && (
+																<div className={navStyles.customStatus}>
+																	{discordInfo.activity.customStatus.emoji && (
+																		<Tooltip
+																			label={`:${
+																				emoji.has(
+																					discordInfo.activity.customStatus
+																						.emoji.name,
+																				)
+																					? emoji.which(
+																							discordInfo.activity.customStatus
+																								.emoji.name,
+																					  )
+																					: discordInfo.activity.customStatus
+																							.emoji.name
+																			}:`}
+																			arrowPosition={"center"}
+																			arrowSize={6}
+																			withArrow={true}
+																		>
+																			{discordInfo.activity.customStatus.emoji
+																				.id ? (
+																				<img
+																					src={`https://cdn.discordapp.com/emojis/${
 																						discordInfo.activity.customStatus
-																							.emoji.name,
-																				  )
-																				: discordInfo.activity.customStatus
-																						.emoji.name
-																		}:`}
-																		arrowPosition={"center"}
-																		arrowSize={6}
-																		withArrow={true}
-																	>
-																		{discordInfo.activity.customStatus.emoji
-																			.id ? (
-																			<img
-																				src={`https://cdn.discordapp.com/emojis/${
-																					discordInfo.activity.customStatus
-																						.emoji.id
-																				}.${
-																					discordInfo.activity.customStatus
-																						.emoji.animated
-																						? "gif"
-																						: "png"
-																				}?size=96`}
-																				alt="Emoji"
-																				style={{
-																					// marginBottom: "-19px",
-																					float: "left",
-																					width: discordInfo.activity
-																						.customStatus.state
-																						? "20px"
-																						: "50px",
-																					height: discordInfo.activity
-																						.customStatus.state
-																						? "20px"
-																						: "50px",
-																					objectFit: "contain",
-																					marginTop: discordInfo.activity
-																						.customStatus.state
-																						? "0"
-																						: "0px",
-																					// marginBottom: discordInfo.activity
-																					// 	.customStatus.state
-																					// 	? "-1px"
-																					// 	: "0px",
-																					marginRight: "5px",
-																				}}
-																			/>
-																		) : (
-																			// unicode emoji
-																			<div
-																				style={{
-																					// marginBottom: "-19px",
-																					float: "left",
-																					width: discordInfo.activity
-																						.customStatus.state
-																						? "20px"
-																						: "50px",
-																					height: discordInfo.activity
-																						.customStatus.state
-																						? "20px"
-																						: "50px",
-																					fontSize: discordInfo.activity
-																						.customStatus.state
-																						? "20px"
-																						: "50px",
-																					// objectFit: "contain",
-																					marginTop: discordInfo.activity
-																						.customStatus.state
-																						? "-5px"
-																						: "-14px",
-																					marginRight: "5px",
-																				}}
-																			>
-																				{
-																					discordInfo.activity.customStatus
-																						.emoji.name
-																				}
-																			</div>
-																		)}
-																	</Tooltip>
-																)}
-																{discordInfo.activity.customStatus.state ? (
-																	<div
-																		style={{
-																			color:
-																				discordInfo.theme === "light"
-																					? "var(--text-color-dark)"
-																					: "#e2e2e2",
+																							.emoji.id
+																					}.${
+																						discordInfo.activity.customStatus
+																							.emoji.animated
+																							? "gif"
+																							: "png"
+																					}?size=96`}
+																					alt="Emoji"
+																					style={{
+																						// marginBottom: "-19px",
+																						float: "left",
+																						width: discordInfo.activity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						height: discordInfo.activity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						objectFit: "contain",
+																						marginTop: discordInfo.activity
+																							.customStatus.state
+																							? "0"
+																							: "0px",
+																						// marginBottom: discordInfo.activity
+																						// 	.customStatus.state
+																						// 	? "-1px"
+																						// 	: "0px",
+																						marginRight: "5px",
+																					}}
+																				/>
+																			) : (
+																				// unicode emoji
+																				<div
+																					style={{
+																						// marginBottom: "-19px",
+																						float: "left",
+																						width: discordInfo.activity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						height: discordInfo.activity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						fontSize: discordInfo.activity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						// objectFit: "contain",
+																						marginTop: discordInfo.activity
+																							.customStatus.state
+																							? "-5px"
+																							: "-14px",
+																						marginRight: "5px",
+																					}}
+																				>
+																					{
+																						discordInfo.activity.customStatus
+																							.emoji.name
+																					}
+																				</div>
+																			)}
+																		</Tooltip>
+																	)}
+																	{discordInfo.activity.customStatus.state ? (
+																		<div
+																			style={{
+																				color:
+																					discordInfo.theme === "light"
+																						? "var(--text-color-dark)"
+																						: "#e2e2e2",
 
-																			fontFamily:
-																				"gg sans, sans-serif !important",
-																			fontWeight: 400,
-																			fontSize: "13px",
+																				fontFamily:
+																					"gg sans, sans-serif !important",
+																				fontWeight: 400,
+																				fontSize: "13px",
 
-																			marginLeft: "22px",
+																				marginLeft: "22px",
 
-																			// lineHeight: "20px",
-																			// letterSpacing: 0,
+																				// lineHeight: "20px",
+																				// letterSpacing: 0,
 
-																			// marginTop: "-4px",
+																				// marginTop: "-4px",
 
-																			// marginBottom: "1px",
+																				// marginBottom: "1px",
 
-																			maxWidth: "100%",
+																				maxWidth: "100%",
 
-																			wordWrap: "break-word",
-																		}}
-																	>
-																		{discordInfo.activity.customStatus.state}
-																	</div>
-																) : (
-																	<>
-																		<br />
-																		<br />
-																	</>
-																)}
-															</div>
-														)}
+																				wordWrap: "break-word",
+																			}}
+																		>
+																			{discordInfo.activity.customStatus.state}
+																		</div>
+																	) : (
+																		<>
+																			<br />
+																			<br />
+																		</>
+																	)}
+																</div>
+															)}
 
 														<div className="seperator" />
 
@@ -1085,7 +1128,10 @@ export default function NavBar({
 																			<Tooltip
 																				label={
 																					discordInfo.activity.activities[0]
-																						.assets.largeText
+																						.assets
+																						? discordInfo.activity.activities[0]
+																								.assets.largeText
+																						: ""
 																				}
 																				arrowPosition={"center"}
 																				arrowSize={6}
@@ -1093,88 +1139,103 @@ export default function NavBar({
 																			>
 																				<img
 																					src={
-																						discordInfo.activity.activities[0].assets.largeImage.startsWith(
-																							"external",
-																						)
-																							? ""
-																							: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.largeImage}.png`
+																						discordInfo.activity.activities[0]
+																							.assets
+																							? discordInfo.activity.activities[0].assets.largeImage.startsWith(
+																									"mp:external",
+																							  )
+																								? `https://media.discordapp.net/external/${discordInfo.activity.activities[0].assets.largeImage.substring(
+																										12,
+																								  )}`
+																								: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.largeImage}.png`
+																							: "/unknown.svg"
 																					}
 																					alt={
 																						discordInfo.activity.activities[0]
-																							.assets.largeText
+																							.assets
+																							? discordInfo.activity
+																									.activities[0].assets
+																									.largeText
+																							: ""
 																					}
-																					className={
-																						navStyles.activityLargeImage
-																					}
-																					style={{
-																						mask: discordInfo.activity
-																							.activities[0].assets.smallText
-																							? `url("/activityMask.svg")`
-																							: "none",
-																					}}
-																				/>
-																			</Tooltip>
-																			{discordInfo.activity.activities[0].assets
-																				.smallText && (
-																				<Tooltip
-																					label={
-																						discordInfo.activity.activities[0]
-																							.assets.smallText
-																					}
-																					arrowPosition={"center"}
-																					arrowSize={6}
-																					withArrow={true}
-																				>
-																					<div
-																						className={
-																							navStyles.activitySmallImageWrapper
-																						}
-																					>
-																						<img
-																							src={
-																								discordInfo.activity.activities[0].assets.smallImage.startsWith(
-																									"external",
-																								)
-																									? ""
-																									: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.smallImage}.png`
-																							}
-																							alt={
+																					className={clsx(
+																						navStyles.activityLargeImage,
+																						{
+																							[navStyles.activityLargeImageMask]:
 																								discordInfo.activity
 																									.activities[0].assets
-																									.smallText
-																							}
+																									? discordInfo.activity
+																											.activities[0].assets
+																											.smallText
+																									: false,
+																						},
+																					)}
+																				/>
+																			</Tooltip>
+
+																			{discordInfo.activity.activities[0]
+																				.assets &&
+																				discordInfo.activity.activities[0]
+																					.assets.smallText && (
+																					<Tooltip
+																						label={
+																							discordInfo.activity.activities[0]
+																								.assets.smallText
+																						}
+																						arrowPosition={"center"}
+																						arrowSize={6}
+																						withArrow={true}
+																					>
+																						<div
 																							className={
-																								navStyles.activitySmallImage
+																								navStyles.activitySmallImageWrapper
 																							}
-																						/>
-																					</div>
-																				</Tooltip>
-																			)}
+																						>
+																							<img
+																								src={
+																									discordInfo.activity.activities[0].assets.smallImage.startsWith(
+																										"mp:external",
+																									)
+																										? `https://media.discordapp.net/external/${discordInfo.activity.activities[0].assets.smallImage.substring(
+																												12,
+																										  )}`
+																										: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.smallImage}.png`
+																								}
+																								alt={
+																									discordInfo.activity
+																										.activities[0].assets
+																										.smallText
+																								}
+																								className={
+																									navStyles.activitySmallImage
+																								}
+																							/>
+																						</div>
+																					</Tooltip>
+																				)}
 																		</div>
+
 																		<div className={navStyles.activityInfo}>
-																			<div className="activityName">
+																			<div className="activityLabel activityName">
 																				{
 																					discordInfo.activity.activities[0]
 																						.name
 																				}
 																			</div>
-																			<div className="activityDetails">
+																			<div className="activityLabel activityDetails">
 																				{
 																					discordInfo.activity.activities[0]
 																						.details
 																				}
 																			</div>
-																			<div className="activityState">
+																			<div className="activityLabel activityState">
 																				{
 																					discordInfo.activity.activities[0]
 																						.state
 																				}
 																			</div>
-																			<div className="activityTimestamp">
-																				{hours < 10 ? "0" : ""}
-																				{hours}:{minutes < 10 ? "0" : ""}
-																				{minutes}:{seconds < 10 ? "0" : ""}
-																				{seconds} elapsed
+																			<div className="activityLabel activityTimestamp">
+																				{time} elapsed
 																			</div>
 																		</div>
 																	</div>

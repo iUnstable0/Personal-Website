@@ -38,7 +38,7 @@ export default class lib_discord {
 					)
 				).data;
 
-				console.log(data);
+				// console.log(data);
 
 				const primaryColor = `#${lib_color.fix(
 					data.user_profile.theme_colors[0].toString(16),
@@ -146,19 +146,13 @@ export default class lib_discord {
 		const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
 		const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
 
-		// console.log(member.presence);
-
-		if (!member.presence) return null;
-		if (!member.presence.activities) return null;
-		if (member.presence.activities.length === 0) return null;
-
 		let customStatus: any;
 
-		// console.log(member.presence.activities);
+		console.log(member.presence);
 
 		const activities: any[] = [];
 
-		for (const activity of member.presence.activities) {
+		for (const activity of member.presence?.activities) {
 			if (activity.name === "Custom Status") {
 				customStatus = {
 					state: activity.state,
