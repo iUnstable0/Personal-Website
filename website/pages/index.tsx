@@ -29,12 +29,12 @@ import styles from "styles/Index.module.scss";
 // import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 export const getServerSideProps = async (context: any) => {
-	console.log(
-		lib_gql.combineQueries(
-			lib_gqlSchema.query.getData,
-			lib_gqlSchema.query.discordInfo,
-		),
-	);
+	// console.log(
+	// 	lib_gql.combineQueries(
+	// 		lib_gqlSchema.query.getData,
+	// 		lib_gqlSchema.query.discordInfo,
+	// 	),
+	// );
 
 	return lib_axios
 		.request({
@@ -63,7 +63,7 @@ export const getServerSideProps = async (context: any) => {
 				discordInfo: response.data.data.discordInfo,
 			};
 
-			console.log(data);
+			// console.log(data);
 
 			const videos = data.videos;
 

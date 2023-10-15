@@ -56,7 +56,7 @@ export default function NavBar({
 
 	// const curDate = new Date();
 	// const timeStp = new Date(
-	// 	discordUserInfo.activity.activities[0].timestamps.start,
+	// 	discordUserInfo.activity.activities[discordInfo.activity.activities.length - 1].timestamps.start,
 	// );
 
 	// const diff = curDate.getTime() - timeStp.getTime();
@@ -122,33 +122,45 @@ export default function NavBar({
 		},
 	});
 
+	const updateTime = (interval = null) => {
+		if (
+			!discordInfo.activity.activities ||
+			discordInfo.activity.activities.length < 1 ||
+			!discordInfo.activity.activities[
+				discordInfo.activity.activities.length - 1
+			].timestamps
+		) {
+			if (interval !== null) clearInterval(interval);
+
+			return;
+		}
+
+		const curDate = DateTime.now();
+		const timeStp = DateTime.fromISO(
+			discordInfo.activity.activities[
+				discordInfo.activity.activities.length - 1
+			].timestamps.start,
+		);
+
+		const diff = curDate
+			.diff(timeStp, ["hours", "minutes", "seconds", "milliseconds"])
+			.toObject() as any;
+
+		setTime(
+			`${
+				diff.hours > 0 ? diff.hours.toString().padStart(2, "0") + ":" : ""
+			}${diff.minutes.toString().padStart(2, "0")}:${diff.seconds
+				.toString()
+				.padStart(2, "0")}`,
+		);
+	};
+
 	useEffect(() => {
+		updateTime();
+
 		const interval = setInterval(() => {
-			if (
-				!discordInfo.activity.activities ||
-				discordInfo.activity.activities.length < 1
-			) {
-				clearInterval(interval);
-
-				return;
-			}
-
-			const curDate = DateTime.now();
-			const timeStp = DateTime.fromISO(
-				discordInfo.activity.activities[0].timestamps.start,
-			);
-			const diff = curDate
-				.diff(timeStp, ["hours", "minutes", "seconds", "milliseconds"])
-				.toObject() as any;
-
-			setTime(
-				`${
-					diff.hours > 0 ? diff.hours.toString().padStart(2, "0") + ":" : ""
-				}${diff.minutes.toString().padStart(2, "0")}:${diff.seconds
-					.toString()
-					.padStart(2, "0")}`,
-			);
-		}, 1000);
+			updateTime(interval);
+		}, 500);
 
 		return () => clearInterval(interval);
 	}, [discordInfo]);
@@ -421,7 +433,7 @@ export default function NavBar({
 							white-space: nowrap;
 							text-overflow: ellipsis;
 
-							max-width: 90%;
+							max-width: 100%;
 
 							color: ${discordInfo.theme === "light" ? "#313338" : "#ffffff"};
 						}
@@ -429,7 +441,13 @@ export default function NavBar({
 						.activityName {
 							font-weight: 700;
 
-							margin-bottom: 4px;
+							margin-top: ${discordInfo.activity.activities[
+								discordInfo.activity.activities.length - 1
+							]?.assets
+								? "-8px"
+								: "0px"};
+
+							//margin-bottom: 4px;
 						}
 
 						.activityDetails {
@@ -960,11 +978,11 @@ export default function NavBar({
 																			},
 																		);
 
-																		console.log(line);
+																		// console.log(line);
 
 																		const poop = line.split("_IMG_");
 
-																		console.log(poop);
+																		// console.log(poop);
 
 																		// console.log(line);
 																		// console.log(poop);
@@ -1125,92 +1143,154 @@ export default function NavBar({
 																	</div>
 																	<div className={navStyles.activityBox}>
 																		<div className={navStyles.activityAsset}>
-																			<Tooltip
-																				label={
-																					discordInfo.activity.activities[0]
-																						.assets
-																						? discordInfo.activity.activities[0]
-																								.assets.largeText
-																						: ""
-																				}
-																				arrowPosition={"center"}
-																				arrowSize={6}
-																				withArrow={true}
-																			>
-																				<img
-																					src={
-																						discordInfo.activity.activities[0]
-																							.assets
-																							? discordInfo.activity.activities[0].assets.largeImage.startsWith(
-																									"mp:external",
-																							  )
-																								? `https://media.discordapp.net/external/${discordInfo.activity.activities[0].assets.largeImage.substring(
+																			{discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].assets && (
+																				<Tooltip
+																					label={
+																						discordInfo.activity.activities[
+																							discordInfo.activity.activities
+																								.length - 1
+																						].assets.largeText
+																					}
+																					arrowPosition={"center"}
+																					arrowSize={6}
+																					withArrow={true}
+																					disabled={
+																						!discordInfo.activity.activities[
+																							discordInfo.activity.activities
+																								.length - 1
+																						].assets.largeText ||
+																						discordInfo.activity.activities[
+																							discordInfo.activity.activities
+																								.length - 1
+																						].assets.largeText.replace(
+																							/\s/g,
+																							"",
+																						) === ""
+																					}
+																				>
+																					<img
+																						src={
+																							discordInfo.activity.activities[
+																								discordInfo.activity.activities
+																									.length - 1
+																							].assets.largeImage.startsWith(
+																								"mp:external",
+																							)
+																								? `https://media.discordapp.net/external/${discordInfo.activity.activities[
+																										discordInfo.activity
+																											.activities.length - 1
+																								  ].assets.largeImage.substring(
 																										12,
 																								  )}`
-																								: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.largeImage}.png`
-																							: "/unknown.svg"
-																					}
-																					alt={
-																						discordInfo.activity.activities[0]
-																							.assets
-																							? discordInfo.activity
-																									.activities[0].assets
-																									.largeText
-																							: ""
-																					}
+																								: `https://cdn.discordapp.com/app-assets/${
+																										discordInfo.activity
+																											.activities[
+																											discordInfo.activity
+																												.activities.length - 1
+																										].applicationId
+																								  }/${
+																										discordInfo.activity
+																											.activities[
+																											discordInfo.activity
+																												.activities.length - 1
+																										].assets.largeImage
+																								  }.png`
+																						}
+																						alt={
+																							discordInfo.activity.activities[
+																								discordInfo.activity.activities
+																									.length - 1
+																							].assets.largeText
+																						}
+																						className={clsx(
+																							navStyles.activityLargeImage,
+																							{
+																								[navStyles.activityLargeImageMask]:
+																									discordInfo.activity
+																										.activities[
+																										discordInfo.activity
+																											.activities.length - 1
+																									].assets.smallText,
+																							},
+																						)}
+																					/>
+																				</Tooltip>
+																			)}
+
+																			{!discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].assets && (
+																				<img
+																					src="/unknown.svg"
+																					alt="Unknown"
 																					className={clsx(
 																						navStyles.activityLargeImage,
-																						{
-																							[navStyles.activityLargeImageMask]:
-																								discordInfo.activity
-																									.activities[0].assets
-																									? discordInfo.activity
-																											.activities[0].assets
-																											.smallText
-																									: false,
-																						},
+																						navStyles.activityUnknown,
 																					)}
 																				/>
-																			</Tooltip>
+																			)}
 
-																			{discordInfo.activity.activities[0]
-																				.assets &&
-																				discordInfo.activity.activities[0]
-																					.assets.smallText && (
+																			{discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].assets &&
+																				discordInfo.activity.activities[
+																					discordInfo.activity.activities
+																						.length - 1
+																				].assets.smallText && (
 																					<Tooltip
 																						label={
-																							discordInfo.activity.activities[0]
-																								.assets.smallText
+																							discordInfo.activity.activities[
+																								discordInfo.activity.activities
+																									.length - 1
+																							].assets.smallText
 																						}
 																						arrowPosition={"center"}
 																						arrowSize={6}
 																						withArrow={true}
 																					>
-																						<div
-																							className={
-																								navStyles.activitySmallImageWrapper
-																							}
-																						>
-																							<img
-																								src={
-																									discordInfo.activity.activities[0].assets.smallImage.startsWith(
-																										"mp:external",
-																									)
-																										? `https://media.discordapp.net/external/${discordInfo.activity.activities[0].assets.smallImage.substring(
-																												12,
-																										  )}`
-																										: `https://cdn.discordapp.com/app-assets/${discordInfo.activity.activities[0].applicationId}/${discordInfo.activity.activities[0].assets.smallImage}.png`
-																								}
-																								alt={
+																						<img
+																							src={
+																								discordInfo.activity.activities[
 																									discordInfo.activity
-																										.activities[0].assets
-																										.smallText
-																								}
-																								className={
-																									navStyles.activitySmallImage
-																								}
-																							/>
-																						</div>
+																										.activities.length - 1
+																								].assets.smallImage.startsWith(
+																									"mp:external",
+																								)
+																									? `https://media.discordapp.net/external/${discordInfo.activity.activities[
+																											discordInfo.activity
+																												.activities.length - 1
+																									  ].assets.smallImage.substring(
+																											12,
+																									  )}`
+																									: `https://cdn.discordapp.com/app-assets/${
+																											discordInfo.activity
+																												.activities[
+																												discordInfo.activity
+																													.activities.length - 1
+																											].applicationId
+																									  }/${
+																											discordInfo.activity
+																												.activities[
+																												discordInfo.activity
+																													.activities.length - 1
+																											].assets.smallImage
+																									  }.png`
+																							}
+																							alt={
+																								discordInfo.activity.activities[
+																									discordInfo.activity
+																										.activities.length - 1
+																								].assets.smallText
+																							}
+																							className={
+																								navStyles.activitySmallImage
+																							}
+																						/>
 																					</Tooltip>
 																				)}
 																		</div>
@@ -1218,25 +1298,54 @@ export default function NavBar({
 																		<div className={navStyles.activityInfo}>
 																			<div className="activityLabel activityName">
 																				{
-																					discordInfo.activity.activities[0]
-																						.name
+																					discordInfo.activity.activities[
+																						discordInfo.activity.activities
+																							.length - 1
+																					].name
 																				}
 																			</div>
-																			<div className="activityLabel activityDetails">
-																				{
-																					discordInfo.activity.activities[0]
-																						.details
-																				}
-																			</div>
-																			<div className="activityLabel activityState">
-																				{
-																					discordInfo.activity.activities[0]
-																						.state
-																				}
-																			</div>
-																			<div className="activityLabel activityTimestamp">
-																				{time} elapsed
-																			</div>
+																			{discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].details &&
+																				discordInfo.activity.activities[
+																					discordInfo.activity.activities
+																						.length - 1
+																				].details.replace(/\s/g, "") !== "" && (
+																					<div className="activityLabel activityDetails">
+																						{
+																							discordInfo.activity.activities[
+																								discordInfo.activity.activities
+																									.length - 1
+																							].details
+																						}
+																					</div>
+																				)}
+																			{discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].state &&
+																				discordInfo.activity.activities[
+																					discordInfo.activity.activities
+																						.length - 1
+																				].state.replace(/\s/g, "") !== "" && (
+																					<div className="activityLabel activityState">
+																						{
+																							discordInfo.activity.activities[
+																								discordInfo.activity.activities
+																									.length - 1
+																							].state
+																						}
+																					</div>
+																				)}
+																			{discordInfo.activity.activities[
+																				discordInfo.activity.activities.length -
+																					1
+																			].timestamps && (
+																				<div className="activityLabel activityTimestamp">
+																					{time} elapsed
+																				</div>
+																			)}
 																		</div>
 																	</div>
 																</div>
