@@ -196,6 +196,14 @@ export default class query {
 	}
 
 	public static async getDiscordInfo() {
-		return await lib_discord.getInfo();
+		return (await lib_discord.getInfo()).data;
+	}
+
+	public static async getExtraDiscordInfo() {
+		return (await lib_discord.getExtraInfo()).data;
+	}
+
+	public static async getDiscordActivity() {
+		return (await lib_discord.getActivity()).data;
 	}
 }

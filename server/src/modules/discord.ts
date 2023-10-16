@@ -22,8 +22,62 @@ export default class lib_discord {
 
 		let discordInfo: any = {};
 
-		if (cache && lib_data.exists(localDiscordInfoFile)) {
+		let changed = !lib_data.exists(localDiscordInfoFile);
+
+		if (cache && !changed) {
 			discordInfo = await lib_data.readFile(localDiscordInfoFile);
+		} else {
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
+			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+
+			// console.log(member.user);
+
+			const discordAvatar = `https://cdn.discordapp.com/avatars/${
+				member.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
+			}/${member.user.avatar}.${
+				member.user.avatar.startsWith("a_") ? "gif" : "png"
+			}?size=2048`;
+
+			discordInfo = {
+				id: member.user.id, // Same here ;p
+				username: member.user.username,
+				globalName: member.user.globalName,
+				avatar: discordAvatar,
+			};
+
+			if (!changed) {
+				const oldData = await lib_data.readFile(localDiscordInfoFile);
+
+				if (JSON.stringify(oldData) !== JSON.stringify(discordInfo)) {
+					changed = true;
+				}
+			}
+
+			if (changed) {
+				lib_data.writeFile(localDiscordInfoFile, discordInfo);
+			}
+		}
+
+		return {
+			data: discordInfo,
+			changed,
+		};
+	}
+
+	public static async getExtraInfo(cache = true) {
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+
+		const localExtraDiscordInfoFile = `extraDiscordInfo_${strippedDiscordUserId}.json`;
+		// const discordInfoCacheKey = `cache_discordInfo_${strippedDiscordUserId}`;
+
+		// const cachedDiscordInfo: any = await lib_cache.get(discordInfoCacheKey);
+
+		let extraDiscordInfo: any = {};
+
+		let changed = !lib_data.exists(localExtraDiscordInfoFile);
+
+		if (cache && !changed) {
+			extraDiscordInfo = await lib_data.readFile(localExtraDiscordInfoFile);
 		} else {
 			try {
 				const data: any = (
@@ -59,12 +113,6 @@ export default class lib_discord {
 					? lib_color.addWhiteOverlay(tinycolorSecondary, 0.6)
 					: lib_color.addBlackOverlay(tinycolorSecondary, 0.6);
 
-				const discordAvatar = `https://cdn.discordapp.com/avatars/${
-					data.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
-				}/${data.user.avatar}.${
-					data.user.avatar.startsWith("a_") ? "gif" : "png"
-				}?size=2048`;
-
 				const discordBanner = data.user_profile.banner
 					? `https://cdn.discordapp.com/banners/${data.user.id}/${
 							data.user_profile.banner
@@ -73,15 +121,11 @@ export default class lib_discord {
 					  }?size=4096`
 					: null;
 
-				discordInfo = {
-					id: data.user.id, // Same here ;p
-					username: data.user.username,
-					globalName: data.user.global_name,
-					avatar: discordAvatar,
+				extraDiscordInfo = {
 					avatarDecoration: data.user.avatar_decoration,
 					banner: discordBanner,
 					theme: tinycolorPrimary.isLight() ? "light" : "dark",
-					activity: await lib_discord.getActivity(),
+					// activity: await lib_discord.getActivity(),
 					seperatorColor: lib_color.getColorFromGradientPoint(
 						processedPrimary,
 						processedSecondary,
@@ -102,7 +146,19 @@ export default class lib_discord {
 					badges: data.badges,
 				};
 
-				lib_data.writeFile(localDiscordInfoFile, discordInfo);
+				if (!changed) {
+					const oldData = await lib_data.readFile(localExtraDiscordInfoFile);
+
+					if (JSON.stringify(oldData) !== JSON.stringify(extraDiscordInfo)) {
+						changed = true;
+					}
+				}
+
+				if (changed) {
+					lib_data.writeFile(localExtraDiscordInfoFile, extraDiscordInfo);
+				}
+
+				// lib_data.writeFile(localDiscordInfoFile, discordInfo);
 
 				// await lib_cache.set(discordInfoCacheKey, discordInfo, 60);
 			} catch (error) {
@@ -121,12 +177,12 @@ export default class lib_discord {
 				// });
 
 				console.error(
-					`[Main Query] Failed to get discord info.`,
+					`[Main Query] Failed to get extra discord info.`,
 					lib_axios.parseError(error),
 				);
 
 				if (!cache) {
-					discordInfo = await lib_data.readFile(localDiscordInfoFile);
+					extraDiscordInfo = await lib_data.readFile(localExtraDiscordInfoFile);
 				}
 
 				// // Serve local discordInfo.json if we can't get it from Discord API
@@ -139,41 +195,77 @@ export default class lib_discord {
 			}
 		}
 
-		return discordInfo;
+		// console.log(extraDiscordInfo);
+
+		return {
+			data: extraDiscordInfo,
+			changed,
+		};
 	}
 
-	public static async getActivity() {
-		const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-		const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+	public static async getActivity(cache = true) {
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
 
-		let customStatus: any;
+		const localDiscordActivityFile = `discordActivity_${strippedDiscordUserId}.json`;
 
-		console.log(member.presence);
+		let discordActivity: any = {};
 
-		const activities: any[] = [];
+		let changed = !lib_data.exists(localDiscordActivityFile);
 
-		for (const activity of member.presence?.activities) {
-			if (activity.name === "Custom Status") {
-				customStatus = {
-					state: activity.state,
-					emoji: activity.emoji,
-				};
-			} else {
-				activities.push({
-					name: activity.name,
-					details: activity.details,
-					state: activity.state,
-					applicationId: activity.applicationId,
-					timestamps: activity.timestamps,
-					assets: activity.assets,
-					createdTimestamp: activity.createdTimestamp,
-				});
+		if (cache && !changed) {
+			discordActivity = await lib_data.readFile(localDiscordActivityFile);
+		} else {
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
+			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+
+			let customStatus: any = null;
+
+			// console.log(member.user);
+
+			const activities: any[] = [];
+
+			for (const activity of member.presence?.activities) {
+				if (activity.name === "Custom Status") {
+					customStatus = {
+						state: activity.state,
+						emoji: activity.emoji,
+					};
+				} else {
+					activities.push({
+						name: activity.name,
+						details: activity.details,
+						state: activity.state,
+						applicationId: activity.applicationId,
+						timestamps: activity.timestamps,
+						assets: activity.assets,
+						createdTimestamp: activity.createdTimestamp,
+					});
+				}
+			}
+
+			discordActivity = {
+				customStatus,
+				activities,
+			};
+
+			if (!changed) {
+				const oldData = await lib_data.readFile(localDiscordActivityFile);
+
+				if (JSON.stringify(oldData) !== JSON.stringify(discordActivity)) {
+					changed = true;
+				}
+			}
+
+			if (changed) {
+				lib_data.writeFile(localDiscordActivityFile, discordActivity);
 			}
 		}
 
+		// console.log(customStatus, activities);
+
 		return {
-			customStatus,
-			activities,
+			data: discordActivity,
+			changed,
 		};
 	}
 }

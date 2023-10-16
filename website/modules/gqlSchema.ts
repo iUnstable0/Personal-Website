@@ -20,39 +20,15 @@ export default class lib_gqlSchema {
 					username
 					globalName
 					avatar
+				}
+			}
+    `,
+		extraDiscordInfo: `
+			query {
+				extraDiscordInfo {
 					avatarDecoration
 					banner
 					theme
-					activity {
-						customStatus {
-							state
-							emoji {
-								animated
-								name
-								id
-								createdTimestamp
-								url
-								identifier
-							}
-						}
-						activities {
-							name
-							details
-							state
-							applicationId
-							timestamps {
-								start
-								end
-							}
-							assets {
-								largeImage
-								largeText
-								smallImage
-								smallText
-							}
-							createdTimestamp
-						}
-					}
 					seperatorColor
 					themeColors {
 						primary {
@@ -72,7 +48,41 @@ export default class lib_gqlSchema {
 					}
 				}
 			}
-    `,
+		`,
+		discordActivity: `
+			query {
+				discordActivity {
+					customStatus {
+						state
+						emoji {
+							animated
+							name
+							id
+							createdTimestamp
+							url
+							identifier
+						}
+					}
+					activities {
+						name
+						details
+						state
+						applicationId
+						timestamps {
+							start
+							end
+						}
+						assets {
+							largeImage
+							largeText
+							smallImage
+							smallText
+						}
+						createdTimestamp
+					}
+				}
+			}
+		`,
 	};
 
 	public static mutation = {};

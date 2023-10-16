@@ -721,9 +721,6 @@ height: 30px; */
 .activityAsset {
   position: relative;
 
-  max-height: 60px;
-  max-width: 60px;
-
   overflow: visible;
 }
 
@@ -777,7 +774,7 @@ height: 30px; */
   flex-direction: column;
   //justify-content: center;
   justify-content: space-evenly;
-  padding: 8px 0;
+
   // flex: 1 1 auto;
 
   flex-grow: 1;

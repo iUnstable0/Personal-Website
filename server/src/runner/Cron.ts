@@ -19,15 +19,69 @@ export default class Cron {
 
 			jobs.push(
 				new CronJob(
+					"*/2 * * * * *",
+					async () => {
+						// console.log("You will see this message every 10 seconds");
+
+						const result = await lib_discord.getActivity(false);
+
+						if (result.changed) {
+							console.log(
+								"Data change detected, sending update to discord activity channel",
+							);
+
+							io.to("discord_activity").emit("update");
+						}
+
+						// console.log("Sent update to discord activity channel");
+					},
+					null,
+					true,
+					"America/Los_Angeles",
+				),
+			);
+
+			jobs.push(
+				new CronJob(
+					"*/2 * * * * *",
+					async () => {
+						// console.log("You will see this message every 10 seconds");
+
+						const result = await lib_discord.getInfo(false);
+
+						if (result.changed) {
+							console.log(
+								"Data change detected, sending update to discord info channel",
+							);
+
+							io.to("discord_info").emit("update");
+						}
+
+						// console.log("Sent update to discord info channel");
+					},
+					null,
+					true,
+					"America/Los_Angeles",
+				),
+			);
+
+			jobs.push(
+				new CronJob(
 					"*/10 * * * * *",
 					async () => {
 						// console.log("You will see this message every 10 seconds");
 
-						await lib_discord.getInfo(false);
+						const result = await lib_discord.getExtraInfo(false);
 
-						io.to("discord").emit("update");
+						if (result.changed) {
+							console.log(
+								"Data change detected, sending update to discord extra info channel",
+							);
 
-						// console.log("Sent update to discord channel");
+							io.to("discord_extra_info").emit("update");
+						}
+
+						// console.log("Sent update to discord info channel");
 					},
 					null,
 					true,

@@ -47,6 +47,8 @@ export const getServerSideProps = async (context: any) => {
 				query: lib_gql.combineQueries(
 					lib_gqlSchema.query.getData,
 					lib_gqlSchema.query.discordInfo,
+					lib_gqlSchema.query.extraDiscordInfo,
+					lib_gqlSchema.query.discordActivity,
 				),
 				variables: {
 					videoFormat:
@@ -61,6 +63,8 @@ export const getServerSideProps = async (context: any) => {
 			const data = {
 				...response.data.data.getData,
 				discordInfo: response.data.data.discordInfo,
+				extraDiscordInfo: response.data.data.extraDiscordInfo,
+				discordActivity: response.data.data.discordActivity,
 			};
 
 			// console.log(data);
@@ -81,6 +85,8 @@ export const getServerSideProps = async (context: any) => {
 					userInfo: null,
 					webring: data.webring,
 					discordInfo: data.discordInfo,
+					extraDiscordInfo: data.extraDiscordInfo,
+					discordActivity: data.discordActivity,
 				},
 			};
 		})
@@ -98,12 +104,16 @@ export default function Page({
 	contentVisible, // From _app.tsx
 	webring,
 	discordInfo,
+	extraDiscordInfo,
+	discordActivity,
 }: {
 	// firstTimeVisit: boolean;
 	// userInfo: any;
 	contentVisible: boolean;
 	webring: Array<any>;
 	discordInfo: any;
+	extraDiscordInfo: any;
+	discordActivity: any;
 }) {
 	const router = useRouter();
 
@@ -158,6 +168,8 @@ export default function Page({
 				}}
 				webring={webring}
 				discordUserInfo={discordInfo}
+				extraDiscordUserInfo={extraDiscordInfo}
+				discordUserActivity={discordActivity}
 				contentVisible={contentVisible}
 			/>
 
