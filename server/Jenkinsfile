@@ -90,12 +90,10 @@ pipeline {
                 DOPPLER_TOKEN = credentials("""${sh(
                     returnStdout: true,
                     script: '''
-                        echo $BRANCH_NAME;
-
                         if [ "$BRANCH_NAME" = "staging" ]; then
-                            echo "77c5efa1-2ae8-4865-89eb-073c74ca7b3e";
+                            echo 77c5efa1-2ae8-4865-89eb-073c74ca7b3e;
                         else
-                            echo "73adca38-0b56-499c-99b1-89ea088fc7c2";
+                            echo 73adca38-0b56-499c-99b1-89ea088fc7c2;
                         fi
                     '''
                 )}""")
