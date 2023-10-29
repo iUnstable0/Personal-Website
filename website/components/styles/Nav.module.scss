@@ -303,9 +303,7 @@
   }
 }
 
-
 // PORTED
-
 
 //.container {
 //	position: relative;
@@ -408,9 +406,9 @@
 
 .right {
   /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
+flex-direction: column;
+justify-content: center;
+align-items: center; */
   /* margin: 1rem; */
   /* padding: 1rem; */
   background-color: var(--light-blue-2);
@@ -418,7 +416,7 @@
   border-radius: 1rem;
   width: 65%;
   /* height: 90%;
-  height: 82vh; */
+height: 82vh; */
 }
 
 .banner {
@@ -441,19 +439,21 @@
 
   object-fit: cover;
 
-  mask-image: url("/border.svg");
+  mask: url("/ddwa.svg");
+
+  //mask-image: url("/border.svg");
 
   // Minus position by size changed divided by 2
   //Example: 4000px -> 3980px = 20px / 2 = 10px
   //Then minus 10px from the position
 
-  mask-position: -1842px -1784px;
+  //mask-position: -1842px -1784px;
   //mask-position: -1990px -1929px;
   //mask-position: -1986px -1922px;
-  mask-size: 3800px 3800px;
+  //mask-size: 3800px 3800px;
   //mask-size: 4100px 4100px;
 
-  mask-repeat: no-repeat;
+  //mask-repeat: no-repeat;
 }
 
 /* .bannerImg {
@@ -470,11 +470,11 @@
   /* border-radius: 100%; */
   /* margin: 1rem 0 0 1rem; */
   /* width: 155px;
-  height: 155px; */
+height: 155px; */
   /* position: relative; */
   /* z-index: 2; */
   /* background: white;
-  opacity: 0.5; */
+opacity: 0.5; */
   /* margin-top: -117px; */
 
   // DWDWDWDWDWDW
@@ -483,8 +483,8 @@
   // DWDWDWDWDWDW
 
   //margin-top: -52px;
-  margin-top: 68px;
-  margin-left: 13px;
+  margin-top: 65px;
+  margin-left: 11px;
 
   display: flex;
   justify-content: left;
@@ -515,7 +515,7 @@
 .pfpImgDecoBorder {
   /* width: 150px; */
   /* width: 110%;
-  height: 110%; */
+height: 110%; */
   /* width: auto; */
   /* height: 100%; */
   /* width: auto; */
@@ -529,7 +529,7 @@
   /* position: absolute; */
   /* border-radius: 100%; */
   /* margin-left: -7%;
-  margin-top: -12%; */
+margin-top: -12%; */
 }
 
 /* .pfpImg { */
@@ -548,7 +548,7 @@
 /* } */
 
 .pfpImg {
-  width: 92px;
+  width: 94px;
   //width: 97px;
   object-fit: cover;
   border-radius: 100%;
@@ -589,7 +589,7 @@
 
 .badge {
   /* width: 30px;
-  height: 30px; */
+height: 30px; */
   object-fit: cover;
   border-radius: 100%;
   /* margin-left: 1rem; */
@@ -671,15 +671,18 @@
   margin: 3px 2px;
 }
 
-.customActivity {
+.customStatus {
   overflow-wrap: break-word;
-  margin-left: 11.2px;
+  box-sizing: border-box;
+  //margin-top: 12px;
+
+  margin-left: 12px;
   margin-right: 11.2px;
 
-  /* display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center; */
+  //display: flex;
+  //flex-direction: row;
+  //justify-content: left;
+  //align-items: center;
 }
 
 /* .bodyTextTitle {
@@ -703,3 +706,79 @@
 /* .bulletPoint {
 	color: #4c4e5f;
 } */
+
+.activityBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  //align-items: center;
+  //align-items: top;
+
+  margin-left: 11.2px;
+  margin-top: 6px;
+}
+
+.activityAsset {
+  position: relative;
+
+  overflow: visible;
+}
+
+.activityLargeImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+
+  display: block;
+  position: relative;
+  z-index: 1;
+
+  object-fit: cover;
+  // mask: url("/activityMask.svg");
+}
+
+.activityUnknown {
+  width: 35px;
+  height: 35px;
+  border-radius: 0px;
+}
+
+.activityLargeImageMask {
+  mask: url("/activityMask.svg");
+}
+
+.activitySmallImage {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: block;
+  border-radius: 100%;
+
+  right: -4px;
+  bottom: -4px;
+
+  z-index: 2;
+
+  //border-radius: 100%;
+  //bottom: 0;
+  //right: 0;
+  //background-color: white;
+  //box-shadow: 0 0 0 2px white; /* This creates the cutout effect */
+}
+
+.activityInfo {
+  margin-left: 10px;
+
+  //  Row from top to bottom
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  justify-content: space-evenly;
+
+  // flex: 1 1 auto;
+
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  //align-items: center;
+}

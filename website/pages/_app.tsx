@@ -27,7 +27,7 @@ import { SiApplemusic } from "react-icons/si";
 import { IoClose } from "react-icons/io5";
 
 // @ts-ignore
-import * as Unicons from "@iconscout/react-unicons";
+import { UilArrowDown, UilArrowUp } from "@iconscout/react-unicons";
 
 // import ScaleLoader from "react-spinners/ScaleLoader";
 import BarLoader from "react-spinners/BarLoader";
@@ -47,32 +47,32 @@ import mediaControlStyles from "styles/MediaControl.module.scss";
 
 // Fonts
 
-import "@fontsource/arimo";
-import "@fontsource/arimo/500.css";
-import "@fontsource/arimo/600.css";
-import "@fontsource/arimo/700.css";
+// import "@fontsource/arimo";
+// import "@fontsource/arimo/500.css";
+// import "@fontsource/arimo/600.css";
+// import "@fontsource/arimo/700.css";
 
-import "@fontsource/metrophobic";
+// import "@fontsource/metrophobic";
 
-import "@fontsource/noto-sans";
-import "@fontsource/noto-sans/100.css";
-import "@fontsource/noto-sans/200.css";
-import "@fontsource/noto-sans/300.css";
-import "@fontsource/noto-sans/500.css";
-import "@fontsource/noto-sans/600.css";
-import "@fontsource/noto-sans/700.css";
-import "@fontsource/noto-sans/800.css";
-import "@fontsource/noto-sans/900.css";
+// import "@fontsource/noto-sans";
+// import "@fontsource/noto-sans/100.css";
+// import "@fontsource/noto-sans/200.css";
+// import "@fontsource/noto-sans/300.css";
+// import "@fontsource/noto-sans/500.css";
+// import "@fontsource/noto-sans/600.css";
+// import "@fontsource/noto-sans/700.css";
+// import "@fontsource/noto-sans/800.css";
+// import "@fontsource/noto-sans/900.css";
 
-import "@fontsource/open-sans";
-import "@fontsource/open-sans/300.css";
-import "@fontsource/open-sans/500.css";
-import "@fontsource/open-sans/600.css";
-import "@fontsource/open-sans/700.css";
-import "@fontsource/open-sans/800.css";
+// import "@fontsource/open-sans";
+// import "@fontsource/open-sans/300.css";
+// import "@fontsource/open-sans/500.css";
+// import "@fontsource/open-sans/600.css";
+// import "@fontsource/open-sans/700.css";
+// import "@fontsource/open-sans/800.css";
 
-import "@fontsource/pt-sans";
-import "@fontsource/pt-sans/700.css";
+// import "@fontsource/pt-sans";
+// import "@fontsource/pt-sans/700.css";
 
 import "@fontsource/quicksand";
 import "@fontsource/quicksand/300.css";
@@ -80,21 +80,21 @@ import "@fontsource/quicksand/500.css";
 import "@fontsource/quicksand/600.css";
 import "@fontsource/quicksand/700.css";
 
-import "@fontsource/roboto";
-import "@fontsource/roboto/100.css";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import "@fontsource/roboto/900.css";
+// import "@fontsource/roboto";
+// import "@fontsource/roboto/100.css";
+// import "@fontsource/roboto/300.css";
+// import "@fontsource/roboto/500.css";
+// import "@fontsource/roboto/700.css";
+// import "@fontsource/roboto/900.css";
 
-import "@fontsource/secular-one";
+// import "@fontsource/secular-one";
 
-import "@fontsource/source-sans-pro";
-import "@fontsource/source-sans-pro/200.css";
-import "@fontsource/source-sans-pro/300.css";
-import "@fontsource/source-sans-pro/600.css";
-import "@fontsource/source-sans-pro/700.css";
-import "@fontsource/source-sans-pro/900.css";
+// import "@fontsource/source-sans-pro";
+// import "@fontsource/source-sans-pro/200.css";
+// import "@fontsource/source-sans-pro/300.css";
+// import "@fontsource/source-sans-pro/600.css";
+// import "@fontsource/source-sans-pro/700.css";
+// import "@fontsource/source-sans-pro/900.css";
 
 // Defaults to weight 400 with all styles included.
 import "@fontsource/ubuntu";
@@ -102,15 +102,15 @@ import "@fontsource/ubuntu/300.css";
 import "@fontsource/ubuntu/500.css";
 import "@fontsource/ubuntu/700.css";
 
-import "@fontsource/work-sans";
-import "@fontsource/work-sans/100.css";
-import "@fontsource/work-sans/200.css";
-import "@fontsource/work-sans/300.css";
-import "@fontsource/work-sans/500.css";
-import "@fontsource/work-sans/600.css";
-import "@fontsource/work-sans/700.css";
-import "@fontsource/work-sans/800.css";
-import "@fontsource/work-sans/900.css";
+// import "@fontsource/work-sans";
+// import "@fontsource/work-sans/100.css";
+// import "@fontsource/work-sans/200.css";
+// import "@fontsource/work-sans/300.css";
+// import "@fontsource/work-sans/500.css";
+// import "@fontsource/work-sans/600.css";
+// import "@fontsource/work-sans/700.css";
+// import "@fontsource/work-sans/800.css";
+// import "@fontsource/work-sans/900.css";
 
 // const theme = createTheme({
 //   type: "dark",
@@ -846,7 +846,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						)}
 
 						{controlsVisible ? (
-							<Unicons.UilArrowDown
+							<UilArrowDown
 								className={mediaControlStyles.toggleControls}
 								onClick={() => setControlsVisible(false)}
 								// style={{
@@ -854,7 +854,7 @@ export default function App({ Component, pageProps }: AppProps) {
 								// }}
 							/>
 						) : (
-							<Unicons.UilArrowUp
+							<UilArrowUp
 								className={mediaControlStyles.toggleControls}
 								onClick={() => setControlsVisible(true)}
 								// style={{

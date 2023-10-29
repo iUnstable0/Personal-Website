@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 
+import lib_gql from "@iunstable0/website-libs/build/gql";
+
 import lib_axios from "@iunstable0/server-libs/build/axios";
 
 import lib_gqlSchema from "modules/gqlSchema";
@@ -27,6 +29,13 @@ import styles from "styles/Index.module.scss";
 // import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 export const getServerSideProps = async (context: any) => {
+	// console.log(
+	// 	lib_gql.combineQueries(
+	// 		lib_gqlSchema.query.getData,
+	// 		lib_gqlSchema.query.discordInfo,
+	// 	),
+	// );
+
 	return lib_axios
 		.request({
 			method: "POST",
@@ -35,7 +44,12 @@ export const getServerSideProps = async (context: any) => {
 				"Content-Type": "application/json",
 			},
 			data: {
-				query: lib_gqlSchema.query.getData,
+				query: lib_gql.combineQueries(
+					lib_gqlSchema.query.getData,
+					lib_gqlSchema.query.discordInfo,
+					lib_gqlSchema.query.extraDiscordInfo,
+					lib_gqlSchema.query.discordActivity,
+				),
 				variables: {
 					videoFormat:
 						// // If firefox then webm or else mp4
@@ -46,7 +60,14 @@ export const getServerSideProps = async (context: any) => {
 			},
 		})
 		.then((response: any) => {
-			const data = response.data.data.getData;
+			const data = {
+				...response.data.data.getData,
+				discordInfo: response.data.data.discordInfo,
+				extraDiscordInfo: response.data.data.extraDiscordInfo,
+				discordActivity: response.data.data.discordActivity,
+			};
+
+			// console.log(data);
 
 			const videos = data.videos;
 
@@ -64,13 +85,16 @@ export const getServerSideProps = async (context: any) => {
 					userInfo: null,
 					webring: data.webring,
 					discordInfo: data.discordInfo,
+					extraDiscordInfo: data.extraDiscordInfo,
+					discordActivity: data.discordActivity,
 				},
 			};
 		})
 		.catch((error: any) => {
+			// console.log(error.response.data);
 			console.log(lib_axios.parseError(error));
 
-			return null;
+			return;
 		});
 };
 
@@ -80,12 +104,16 @@ export default function Page({
 	contentVisible, // From _app.tsx
 	webring,
 	discordInfo,
+	extraDiscordInfo,
+	discordActivity,
 }: {
 	// firstTimeVisit: boolean;
 	// userInfo: any;
 	contentVisible: boolean;
 	webring: Array<any>;
 	discordInfo: any;
+	extraDiscordInfo: any;
+	discordActivity: any;
 }) {
 	const router = useRouter();
 
@@ -139,7 +167,9 @@ export default function Page({
 					localStorage.setItem("page", page);
 				}}
 				webring={webring}
-				discordInfo={discordInfo}
+				discordUserInfo={discordInfo}
+				extraDiscordUserInfo={extraDiscordInfo}
+				discordUserActivity={discordActivity}
 				contentVisible={contentVisible}
 			/>
 

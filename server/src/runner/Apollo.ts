@@ -16,20 +16,11 @@ const { rateLimitDirectiveTypeDefs, rateLimitDirectiveTransformer } =
 import depthLimit from "graphql-depth-limit";
 import fs from "fs";
 
-import Resolver from "../graphql/resolver";
-
 import lib_error from "@iunstable0/server-libs/build/error";
 
-const plugins = [];
+import Resolver from "@/graphql/resolver";
 
-// if (process.env.NODE_ENV === "production") {
-// 	plugins.push(
-// 		ApolloServerPluginLandingPageProductionDefault({
-// 			embed: true,
-// 			graphRef: "iunstable0s-team-5t8xap@main",
-// 		}),
-// 	);
-// }
+const plugins = [];
 
 let schema = makeExecutableSchema({
 	typeDefs: [
