@@ -108,18 +108,29 @@ pipeline {
                 }
             }
 
+            environment {
+                DOPPLER_TOKEN = credentials("""${sh(
+                    returnStdout: true,
+                    script: '''
+                        echo $BRANCH_NAME;
+
+                        if [ "$BRANCH_NAME" = "staging" ]; then
+                            echo "ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa";
+                        else
+                            echo "c2423ab3-f04f-44b6-b634-4703f7846c3f";
+                        fi
+                    '''
+                )}""")
+            }
+
             steps {
                 script {
                     // Override the DOPPLER_TOKEN for the staging branch
                     if (env.BRANCH_NAME == 'staging') {
-                        env.DOPPLER_TOKEN = credentials('ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa')
-
                         env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging'
                         env.PM2_NAME = "@iUnstable0/Personal-Website/Staging-Website"
                         env.PNPM_COMMAND = 'staging'
                     } else {
-                        env.DOPPLER_TOKEN = credentials('c2423ab3-f04f-44b6-b634-4703f7846c3f')
-
                         env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main'
                         env.PM2_NAME = "@iUnstable0/Personal-Website/Website"
                         env.PNPM_COMMAND = 'start'
