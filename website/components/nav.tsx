@@ -96,6 +96,15 @@ export default function NavBar({
 			useState<any>(extraDiscordUserInfo),
 		[discordActivity, setDiscordActivity] = useState<any>(discordUserActivity);
 
+	const [activityDetailsVisible, setActivityDetailsVisible] = useState<boolean>(
+			checkActivityVisible("details"),
+		),
+		[activityStateVisible, setActivityStateVisible] = useState<boolean>(
+			checkActivityVisible("state"),
+		),
+		[activityCreatedTimestampVisible, setActivityCreatedTimestampVisible] =
+			useState<boolean>(checkActivityVisible("createdTimestamp"));
+
 	const pageName = page
 		? page.substring(0, 1).toUpperCase() + page.substring(1)
 		: "Home";
@@ -186,12 +195,22 @@ export default function NavBar({
 		},
 	});
 
+	function checkActivityVisible(name: string) {
+		return (
+			discordActivity.activities[discordActivity.activities.length - 1] &&
+			discordActivity.activities[discordActivity.activities.length - 1][name] &&
+			discordActivity.activities[discordActivity.activities.length - 1][
+				name
+			].replace(/\s/g, "") !== ""
+		);
+	}
+
 	const updateTime = (interval: any = null) => {
 		if (
 			!discordActivity.activities ||
 			discordActivity.activities.length < 1 ||
 			!discordActivity.activities[discordActivity.activities.length - 1]
-				.timestamps
+				.createdTimestamp
 		) {
 			if (interval !== null) clearInterval(interval);
 
@@ -199,9 +218,12 @@ export default function NavBar({
 		}
 
 		const curDate = DateTime.now();
-		const timeStp = DateTime.fromISO(
-			discordActivity.activities[discordActivity.activities.length - 1]
-				.timestamps.start,
+		const timeStp = DateTime.fromMillis(
+			// 	Convert string to number
+			Number(
+				discordActivity.activities[discordActivity.activities.length - 1]
+					.createdTimestamp,
+			),
 		);
 
 		const diff = curDate
@@ -218,6 +240,12 @@ export default function NavBar({
 	};
 
 	useEffect(() => {
+		setActivityDetailsVisible(checkActivityVisible("details"));
+		setActivityStateVisible(checkActivityVisible("state"));
+		setActivityCreatedTimestampVisible(
+			checkActivityVisible("createdTimestamp"),
+		);
+
 		updateTime();
 
 		const interval = setInterval(() => {
@@ -522,9 +550,10 @@ export default function NavBar({
 							margin-top: ${discordActivity.activities[
 								discordActivity.activities.length - 1
 							]?.assets
-								? "0px"
-								: // ? "-8px"
-								  "0px"};
+								? activityDetailsVisible || activityStateVisible
+									? "-8px"
+									: "0px"
+								: "0px"};
 
 							//margin-bottom: 4px;
 						}
@@ -1355,6 +1384,19 @@ export default function NavBar({
 																						arrowPosition={"center"}
 																						arrowSize={6}
 																						withArrow={true}
+																						disabled={
+																							!discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.smallText ||
+																							discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.smallText.replace(
+																								/\s/g,
+																								"",
+																							) === ""
+																						}
 																					>
 																						<img
 																							src={
@@ -1416,39 +1458,27 @@ export default function NavBar({
 																					].name
 																				}
 																			</div>
-																			{discordActivity.activities[
-																				discordActivity.activities.length - 1
-																			].details &&
-																				discordActivity.activities[
-																					discordActivity.activities.length - 1
-																				].details.replace(/\s/g, "") !== "" && (
-																					<div className="activityLabel activityDetails">
-																						{
-																							discordActivity.activities[
-																								discordActivity.activities
-																									.length - 1
-																							].details
-																						}
-																					</div>
-																				)}
-																			{discordActivity.activities[
-																				discordActivity.activities.length - 1
-																			].state &&
-																				discordActivity.activities[
-																					discordActivity.activities.length - 1
-																				].state.replace(/\s/g, "") !== "" && (
-																					<div className="activityLabel activityState">
-																						{
-																							discordActivity.activities[
-																								discordActivity.activities
-																									.length - 1
-																							].state
-																						}
-																					</div>
-																				)}
-																			{discordActivity.activities[
-																				discordActivity.activities.length - 1
-																			].timestamps && (
+																			{activityDetailsVisible && (
+																				<div className="activityLabel activityDetails">
+																					{
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].details
+																					}
+																				</div>
+																			)}
+																			{activityStateVisible && (
+																				<div className="activityLabel activityState">
+																					{
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].state
+																					}
+																				</div>
+																			)}
+																			{activityCreatedTimestampVisible && (
 																				<div className="activityLabel activityTimestamp">
 																					{time} elapsed
 																				</div>
