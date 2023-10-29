@@ -28,7 +28,7 @@ export default function Component({
 
 		socket.on("disconnect", () => onDisconnect && onDisconnect());
 
-		socket.on("update", (message) => onUpdate && onUpdate(message));
+		socket.on("update", () => onUpdate && onUpdate());
 
 		// onUpdate && onUpdate();
 
