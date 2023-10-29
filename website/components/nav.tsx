@@ -1,21 +1,41 @@
-import Image from "next/image";
-import Head from "next/head";
+// Packages
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+
+import { DateTime } from "luxon";
+
+// import { useStopwatch } from "react-timer-hook";
+
+import * as emoji from "node-emoji";
 
 import clsx from "clsx";
 import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
 
+import lib_axios from "@iunstable0/server-libs/build/axios";
+
+import lib_toaster from "@iunstable0/website-libs/build/toaster";
+
+import lib_gqlSchema from "modules/gqlSchema";
+
+// Components
+
+import Image from "next/image";
+import Head from "next/head";
+
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Popover, Tooltip } from "@mantine/core";
+
+import Socket from "components/socket";
 
 // import { Tooltip } from "@nextui-org/react";
 
 // @ts-ignore
 import { UilAngleLeft, UilAngleRight, UilCopy } from "@iconscout/react-unicons";
+
+// Styles
 
 import navStyles from "components/styles/Nav.module.scss";
 
@@ -23,29 +43,217 @@ export default function NavBar({
 	page,
 	setPage,
 	webring,
-	discordInfo,
+	discordUserInfo,
+	extraDiscordUserInfo,
+	discordUserActivity,
 	contentVisible,
 }: {
 	page: string;
 	setPage: (page: string) => void;
 	webring: Array<any>;
-	discordInfo: any;
+	discordUserInfo: any;
+	extraDiscordUserInfo: any;
+	discordUserActivity: any;
 	contentVisible: boolean;
 }) {
 	const router = useRouter();
 
+	// const curDate = new Date();
+	// const timeStp = new Date(
+	// 	discordUserInfo.activity.activities[discordActivity.activities.length - 1].timestamps.start,
+	// );
+
+	// const diff = curDate.getTime() - timeStp.getTime();
+
+	// curDate.setSeconds(curDate.getSeconds() + diff / 1000);
+
+	// const {
+	// 	totalSeconds,
+	// 	seconds,
+	// 	minutes,
+	// 	hours,
+	// 	days,
+	// 	isRunning,
+	// 	start,
+	// 	pause,
+	// 	reset,
+	// } = useStopwatch({
+	// 	autoStart: true,
+	// 	offsetTimestamp: curDate,
+	// });
+
 	// const [selectedPage, setSelectedPage] = useState<string>(router.pathname);
+
+	const [time, setTime] = useState<any>("00:00");
 
 	const [cornerLeftHover, setCornerLeftHover] = useState<boolean>(false),
 		[cornerRightHover, setCornerRightHover] = useState<boolean>(false);
 
 	const [copyButtonClicked, setCopyButtonClicked] = useState(false);
 
+	const [discordInfo, setDiscordInfo] = useState<any>(discordUserInfo),
+		[extraDiscordInfo, setExtraDiscordInfo] =
+			useState<any>(extraDiscordUserInfo),
+		[discordActivity, setDiscordActivity] = useState<any>(discordUserActivity);
+
+	const [activityDetailsVisible, setActivityDetailsVisible] = useState<boolean>(
+			checkActivityVisible("details"),
+		),
+		[activityStateVisible, setActivityStateVisible] = useState<boolean>(
+			checkActivityVisible("state"),
+		),
+		[activityCreatedTimestampVisible, setActivityCreatedTimestampVisible] =
+			useState<boolean>(checkActivityVisible("createdTimestamp"));
+
 	const pageName = page
 		? page.substring(0, 1).toUpperCase() + page.substring(1)
 		: "Home";
 
 	const title = `${pageName} - iUnstable0`;
+
+	Socket({
+		channel: `discord_activity`,
+		onUpdate: async () => {
+			lib_axios
+				.request({
+					method: "POST",
+					// url: "/gql",
+					baseURL: process.env.NEXT_PUBLIC_GQL,
+					data: {
+						query: lib_gqlSchema.query.discordActivity,
+					},
+				})
+				.then(async (response) => {
+					const data = response.data.data.discordActivity;
+
+					// toast.dismiss("discordInfo");
+
+					setDiscordActivity(data);
+					// setDiscordInfo(data);
+				})
+				.catch((error) => {
+					const errors = lib_axios.parseError(error);
+
+					toast.error(lib_toaster.multiToast("error", errors));
+				});
+		},
+	});
+
+	Socket({
+		channel: `discord_info`,
+		onUpdate: async () => {
+			lib_axios
+				.request({
+					method: "POST",
+					// url: "/gql",
+					baseURL: process.env.NEXT_PUBLIC_GQL,
+					data: {
+						query: lib_gqlSchema.query.discordInfo,
+					},
+				})
+				.then(async (response) => {
+					const data = response.data.data.discordInfo;
+
+					// toast.dismiss("discordInfo");
+
+					setDiscordInfo(data);
+					// setDiscordInfo(data);
+				})
+				.catch((error) => {
+					const errors = lib_axios.parseError(error);
+
+					toast.error(lib_toaster.multiToast("error", errors));
+				});
+		},
+	});
+
+	Socket({
+		channel: `discord_extra_info`,
+		onUpdate: async () => {
+			lib_axios
+				.request({
+					method: "POST",
+					// url: "/gql",
+					baseURL: process.env.NEXT_PUBLIC_GQL,
+					data: {
+						query: lib_gqlSchema.query.extraDiscordInfo,
+					},
+				})
+				.then(async (response) => {
+					const data = response.data.data.extraDiscordInfo;
+
+					// toast.dismiss("discordInfo");
+
+					setExtraDiscordInfo(data);
+					// setDiscordInfo(data);
+				})
+				.catch((error) => {
+					const errors = lib_axios.parseError(error);
+
+					toast.error(lib_toaster.multiToast("error", errors));
+				});
+		},
+	});
+
+	function checkActivityVisible(name: string) {
+		return (
+			discordActivity.activities[discordActivity.activities.length - 1] &&
+			discordActivity.activities[discordActivity.activities.length - 1][name] &&
+			discordActivity.activities[discordActivity.activities.length - 1][
+				name
+			].replace(/\s/g, "") !== ""
+		);
+	}
+
+	const updateTime = (interval: any = null) => {
+		if (
+			!discordActivity.activities ||
+			discordActivity.activities.length < 1 ||
+			!discordActivity.activities[discordActivity.activities.length - 1]
+				.createdTimestamp
+		) {
+			if (interval !== null) clearInterval(interval);
+
+			return;
+		}
+
+		const curDate = DateTime.now();
+		const timeStp = DateTime.fromMillis(
+			// 	Convert string to number
+			Number(
+				discordActivity.activities[discordActivity.activities.length - 1]
+					.createdTimestamp,
+			),
+		);
+
+		const diff = curDate
+			.diff(timeStp, ["hours", "minutes", "seconds", "milliseconds"])
+			.toObject() as any;
+
+		setTime(
+			`${
+				diff.hours > 0 ? diff.hours.toString().padStart(2, "0") + ":" : ""
+			}${diff.minutes.toString().padStart(2, "0")}:${diff.seconds
+				.toString()
+				.padStart(2, "0")}`,
+		);
+	};
+
+	useEffect(() => {
+		setActivityDetailsVisible(checkActivityVisible("details"));
+		setActivityStateVisible(checkActivityVisible("state"));
+		setActivityCreatedTimestampVisible(
+			checkActivityVisible("createdTimestamp"),
+		);
+
+		updateTime();
+
+		const interval = setInterval(() => {
+			updateTime(interval);
+		}, 500);
+
+		return () => clearInterval(interval);
+	}, [discordActivity]);
 
 	return (
 		<>
@@ -77,14 +285,14 @@ export default function NavBar({
 
 							background: linear-gradient(
 									to bottom,
-									${discordInfo.themeColors.primary.processed} 0%,
-									${discordInfo.themeColors.primary.processed} 30%,
-									${discordInfo.themeColors.secondary.processed} 100%
+									${extraDiscordInfo.themeColors.primary.processed} 0%,
+									${extraDiscordInfo.themeColors.primary.processed} 30%,
+									${extraDiscordInfo.themeColors.secondary.processed} 100%
 								),
 								linear-gradient(
 									to bottom,
-									${discordInfo.themeColors.primary.original} 0%,
-									${discordInfo.themeColors.secondary.original} 100%
+									${extraDiscordInfo.themeColors.primary.original} 0%,
+									${extraDiscordInfo.themeColors.secondary.original} 100%
 								);
 							z-index: 0;
 							border: double 5px transparent;
@@ -102,8 +310,8 @@ export default function NavBar({
 							left: 0;
 							background: linear-gradient(
 								to bottom,
-								${discordInfo.themeColors.primary.original} 0%,
-								${discordInfo.themeColors.secondary.original} 100%
+								${extraDiscordInfo.themeColors.primary.original} 0%,
+								${extraDiscordInfo.themeColors.secondary.original} 100%
 							);
 							transform: translate3d(0px, 0px, 0) scale(0.95);
 							filter: blur(65px);
@@ -153,7 +361,7 @@ export default function NavBar({
 							margin-right: 5%;
 
 							border-radius: 9px;
-							background: ${discordInfo.theme === "light"
+							background: ${extraDiscordInfo.theme === "light"
 								? "#ffffff95"
 								: "#00000060"};
 
@@ -172,7 +380,7 @@ export default function NavBar({
 
 						.body {
 							border-radius: 9px;
-							background: ${discordInfo.theme === "light"
+							background: ${extraDiscordInfo.theme === "light"
 								? "#ffffff95"
 								: // : "#13131395"};
 								  "#00000060"};
@@ -184,7 +392,9 @@ export default function NavBar({
 						}
 
 						.globalName {
-							color: ${discordInfo.theme === "light" ? "#343434" : "#ffffff"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#343434"
+								: "#ffffff"};
 							margin: 8px 12px 0 12px;
 
 							font-family: "gg sans", sans-serif !important;
@@ -200,7 +410,9 @@ export default function NavBar({
 						}
 
 						.username {
-							color: ${discordInfo.theme === "light" ? "#050505" : "#ffffff"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#050505"
+								: "#ffffff"};
 
 							margin: -4px 12px 8px 12px;
 
@@ -208,14 +420,33 @@ export default function NavBar({
 							font-weight: 500;
 							font-size: 14.7px;
 
-							display: flex;
-							flex-direction: row;
-							justify-content: left;
-							align-items: center;
+							//display: flex;
+							//flex-direction: row;
+							//justify-content: left;
+							//align-items: center;
+						}
+
+						.pronouns {
+							color: ${extraDiscordInfo.theme === "light"
+								? "#050505"
+								: "#ffffff"};
+
+							margin: -10px 12px 8px 12px;
+
+							font-family: "gg sans", sans-serif !important;
+							font-weight: 400;
+							font-size: 14.7px;
+
+							//display: flex;
+							//flex-direction: row;
+							//justify-content: left;
+							//align-items: center;
 						}
 
 						.discriminator {
-							color: ${discordInfo.theme === "light" ? "#4c4e5f" : "#c0c0c4"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#4c4e5f"
+								: "#c0c0c4"};
 							font-weight: 600;
 							font-size: 22px;
 							font-family: "Work Sans", sans-serif !important;
@@ -225,7 +456,9 @@ export default function NavBar({
 							opacity: 0;
 							margin-left: 6px;
 							transition: all 0.2s ease-in-out;
-							color: ${discordInfo.theme === "light" ? "#4c4e5f" : "#c0c0c4"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#4c4e5f"
+								: "#c0c0c4"};
 							width: 1.25rem;
 						}
 
@@ -244,12 +477,12 @@ export default function NavBar({
 						.seperator {
 							width: 92%;
 							height: 0.5px;
-							background: ${discordInfo.seperatorColor};
+							background: ${extraDiscordInfo.seperatorColor};
 							margin: 0.7rem auto;
 						}
 
 						.bodyTextContent {
-							color: ${discordInfo.theme === "light"
+							color: ${extraDiscordInfo.theme === "light"
 								? "var(--text-color-dark)"
 								: "#e2e2e2"};
 							font-weight: 400;
@@ -272,7 +505,9 @@ export default function NavBar({
 						}
 
 						.bodyTextTitle {
-							color: ${discordInfo.theme === "light" ? "#313131" : "#e2e2e2"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#060607"
+								: "#e2e2e2"};
 							margin: 10px 0 0 11.2px;
 
 							font-family: "gg sans", sans-serif !important;
@@ -285,11 +520,60 @@ export default function NavBar({
 							font-weight: 400;
 							font-size: 15.5px;
 
-							color: ${discordInfo.theme === "light" ? "#242424" : "#e2e2e2"};
+							color: ${extraDiscordInfo.theme === "light"
+								? "#242424"
+								: "#e2e2e2"};
 							line-height: 18px;
 							letter-spacing: 0;
 
 							word-wrap: break-word;
+						}
+
+						.activityLabel {
+							font-family: "gg sans", sans-serif !important;
+							font-size: 14px;
+
+							overflow: hidden;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+
+							max-width: 90%;
+
+							color: ${extraDiscordInfo.theme === "light"
+								? "#313338"
+								: "#ffffff"};
+						}
+
+						.activityName {
+							font-weight: 700;
+
+							margin-top: ${discordActivity.activities[
+								discordActivity.activities.length - 1
+							]?.assets
+								? activityDetailsVisible || activityStateVisible
+									? "-8px"
+									: "0px"
+								: "0px"};
+
+							//margin-bottom: 4px;
+						}
+
+						.activityDetails {
+							font-weight: 500;
+
+							margin-top: -4px;
+						}
+
+						.activityState {
+							font-weight: 500;
+
+							margin-top: -4px;
+						}
+
+						.activityTimestamp {
+							font-weight: 500;
+
+							margin-top: -4px;
 						}
 					`}</style>
 				)}
@@ -477,17 +761,25 @@ export default function NavBar({
 							alt="Banner"
 							className={navStyles.bannerImg}
 						/> */}
-												{discordInfo.banner ? (
+												{extraDiscordInfo.banner ? (
 													<img
-														src={discordInfo.banner}
+														src={extraDiscordInfo.banner}
 														alt="Profile Banner"
 														className={clsx(
 															navStyles.banner,
 															navStyles.bannerImg,
 														)}
-														// className={`${navStyles.banner} ${navStyles.bannerImg}`}
 													/>
 												) : (
+													// <img
+													// 	src={discordInfo.banner}
+													// 	alt="Profile Banner"
+													// 	className={clsx(
+													// 		navStyles.banner,
+													// 		navStyles.bannerImg,
+													// 	)}
+													// 	// className={`${navStyles.banner} ${navStyles.bannerImg}`}
+													// />
 													// <Image
 													// 	src={banner}
 													// 	alt="Profile Banner"
@@ -501,7 +793,7 @@ export default function NavBar({
 														)}
 														style={{
 															backgroundColor:
-																discordInfo.themeColors.primary.original,
+																extraDiscordInfo.themeColors.primary.original,
 														}}
 													></div>
 												)}
@@ -556,86 +848,31 @@ export default function NavBar({
 													{/*/>*/}
 												</div>
 												<div className="badges">
-													<Tooltip
-														label={"HypeSquad Balance"}
-														arrowPosition={"center"}
-														arrowSize={6}
-														withArrow={true}
-													>
-														<Image
-															src="/hypesquad_balance.svg"
-															alt="Hypesquad"
-															className={navStyles.badge}
-															width={25}
-															height={25}
-															// loading="eager"
-															priority={true}
-														/>
-													</Tooltip>
-													<Tooltip
-														label={"Active Developer"}
-														arrowPosition={"center"}
-														arrowSize={6}
-														withArrow={true}
-													>
-														<Image
-															src="/active_developer.svg"
-															alt="Active Developer"
-															className={navStyles.badge}
-															width={25}
-															height={25}
-															// loading="eager"
-															priority={true}
-														/>
-													</Tooltip>
-													<Tooltip
-														label={"Subscriber since Dec 8, 2022"}
-														arrowPosition={"center"}
-														arrowSize={6}
-														withArrow={true}
-													>
-														<Image
-															src="/nitro.svg"
-															alt="Nitro"
-															className={navStyles.badge}
-															width={25}
-															height={25}
-															// loading="eager"
-															priority={true}
-														/>
-													</Tooltip>
-													<Tooltip
-														label={"Server boosting since Dec 26, 2022"}
-														arrowPosition={"center"}
-														arrowSize={6}
-														withArrow={true}
-													>
-														<Image
-															src="/boost.svg"
-															alt="Boost"
-															className={navStyles.badge}
-															width={25}
-															height={25}
-															// loading="eager"
-															priority={true}
-														/>
-													</Tooltip>
-													<Tooltip
-														label={"Originally known as iunstable0#0001"}
-														arrowPosition={"center"}
-														arrowSize={6}
-														withArrow={true}
-													>
-														<Image
-															src="/legacy.png"
-															alt="Legacy Name"
-															className={navStyles.badge}
-															width={25}
-															height={25}
-															// loading="eager"
-															priority={true}
-														/>
-													</Tooltip>
+													{extraDiscordInfo.badges.map(
+														(badge: any, key: number) => (
+															<Tooltip
+																key={key}
+																label={badge.description}
+																arrowPosition={"center"}
+																arrowSize={6}
+																withArrow={true}
+															>
+																<Image
+																	src={`/badges/${badge.id}.${
+																		badge.id === "legacy_username"
+																			? "png"
+																			: "svg"
+																	}`}
+																	alt={badge.id}
+																	className={navStyles.badge}
+																	width={25}
+																	height={25}
+																	loading="eager"
+																	priority={true}
+																/>
+															</Tooltip>
+														),
+													)}
 												</div>
 												<div className={navStyles.bodyContainer}>
 													<div className="body">
@@ -670,90 +907,155 @@ export default function NavBar({
 														<div className="username">
 															{discordInfo.username}
 														</div>
+														<div className="pronouns">
+															{extraDiscordInfo.pronouns}
+														</div>
 
-														{discordInfo.customActivity && (
-															<div className={navStyles.customActivity}>
-																{discordInfo.customActivity.emoji && (
-																	<Tooltip
-																		label={`:${discordInfo.customActivity.emoji.name}:`}
-																		arrowPosition={"center"}
-																		arrowSize={6}
-																		withArrow={true}
-																	>
-																		{discordInfo.customActivity.emoji.id ? (
-																			<img
-																				src={`https://cdn.discordapp.com/emojis/${
-																					discordInfo.customActivity.emoji.id
-																				}.${
-																					discordInfo.customActivity.emoji
-																						.animated
-																						? "gif"
-																						: "png"
-																				}?size=96`}
-																				alt="Emoji"
-																				style={{
-																					// marginBottom: "-19px",
-																					float: "left",
-																					width: "20px",
-																					height: "20px",
-																					objectFit: "contain",
-																					marginTop: "3px",
-																					marginRight: "5px",
-																				}}
-																			/>
-																		) : (
-																			<div
-																				style={{
-																					// marginBottom: "-19px",
-																					float: "left",
-																					width: "20px",
-																					height: "20px",
-																					objectFit: "contain",
-																					marginTop: "0px",
-																					marginRight: "5px",
-																				}}
-																			>
-																				{discordInfo.customActivity.emoji.name}
-																			</div>
-																		)}
-																	</Tooltip>
-																)}
-																<span
-																	style={{
-																		color:
-																			discordInfo.theme === "light"
-																				? "var(--text-color-dark)"
-																				: "#e2e2e2",
+														{discordActivity &&
+															discordActivity.customStatus && (
+																<div className={navStyles.customStatus}>
+																	{discordActivity.customStatus.emoji && (
+																		<Tooltip
+																			label={`:${
+																				emoji.has(
+																					discordActivity.customStatus.emoji
+																						.name,
+																				)
+																					? emoji.which(
+																							discordActivity.customStatus.emoji
+																								.name,
+																					  )
+																					: discordActivity.customStatus.emoji
+																							.name
+																			}:`}
+																			arrowPosition={"center"}
+																			arrowSize={6}
+																			withArrow={true}
+																		>
+																			{discordActivity.customStatus.emoji.id ? (
+																				<img
+																					src={`https://cdn.discordapp.com/emojis/${
+																						discordActivity.customStatus.emoji
+																							.id
+																					}.${
+																						discordActivity.customStatus.emoji
+																							.animated
+																							? "gif"
+																							: "png"
+																					}?size=96`}
+																					alt="Emoji"
+																					style={{
+																						// marginBottom: "-19px",
+																						float: "left",
+																						width: discordActivity.customStatus
+																							.state
+																							? "20px"
+																							: "50px",
+																						height: discordActivity.customStatus
+																							.state
+																							? "20px"
+																							: "50px",
+																						objectFit: "contain",
+																						marginTop: discordActivity
+																							.customStatus.state
+																							? "0"
+																							: "0px",
+																						// marginBottom: discordActivity
+																						// 	.customStatus.state
+																						// 	? "-1px"
+																						// 	: "0px",
+																						marginRight: "5px",
+																					}}
+																				/>
+																			) : (
+																				// unicode emoji
+																				<div
+																					style={{
+																						// marginBottom: "-19px",
+																						float: "left",
+																						width: discordActivity.customStatus
+																							.state
+																							? "20px"
+																							: "50px",
+																						height: discordActivity.customStatus
+																							.state
+																							? "20px"
+																							: "50px",
+																						fontSize: discordActivity
+																							.customStatus.state
+																							? "20px"
+																							: "50px",
+																						// objectFit: "contain",
+																						marginTop: discordActivity
+																							.customStatus.state
+																							? "-5px"
+																							: "-14px",
+																						marginRight: "5px",
+																					}}
+																				>
+																					{
+																						discordActivity.customStatus.emoji
+																							.name
+																					}
+																				</div>
+																			)}
+																		</Tooltip>
+																	)}
 
-																		// margin-left: 11.2px;
-																		// margin-bottom: 2px;
+																	{discordActivity.customStatus.state ? (
+																		<div
+																			style={{
+																				color:
+																					extraDiscordInfo.theme === "light"
+																						? "var(--text-color-dark)"
+																						: "#e2e2e2",
 
-																		fontFamily:
-																			"gg sans, sans-serif !important",
-																		fontWeight: 400,
-																		fontSize: "13px",
+																				fontFamily:
+																					"gg sans, sans-serif !important",
+																				fontWeight: 400,
+																				fontSize: "13px",
 
-																		lineHeight: "20px",
-																		letterSpacing: 0,
+																				marginLeft: discordActivity.customStatus
+																					.emoji
+																					? "22px"
+																					: "0px",
 
-																		wordWrap: "break-word",
-																	}}
-																>
-																	{discordInfo.customActivity.state}
-																</span>
-															</div>
-														)}
+																				// lineHeight: "20px",
+																				// letterSpacing: 0,
+
+																				// marginTop: "-4px",
+
+																				// marginBottom: "1px",
+
+																				maxWidth: "100%",
+
+																				wordWrap: "break-word",
+																			}}
+																		>
+																			{discordActivity.customStatus.state}
+																		</div>
+																	) : (
+																		<>
+																			<br />
+																			<br />
+																		</>
+																	)}
+																</div>
+															)}
 
 														<div className="seperator" />
+
 														<div className={navStyles.bodyText}>
-															<div className="bodyTextTitle">ABOUT ME</div>
-															<div>
-																{/* <p
+															{extraDiscordInfo.bio && (
+																<>
+																	<div className="bodyTextTitle">ABOUT ME</div>
+																	<div>
+																		{/* <p
 											className={
 												navStyles.bodyTextContent
 											}
 										> */}
-																{/* tjzcgt8696@privaterelay.appleid.com
+																		{/* tjzcgt8696@privaterelay.appleid.com
 											<br />
 											0-curl.annoyed@icloud.com
 											<br />
@@ -764,195 +1066,430 @@ export default function NavBar({
 											<br />
 											session:
 											05e54486ba05faa5a31d197cb2818fffb4d7797080c43a8d186822166f8a8b5152 */}
-																{console.log(discordInfo.bio.split("\n"))}
-																{discordInfo.bio
-																	.split("\n")
-																	.map((item: string, key: string) => {
-																		// console.log(item);
-																		if (item === "")
-																			return (
-																				<div
-																					key={key}
-																					style={{
-																						marginTop: "0px",
-																						marginBottom: "0px",
-																						fontSize: "8px",
-																					}}
-																				>
-																					<br />
-																				</div>
-																			);
+																		{/*{console.log(discordInfo.bio.split("\n"))}*/}
+																		{extraDiscordInfo.bio
+																			.split("\n")
+																			.map((item: string, key: string) => {
+																				// console.log(item);
+																				if (item === "")
+																					return (
+																						<div
+																							key={key}
+																							style={{
+																								marginTop: "0px",
+																								marginBottom: "0px",
+																								fontSize: "8px",
+																							}}
+																						>
+																							<br />
+																						</div>
+																					);
 
-																		const line = item.replace(
-																			/\<(.*?)\:(.*?)\>/g,
-																			(match: any, p1: any, p2: any) => {
-																				// console.log(p2);
-																				return `_IMG_$img:${
-																					p1 === "" ? "" : `${p1}:`
-																				}${p2}_IMG_`;
-																			},
-																		);
+																				const line = item.replace(
+																					/\<(.*?)\:(.*?)\>/g,
+																					(match: any, p1: any, p2: any) => {
+																						// console.log(p2);
+																						return `_IMG_$img:${
+																							p1 === "" ? "" : `${p1}:`
+																						}${p2}_IMG_`;
+																					},
+																				);
 
-																		console.log(line);
+																				// console.log(line);
 
-																		const poop = line.split("_IMG_");
+																				const poop = line.split("_IMG_");
 
-																		console.log(poop);
+																				// console.log(poop);
 
-																		// console.log(line);
-																		// console.log(poop);
+																				// console.log(line);
+																				// console.log(poop);
 
-																		// console.log(poop[0] !== "" && poop[0]);
-																		// console.log(poop.length);
+																				// console.log(poop[0] !== "" && poop[0]);
+																				// console.log(poop.length);
 
-																		return (
-																			<div
-																				key={key}
-																				className="bodyTextContent"
-																			>
-																				{poop[0] !== "" && poop[0]}
-																				{poop.length > 1 &&
-																					poop.map(
-																						(
-																							poopitem: string,
-																							poopkey: number,
-																						) => {
-																							if (poopkey === 0) return "";
+																				return (
+																					<div
+																						key={key}
+																						className="bodyTextContent"
+																					>
+																						{poop[0] !== "" && poop[0]}
+																						{poop.length > 1 &&
+																							poop.map(
+																								(
+																									poopitem: string,
+																									poopkey: number,
+																								) => {
+																									if (poopkey === 0) return "";
 
-																							// if (poopitem === "") {
-																							// console.log("EMPTY");
+																									// if (poopitem === "") {
+																									// console.log("EMPTY");
 
-																							// 	return "";
-																							// }
+																									// 	return "";
+																									// }
 
-																							if (
-																								!poopitem.startsWith("$img:")
-																							) {
-																								// return <span key={poopkey}>{poopitem}</span>;
-																								return poopitem;
-																							}
+																									if (
+																										!poopitem.startsWith(
+																											"$img:",
+																										)
+																									) {
+																										// return <span key={poopkey}>{poopitem}</span>;
+																										return poopitem;
+																									}
 
-																							// console.log(poopitem);
-																							// console.log(poop);
-																							// console.log(line);
+																									// console.log(poopitem);
+																									// console.log(poop);
+																									// console.log(line);
 
-																							const splittedEmo = poopitem
-																								.replace("$img:", "")
-																								.split(":");
+																									const splittedEmo = poopitem
+																										.replace("$img:", "")
+																										.split(":");
 
-																							const animated =
-																								splittedEmo.length > 2
-																									? true
-																									: false;
+																									const animated =
+																										splittedEmo.length > 2;
 
-																							const emoName = animated
-																								? splittedEmo[1]
-																								: splittedEmo[0];
+																									const emoName = animated
+																										? splittedEmo[1]
+																										: splittedEmo[0];
 
-																							const emoID = animated
-																								? splittedEmo[2]
-																								: splittedEmo[1];
+																									const emoID = animated
+																										? splittedEmo[2]
+																										: splittedEmo[1];
 
-																							return (
-																								<span key={poopkey}>
-																									<Tooltip
-																										label={`:${emoName}:`}
-																										arrowPosition={"center"}
-																										arrowSize={6}
-																										withArrow={true}
-																									>
-																										<Image
-																											src={`https://cdn.discordapp.com/emojis/${emoID}.${
-																												animated ? "gif" : "png"
-																											}?size=96`}
-																											alt="Emoji"
-																											width={20}
-																											height={20}
-																											style={{
-																												marginBottom: "-5px",
-																											}}
-																											// loading="eager"
-																											priority={true}
-																										/>
-																									</Tooltip>
-																									{/* {poop[poopkey + 1]} */}
-																								</span>
-																							);
-																						},
-																					)}
-																				<br />
-																			</div>
-																		);
-																	})}
-																{/* </p> */}
-															</div>
+																									return (
+																										<span key={poopkey}>
+																											<Tooltip
+																												label={`:${emoName}:`}
+																												arrowPosition={"center"}
+																												arrowSize={6}
+																												withArrow={true}
+																											>
+																												<img
+																													src={`https://cdn.discordapp.com/emojis/${emoID}.${
+																														animated
+																															? "gif"
+																															: "png"
+																													}?size=96`}
+																													alt="Emoji"
+																													// width={20}
+																													// height={20}
+																													style={{
+																														marginBottom:
+																															"-5px",
+																														width: "20px",
+																													}}
+																													// loading="eager"
+																													// priority={true}
+																												/>
+																											</Tooltip>
+																											{/* {poop[poopkey + 1]} */}
+																										</span>
+																									);
+																								},
+																							)}
+																						<br />
+																					</div>
+																				);
+																			})}
+																		{/* </p> */}
+																	</div>
+																</>
+															)}
+
 															<div className="bodyTextTitle">MEMBER SINCE</div>
-															<div>
-																{/* <p
+															{/*<div>*/}
+															{/* <p
 											className={
 												navStyles.bodyTextContent
 											}
 										> */}
-																<div className={navStyles.date}>
-																	<Tooltip
-																		label={"Discord"}
-																		arrowPosition={"center"}
-																		arrowSize={6}
-																		withArrow={true}
-																	>
-																		<Image
-																			src={`/discord-mark-${
-																				discordInfo.theme === "light"
-																					? "black"
-																					: "white"
-																			}.svg`}
-																			alt="Discord"
-																			width={18}
-																			height={18}
-																			loading="eager"
-																		/>
-																	</Tooltip>
-																	<span className={"dateText"}>
-																		Feb 03, 2022
-																	</span>
-																	{/* Bullet point */}
-																	<span
+															<div className={navStyles.date}>
+																<Tooltip
+																	label={"Discord"}
+																	arrowPosition={"center"}
+																	arrowSize={6}
+																	withArrow={true}
+																>
+																	<Image
+																		src={`/discord-mark-${
+																			extraDiscordInfo.theme === "light"
+																				? "black"
+																				: "white"
+																		}.svg`}
+																		alt="Discord"
+																		width={18}
+																		height={18}
+																		loading="eager"
+																	/>
+																</Tooltip>
+																<span className={"dateText"}>Feb 03, 2022</span>
+																{/* Bullet point */}
+																<span
+																	style={{
+																		color:
+																			extraDiscordInfo.theme === "light"
+																				? "#4c4e5f"
+																				: "#b9bbca",
+																	}}
+																>
+																	•
+																</span>
+																<Tooltip
+																	label={"Planet Earth"}
+																	arrowPosition={"center"}
+																	arrowSize={6}
+																	withArrow={true}
+																>
+																	<Image
+																		src="/world.svg"
+																		alt="Planet Earth"
+																		width={18}
+																		height={18}
+																		loading="eager"
 																		style={{
-																			color:
-																				discordInfo.theme === "light"
-																					? "#4c4e5f"
-																					: "#b9bbca",
+																			// Invert
+																			filter:
+																				extraDiscordInfo.theme === "light"
+																					? "invert(0)"
+																					: "invert(1)",
 																		}}
-																	>
-																		•
-																	</span>
-																	<Tooltip
-																		label={"Planet Earth"}
-																		arrowPosition={"center"}
-																		arrowSize={6}
-																		withArrow={true}
-																	>
-																		<Image
-																			src="/world.svg"
-																			alt="Planet Earth"
-																			width={18}
-																			height={18}
-																			loading="eager"
-																			style={{
-																				// Invert
-																				filter:
-																					discordInfo.theme === "light"
-																						? "invert(0)"
-																						: "invert(1)",
-																			}}
-																		/>
-																	</Tooltip>
-																	<span className={"dateText"}>
-																		Apr 08, 2007
-																	</span>
-																</div>
-																{/* </p> */}
+																	/>
+																</Tooltip>
+																<span className={"dateText"}>Apr 08, 2007</span>
 															</div>
+															{/* </p> */}
+															{/*</div>*/}
+															{/*{discordActivity.activities.map(*/}
+															{/*	(activity: any, key: number) => (*/}
+															{/*		<div key={key}>*/}
+															{discordActivity.activities.length > 0 && (
+																<div>
+																	<div className="bodyTextTitle">
+																		PLAYING A GAME
+																	</div>
+																	<div className={navStyles.activityBox}>
+																		<div
+																			className={navStyles.activityAsset}
+																			style={{
+																				maxHeight: discordActivity.activities[
+																					discordActivity.activities.length - 1
+																				].assets
+																					? "60px"
+																					: "35px",
+																				maxWidth: discordActivity.activities[
+																					discordActivity.activities.length - 1
+																				].assets
+																					? "60px"
+																					: "35px",
+																			}}
+																		>
+																			{discordActivity.activities[
+																				discordActivity.activities.length - 1
+																			].assets && (
+																				<Tooltip
+																					label={
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].assets.largeText
+																					}
+																					arrowPosition={"center"}
+																					arrowSize={6}
+																					withArrow={true}
+																					disabled={
+																						!discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].assets.largeText ||
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].assets.largeText.replace(
+																							/\s/g,
+																							"",
+																						) === ""
+																					}
+																				>
+																					<img
+																						src={
+																							discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.largeImage.startsWith(
+																								"mp:external",
+																							)
+																								? `https://media.discordapp.net/external/${discordActivity.activities[
+																										discordActivity.activities
+																											.length - 1
+																								  ].assets.largeImage.substring(
+																										12,
+																								  )}`
+																								: `https://cdn.discordapp.com/app-assets/${
+																										discordActivity.activities[
+																											discordActivity.activities
+																												.length - 1
+																										].applicationId
+																								  }/${
+																										discordActivity.activities[
+																											discordActivity.activities
+																												.length - 1
+																										].assets.largeImage
+																								  }.png`
+																						}
+																						alt={
+																							discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.largeText
+																						}
+																						className={clsx(
+																							navStyles.activityLargeImage,
+																							{
+																								[navStyles.activityLargeImageMask]:
+																									discordActivity.activities[
+																										discordActivity.activities
+																											.length - 1
+																									].assets.smallText,
+																							},
+																						)}
+																					/>
+																				</Tooltip>
+																			)}
+
+																			{!discordActivity.activities[
+																				discordActivity.activities.length - 1
+																			].assets && (
+																				<img
+																					src="/unknown.svg"
+																					alt="Unknown"
+																					className={clsx(
+																						navStyles.activityLargeImage,
+																						navStyles.activityUnknown,
+																					)}
+																				/>
+																			)}
+
+																			{discordActivity.activities[
+																				discordActivity.activities.length - 1
+																			].assets &&
+																				discordActivity.activities[
+																					discordActivity.activities.length - 1
+																				].assets.smallText && (
+																					<Tooltip
+																						label={
+																							discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.smallText
+																						}
+																						arrowPosition={"center"}
+																						arrowSize={6}
+																						withArrow={true}
+																						disabled={
+																							!discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.smallText ||
+																							discordActivity.activities[
+																								discordActivity.activities
+																									.length - 1
+																							].assets.smallText.replace(
+																								/\s/g,
+																								"",
+																							) === ""
+																						}
+																					>
+																						<img
+																							src={
+																								discordActivity.activities[
+																									discordActivity.activities
+																										.length - 1
+																								].assets.smallImage.startsWith(
+																									"mp:external",
+																								)
+																									? `https://media.discordapp.net/external/${discordActivity.activities[
+																											discordActivity.activities
+																												.length - 1
+																									  ].assets.smallImage.substring(
+																											12,
+																									  )}`
+																									: `https://cdn.discordapp.com/app-assets/${
+																											discordActivity
+																												.activities[
+																												discordActivity
+																													.activities.length - 1
+																											].applicationId
+																									  }/${
+																											discordActivity
+																												.activities[
+																												discordActivity
+																													.activities.length - 1
+																											].assets.smallImage
+																									  }.png`
+																							}
+																							alt={
+																								discordActivity.activities[
+																									discordActivity.activities
+																										.length - 1
+																								].assets.smallText
+																							}
+																							className={
+																								navStyles.activitySmallImage
+																							}
+																						/>
+																					</Tooltip>
+																				)}
+																		</div>
+
+																		<div
+																			className={navStyles.activityInfo}
+																			style={{
+																				padding: discordActivity.activities[
+																					discordActivity.activities.length - 1
+																				].assets
+																					? "8px 0"
+																					: "0 0",
+																			}}
+																		>
+																			<div className="activityLabel activityName">
+																				{
+																					discordActivity.activities[
+																						discordActivity.activities.length -
+																							1
+																					].name
+																				}
+																			</div>
+																			{activityDetailsVisible && (
+																				<div className="activityLabel activityDetails">
+																					{
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].details
+																					}
+																				</div>
+																			)}
+																			{activityStateVisible && (
+																				<div className="activityLabel activityState">
+																					{
+																						discordActivity.activities[
+																							discordActivity.activities
+																								.length - 1
+																						].state
+																					}
+																				</div>
+																			)}
+																			{activityCreatedTimestampVisible && (
+																				<div className="activityLabel activityTimestamp">
+																					{time} elapsed
+																				</div>
+																			)}
+																		</div>
+																	</div>
+																</div>
+															)}
+
+															{/*	),*/}
+															{/*)}*/}
 														</div>
 													</div>
 												</div>

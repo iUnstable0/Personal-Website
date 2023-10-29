@@ -130,7 +130,7 @@ export default function Component({
 	const [age, setAge] = useState("");
 
 	useEffect(() => {
-		setInterval(() => {
+		const interval = setInterval(() => {
 			setAge(getAge());
 		}, 1);
 
@@ -145,6 +145,8 @@ export default function Component({
 		}
 
 		setGreetings(shuffledGreetings);
+
+		return () => clearInterval(interval);
 	}, []);
 
 	return (

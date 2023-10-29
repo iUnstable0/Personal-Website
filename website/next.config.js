@@ -12,8 +12,12 @@ const nextConfig = {
 				hostname: "cdn.discordapp.com",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "iunstable0.com",
+				pathname: "/**",
+			},
 		],
-		domains: ["iunstable0.com", "dev.iunstable0.com"],
 	},
 	sassOptions: {
 		includePaths: [
