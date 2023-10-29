@@ -78,9 +78,7 @@ export const getServerSideProps = async (context: any) => {
 
 			return {
 				props: {
-					firstTimeVisit: !context.req.headers.referer
-						? true
-						: !context.req.headers.referer.includes("iunstable0.com"),
+					firstTimeVisit: true,
 					videos,
 					userInfo: null,
 					webring: data.webring,
