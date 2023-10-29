@@ -83,16 +83,16 @@ pipeline {
                     cd website;
 
                     if [ -d ${DEPLOY_PATH}/.next ]; then
-                        echo "Copying .next from production";
+                        echo "Copying .next from last successful build";
 
                         error=false;
 
                         cp -a ${DEPLOY_PATH}/.next .next || error=true;
 
-                        [ $error = true ] && echo "Failed to copy .next from production";
-                        [ $error = false ] && echo "Copied .next from production";
+                        [ $error = true ] && echo "Failed to copy .next from last successful build";
+                        [ $error = false ] && echo "Copied .next from last successful build";
                     else
-                        echo "No .next found in production";
+                        echo "No .next found in last successful build";
                     fi
 
                     pnpm build || true
