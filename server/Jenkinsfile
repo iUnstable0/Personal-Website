@@ -117,6 +117,8 @@ pipeline {
 
                     rsync -aP server/ ${DEPLOY_PATH}/Server/;
 
+                    echo ${DOPPLER_TOKEN} ${BRANCH_NAME} ${PNPM_COMMAND}
+
                     if pm2 list | grep -q "${PM2_NAME}"; then
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
                     else
