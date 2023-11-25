@@ -11,25 +11,21 @@ export default function Component({
 				<h1 className={styles.title}>About</h1>
 
 				<p className={styles.description}>
-					I{"'"}m a self-taught full-stack developer (I like coding)
+					I{"'"}m a self-taught full-stack developer
 					<br />
-					<br />
-					I have been programming since I was 10 years old and my first language
-					was Roblox Lua.
+					<br />I{"'"}ve been programming since I was 10 years old, and my first
+					language was Roblox Lua.
 					<br />
 					<br />
 					Languages I currently know: JavaScript, TypeScript, Python, Lua,
-					Shell, SQL
+					Shell, SQL, and more
 					<br />
-					Languages I{"'"}m learning (and planning to learn): Rust, Go, C, C++,
-					Swift, and MAYBE some Assembly for fun (x86 and ARM64)
-					<br />
-					<br />I also want to get into reverse engineering and some
-					cybersecurity cuz it{"'"}s cool
+					Languages I{"'"}m learning (and planning to learn): Rust, Go, C++,
+					Swift
 					<br />
 					<br />
-					Btw, this website is fully open source and you can find the source
-					code on my GitHub (top right)
+					This website is fully open source and you can find the source code on
+					my GitHub (top right)
 					{/*<br />*/}
 					{/*<br />*/}
 					{/*VPS provider: Contabo (abt $11.99 a month + $2.99 for 250gb of S3*/}
