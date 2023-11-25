@@ -16,7 +16,7 @@
     "@fontsource/quicksand": "^5.0.15",
     "@fontsource/ubuntu": "^5.0.8",
     "@iconscout/react-unicons": "^2.0.2",
-    "@iunstable0/server-libs": "^1.2.3",
+    "@iunstable0/server-libs": "^1.2.5",
     "@iunstable0/website-libs": "^1.1.7",
     "@mantine/core": "^7.2.2",
     "@mantine/hooks": "^7.2.2",
