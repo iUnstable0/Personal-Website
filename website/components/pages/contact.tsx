@@ -11,7 +11,7 @@ export default function Component({
 				<h1 className={styles.title}>Contact me</h1>
 
 				<p className={styles.description}>
-					Hmu on Discord (top right corner) or email me admin@gang.email
+					Hmu on Discord (top right corner) or email me contact@iunstable0.com
 				</p>
 			</div>
 		</>
