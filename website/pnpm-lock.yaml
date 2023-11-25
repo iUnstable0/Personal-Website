@@ -24,8 +24,8 @@ dependencies:
     specifier: ^2.0.2
     version: 2.0.2(react@18.2.0)
   '@iunstable0/server-libs':
-    specifier: ^1.2.3
-    version: 1.2.3
+    specifier: ^1.2.5
+    version: 1.2.5
   '@iunstable0/website-libs':
     specifier: ^1.1.7
     version: 1.1.7(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0)
@@ -1125,8 +1125,8 @@ packages:
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
     dev: false
 
-  /@iunstable0/server-libs@1.2.3:
-    resolution: {integrity: sha512-PA5z91n8vdNNyucYpiCS1a4Xebt7WghtUwM78NmQjbkQzQJCJTQm8Jrf0UmNix/L/SSyXLRQbHSC5b3DcKDwsQ==}
+  /@iunstable0/server-libs@1.2.5:
+    resolution: {integrity: sha512-jefeXAIwL+rPiLZtwm9mw7Anij0s9v6v7yhXbmWw1wM9+BCddCY+6UgsqDWh7C2jr6x6r9kvGzVIGiAe1pynfw==}
     dependencies:
       '@aws-sdk/client-s3': 3.456.0
       '@aws-sdk/s3-request-presigner': 3.456.0

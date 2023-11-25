@@ -9,11 +9,6 @@ declare namespace NodeJS {
 		CLOUDFLARE_S3_ENDPOINT: string;
 		CLOUDFLARE_S3_SECRET_KEY: string;
 
-		CONTABO_S3_ACCESS_KEY: string;
-		CONTABO_S3_CUSTOM_DOMAIN: string;
-		CONTABO_S3_ENDPOINT: string;
-		CONTABO_S3_SECRET_KEY: string;
-
 		DISCORD_BOT_TOKEN: string;
 		DISCORD_GUILD_ID: string;
 		DISCORD_TOKEN: string;
@@ -31,16 +26,12 @@ declare namespace NodeJS {
 		REDIS_USERNAME: string;
 
 		S3_BUCKET_NAME: string;
-		S3_CUSTOM_DOMAIN: string;
 		S3_PROVIDER: string;
-
-		SYNOLOGY_S3_ACCESS_KEY: string;
-		SYNOLOGY_S3_CUSTOM_DOMAIN: string;
-		SYNOLOGY_S3_ENDPOINT: string;
-		SYNOLOGY_S3_SECRET_KEY: string;
 
 		WEBSITE_PORT: string;
 
 		WEBSOCKET_PORT: string;
+
+		DOMAIN: string;
 	}
 }
