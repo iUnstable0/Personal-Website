@@ -48,7 +48,9 @@ export default class WebSocketRunner {
 		console.log(
 			chalk.magenta(`[WebSocket]`),
 			`WebSocket Server ready at ws://${
-				process.env.NODE_ENV !== "development" ? "127.0.0.1" : "fakelocal.com"
+				process.env.NODE_ENV !== "development"
+					? "127.0.0.1"
+					: process.env.DOMAIN
 			}:${process.env.WEBSOCKET_PORT}`,
 		);
 	}

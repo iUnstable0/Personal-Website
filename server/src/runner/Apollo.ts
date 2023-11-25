@@ -160,7 +160,7 @@ export default class ApolloRunner {
 					`Apollo Server ready at http://${
 						process.env.NODE_ENV !== "development"
 							? "127.0.0.1"
-							: "fakelocal.com"
+							: process.env.DOMAIN
 					}:${process.env.APOLLO_PORT}`,
 				);
 
