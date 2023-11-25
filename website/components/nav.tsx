@@ -847,6 +847,7 @@ export default function NavBar({
 													{/*	className={navStyles.pfpImgMask}*/}
 													{/*/>*/}
 												</div>
+
 												<div className="badges">
 													{extraDiscordInfo.badges.map(
 														(badge: any, key: number) => (
