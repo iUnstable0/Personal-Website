@@ -6,5 +6,5 @@
   "ignore": [
     "src/**/*.spec.ts"
   ],
-  "exec": "clear && ts-node -r tsconfig-paths/register src/index.ts"
+  "exec": "(clear || cls) && ts-node -r tsconfig-paths/register src/index.ts"
 }
