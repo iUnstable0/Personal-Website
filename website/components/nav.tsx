@@ -607,7 +607,7 @@ export default function NavBar({
 										break;
 									}
 
-								router.push(
+								void router.push(
 									webring[
 										currentUrlIndex - 1 === -1
 											? webring.length - 1
@@ -642,7 +642,7 @@ export default function NavBar({
 										break;
 									}
 
-								router.push(
+								void router.push(
 									webring[
 										currentUrlIndex + 1 === webring.length
 											? 0
