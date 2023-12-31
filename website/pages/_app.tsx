@@ -529,7 +529,7 @@ export default function App({ Component, pageProps }: AppProps) {
 						width: "100%",
 						justifyContent: "space-between",
 						height: "50px",
-						padding: "0 16px",
+						padding: "0 10px",
 					}}
 				>
 					{/* <div
