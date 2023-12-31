@@ -125,7 +125,7 @@ export default function Page({
 			const newQuery = { ...router.query };
 
 			delete newQuery.p;
-			router.replace({ pathname: router.pathname, query: newQuery });
+			void router.replace({ pathname: router.pathname, query: newQuery });
 			localStorage.setItem("page", router.query.p?.toString() || "home");
 
 			return;
