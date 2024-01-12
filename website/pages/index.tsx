@@ -19,6 +19,7 @@ import Nav from "components/nav";
 import Home from "components/pages/home";
 import About from "components/pages/about";
 import Contact from "components/pages/contact";
+import Scrapbook from "components/pages/scrapbook";
 
 // Styles
 
@@ -174,7 +175,7 @@ export default function Page({
 			<AnimatePresence>
 				{contentVisible && page === "home" && (
 					<motion.div
-						key={"WOWGAYSEx"}
+						key={page}
 						initial={{
 							opacity: 0,
 							display: "none",
@@ -199,7 +200,7 @@ export default function Page({
 
 				{contentVisible && page === "about" && (
 					<motion.div
-						key={"OMGGAYSEX"}
+						key={page}
 						initial={{
 							opacity: 0,
 							display: "none",
@@ -244,6 +245,31 @@ export default function Page({
 						}}
 					>
 						<Contact setPage={setPage} />
+					</motion.div>
+				)}
+
+				{contentVisible && page === "scrapbook" && (
+					<motion.div
+						key={page}
+						initial={{
+							opacity: 0,
+							display: "none",
+						}}
+						animate={{
+							opacity: 1,
+							display: "block",
+							transition: {
+								delay: delayTime,
+							},
+						}}
+						exit={{
+							opacity: 0,
+						}}
+						transition={{
+							duration: durationTime,
+						}}
+					>
+						<Scrapbook setPage={setPage} />
 					</motion.div>
 				)}
 			</AnimatePresence>
