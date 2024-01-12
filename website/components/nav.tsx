@@ -383,7 +383,7 @@ export default function NavBar({
 							background: ${extraDiscordInfo.theme === "light"
 								? "#ffffff95"
 								: // : "#13131395"};
-								  "#00000060"};
+									"#00000060"};
 							width: 90%;
 							margin: 0 auto 18px auto;
 							flex-grow: 1;
@@ -671,6 +671,9 @@ export default function NavBar({
 						</li>
 						<li className={page === "contact" ? navStyles.active : ""}>
 							<button onClick={() => setPage("contact")}>Contact</button>
+						</li>{" "}
+						<li className={page === "scrapbook" ? navStyles.active : ""}>
+							<button onClick={() => setPage("scrapbook")}>Scrapbook</button>
 						</li>
 					</ul>
 				</div>
@@ -925,7 +928,7 @@ export default function NavBar({
 																					? emoji.which(
 																							discordActivity.customStatus.emoji
 																								.name,
-																					  )
+																						)
 																					: discordActivity.customStatus.emoji
 																							.name
 																			}:`}
@@ -1321,20 +1324,20 @@ export default function NavBar({
 																								? `https://media.discordapp.net/external/${discordActivity.activities[
 																										discordActivity.activities
 																											.length - 1
-																								  ].assets.largeImage.substring(
+																									].assets.largeImage.substring(
 																										12,
-																								  )}`
+																									)}`
 																								: `https://cdn.discordapp.com/app-assets/${
 																										discordActivity.activities[
 																											discordActivity.activities
 																												.length - 1
 																										].applicationId
-																								  }/${
+																									}/${
 																										discordActivity.activities[
 																											discordActivity.activities
 																												.length - 1
 																										].assets.largeImage
-																								  }.png`
+																									}.png`
 																						}
 																						alt={
 																							discordActivity.activities[
@@ -1410,22 +1413,22 @@ export default function NavBar({
 																									? `https://media.discordapp.net/external/${discordActivity.activities[
 																											discordActivity.activities
 																												.length - 1
-																									  ].assets.smallImage.substring(
+																										].assets.smallImage.substring(
 																											12,
-																									  )}`
+																										)}`
 																									: `https://cdn.discordapp.com/app-assets/${
 																											discordActivity
 																												.activities[
 																												discordActivity
 																													.activities.length - 1
 																											].applicationId
-																									  }/${
+																										}/${
 																											discordActivity
 																												.activities[
 																												discordActivity
 																													.activities.length - 1
 																											].assets.smallImage
-																									  }.png`
+																										}.png`
 																							}
 																							alt={
 																								discordActivity.activities[
