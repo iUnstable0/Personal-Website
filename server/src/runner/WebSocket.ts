@@ -16,13 +16,14 @@ export default class WebSocketRunner {
 
 		io = new Server(Number(process.env.WEBSOCKET_PORT), {
 			path: "/",
-			// cors: {
-			// 	origin: `http://${
-			// 		process.env.NODE_ENV !== "development"
-			// 			? "127.0.0.1"
-			// 			: `fakelocal.com:${process.env.WEBSITE_PORT}`
-			// 	}`,
-			// },
+			cors: {
+				// origin: `http://${
+				// 	process.env.NODE_ENV !== "development"
+				// 		? "127.0.0.1"
+				// 		: `fakelocal.com:${process.env.WEBSITE_PORT}`
+				// }`,
+				origin: "*", // I am so done with cors :D
+			},
 		});
 
 		io.on("connection", (socket: Socket) => {

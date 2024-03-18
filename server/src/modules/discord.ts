@@ -13,7 +13,7 @@ const client = Discord.getClient();
 
 export default class lib_discord {
 	public static async getInfo(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localDiscordInfoFile = `discordInfo_${strippedDiscordUserId}.json`;
 		// const discordInfoCacheKey = `cache_discordInfo_${strippedDiscordUserId}`;
@@ -27,8 +27,8 @@ export default class lib_discord {
 		if (cache && !changed) {
 			discordInfo = await lib_data.readFile(localDiscordInfoFile);
 		} else {
-			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID);
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID!);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID!);
 
 			// console.log(member.user);
 
@@ -65,7 +65,7 @@ export default class lib_discord {
 	}
 
 	public static async getExtraInfo(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localExtraDiscordInfoFile = `extraDiscordInfo_${strippedDiscordUserId}.json`;
 		// const discordInfoCacheKey = `cache_discordInfo_${strippedDiscordUserId}`;
@@ -82,11 +82,11 @@ export default class lib_discord {
 			try {
 				const data: any = (
 					await axios.get(
-						`https://discord.com/api/v9/users/${process.env.DISCORD_USER_ID}/profile?with_mutual_guilds=false&with_mutual_friends_count=false`,
+						`https://discord.com/api/v9/users/${process.env.DISCORD_USER_ID!}/profile?with_mutual_guilds=false&with_mutual_friends_count=false`,
 						{
 							headers: {
 								Accept: "*/*",
-								Authorization: process.env.DISCORD_TOKEN,
+								Authorization: process.env.DISCORD_TOKEN!,
 							},
 						},
 					)
@@ -204,7 +204,7 @@ export default class lib_discord {
 	}
 
 	public static async getActivity(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localDiscordActivityFile = `discordActivity_${strippedDiscordUserId}.json`;
 
@@ -215,8 +215,8 @@ export default class lib_discord {
 		if (cache && !changed) {
 			discordActivity = await lib_data.readFile(localDiscordActivityFile);
 		} else {
-			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID);
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID!);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID!);
 
 			let customStatus: any = null;
 
