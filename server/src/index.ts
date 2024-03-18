@@ -12,6 +12,9 @@ import Discord from "@/runner/Discord";
 import Apollo from "@/runner/Apollo";
 import Cron from "@/runner/Cron";
 
+// @ts-ignore
+process.send = process.send || function () {};
+
 let chalk: any;
 
 (async () => {
