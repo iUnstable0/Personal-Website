@@ -184,7 +184,7 @@ export default class query {
 					path: encodeURI(
 						`${
 							process.env[
-								`${process.env.S3_PROVIDER.toUpperCase()}_S3_CUSTOM_DOMAIN`
+								`${process.env.S3_PROVIDER!.toUpperCase()}_S3_CUSTOM_DOMAIN`
 							]
 						}/${video}`,
 					),
