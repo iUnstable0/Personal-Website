@@ -20,7 +20,7 @@ import lib_error from "@iunstable0/server-libs/build/error";
 
 import Resolver from "@/graphql/resolver";
 
-const plugins = [];
+const plugins: any = [];
 
 let schema = makeExecutableSchema({
 	typeDefs: [
@@ -77,7 +77,7 @@ export default class ApolloRunner {
 
 			startStandaloneServer(server, {
 				listen: { port: process.env.APOLLO_PORT },
-				context: async ({ req }) => {
+				context: async ({ req }: any) => {
 					// @ts-ignore
 					// const body = req.body;
 					//
