@@ -20,7 +20,7 @@ export default class lib_discord {
 
 		// const cachedDiscordInfo: any = await lib_cache.get(discordInfoCacheKey);
 
-		let discordInfo: any = {};
+		let discordInfo: any;
 
 		let changed = !lib_data.exists(localDiscordInfoFile);
 
@@ -116,9 +116,9 @@ export default class lib_discord {
 				const discordBanner = data.user_profile.banner
 					? `https://cdn.discordapp.com/banners/${data.user.id}/${
 							data.user_profile.banner
-					  }.${
+						}.${
 							data.user_profile.banner.startsWith("a_") ? "gif" : "png"
-					  }?size=4096`
+						}?size=4096`
 					: null;
 
 				extraDiscordInfo = {
@@ -208,7 +208,7 @@ export default class lib_discord {
 
 		const localDiscordActivityFile = `discordActivity_${strippedDiscordUserId}.json`;
 
-		let discordActivity: any = {};
+		let discordActivity: any;
 
 		let changed = !lib_data.exists(localDiscordActivityFile);
 
@@ -224,22 +224,24 @@ export default class lib_discord {
 
 			const activities: any[] = [];
 
-			for (const activity of member.presence?.activities) {
-				if (activity.name === "Custom Status") {
-					customStatus = {
-						state: activity.state,
-						emoji: activity.emoji,
-					};
-				} else {
-					activities.push({
-						name: activity.name,
-						details: activity.details,
-						state: activity.state,
-						applicationId: activity.applicationId,
-						timestamps: activity.timestamps,
-						assets: activity.assets,
-						createdTimestamp: activity.createdTimestamp,
-					});
+			if (member.presence?.activities) {
+				for (const activity of member.presence?.activities) {
+					if (activity.name === "Custom Status") {
+						customStatus = {
+							state: activity.state,
+							emoji: activity.emoji,
+						};
+					} else {
+						activities.push({
+							name: activity.name,
+							details: activity.details,
+							state: activity.state,
+							applicationId: activity.applicationId,
+							timestamps: activity.timestamps,
+							assets: activity.assets,
+							createdTimestamp: activity.createdTimestamp,
+						});
+					}
 				}
 			}
 
