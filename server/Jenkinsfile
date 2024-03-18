@@ -29,7 +29,7 @@ pipeline {
                     def proceed = changedFiles.any { it.startsWith('server/') }
 
                     if (!proceed) {
-                        error('No changes in website, skipping deploy.')
+                        error('No changes in server, skipping deploy.')
                     }
                 }
             }
