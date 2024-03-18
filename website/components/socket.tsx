@@ -16,6 +16,7 @@ export default function Component({
 	onDisconnect?: () => void;
 }) {
 	useEffect((): any => {
+		console.log("SOCKET PATH IS", process.env.NEXT_PUBLIC_WEBSOCKET || "");
 		const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET || "", {
 			path: "/",
 			rememberUpgrade: true,
