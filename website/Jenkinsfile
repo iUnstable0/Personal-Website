@@ -68,6 +68,19 @@ pipeline {
                 }
             }
 
+            environment {
+                DOPPLER_TOKEN = credentials("""${sh(
+                    returnStdout: true,
+                    script: '''
+                        if [ "$BRANCH_NAME" = "staging" ]; then
+                            echo ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa;
+                        else
+                            echo c2423ab3-f04f-44b6-b634-4703f7846c3f;
+                        fi
+                    '''
+                )}""")
+            }
+
             steps {
                 script {
                     if (env.BRANCH_NAME == 'staging') {
@@ -95,7 +108,7 @@ pipeline {
                         echo "No .next found in last successful build";
                     fi
 
-                    pnpm build || true
+                    DOPPLER_TOKEN=${DOPPLER_TOKEN} pnpm build || true
                 '''
             }
         }

@@ -46,7 +46,7 @@ export default class DiscordRunner {
 			client.on("ready", async () => {
 				console.log(
 					chalk.magenta(`[Discord]`),
-					`Logged in as ${client.user.tag}!`,
+					`Logged in as ${client.user?.tag}!`,
 				);
 
 				resolve(true);
