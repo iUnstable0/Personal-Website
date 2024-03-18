@@ -4,9 +4,6 @@ if (process.env.NODE_ENV !== "development") {
 
 let time = Date.now();
 
-// @ts-ignore
-process.send = process.send || function () {};
-
 require("better-logging")(console);
 
 import WebSocket from "@/runner/WebSocket";
@@ -30,7 +27,7 @@ let chalk: any;
 							`Server online! Took ${Date.now() - time}ms`,
 						);
 
-						process.send("ready");
+						process.send!("ready");
 					});
 				});
 			});

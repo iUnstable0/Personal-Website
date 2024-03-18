@@ -4,7 +4,7 @@ import WebSocket from "@/runner/WebSocket";
 
 import lib_discord from "@/modules/discord";
 
-const jobs = [];
+const jobs: any = [];
 
 let chalk: any;
 

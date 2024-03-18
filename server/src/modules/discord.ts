@@ -28,20 +28,20 @@ export default class lib_discord {
 			discordInfo = await lib_data.readFile(localDiscordInfoFile);
 		} else {
 			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID);
 
 			// console.log(member.user);
 
 			const discordAvatar = `https://cdn.discordapp.com/avatars/${
-				member.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
-			}/${member.user.avatar}.${
-				member.user.avatar.startsWith("a_") ? "gif" : "png"
+				member?.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
+			}/${member?.user.avatar}.${
+				member?.user.avatar?.startsWith("a_") ? "gif" : "png"
 			}?size=2048`;
 
 			discordInfo = {
-				id: member.user.id, // Same here ;p
-				username: member.user.username,
-				globalName: member.user.globalName,
+				id: member?.user.id, // Same here ;p
+				username: member?.user.username,
+				globalName: member?.user.globalName,
 				avatar: discordAvatar,
 			};
 
@@ -216,7 +216,7 @@ export default class lib_discord {
 			discordActivity = await lib_data.readFile(localDiscordActivityFile);
 		} else {
 			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID);
 
 			let customStatus: any = null;
 
@@ -224,7 +224,7 @@ export default class lib_discord {
 
 			const activities: any[] = [];
 
-			if (member.presence?.activities) {
+			if (member?.presence?.activities) {
 				for (const activity of member.presence?.activities) {
 					if (activity.name === "Custom Status") {
 						customStatus = {
