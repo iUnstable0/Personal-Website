@@ -4,9 +4,6 @@ if (process.env.NODE_ENV !== "development") {
 
 let time = Date.now();
 
-// @ts-ignore
-process.send = process.send || function () {};
-
 require("better-logging")(console);
 
 import WebSocket from "@/runner/WebSocket";
@@ -14,6 +11,9 @@ import Fastify from "@/runner/Fastify";
 import Discord from "@/runner/Discord";
 import Apollo from "@/runner/Apollo";
 import Cron from "@/runner/Cron";
+
+// @ts-ignore
+process.send = process.send || function () {};
 
 let chalk: any;
 
@@ -30,7 +30,7 @@ let chalk: any;
 							`Server online! Took ${Date.now() - time}ms`,
 						);
 
-						process.send("ready");
+						process.send!("ready");
 					});
 				});
 			});

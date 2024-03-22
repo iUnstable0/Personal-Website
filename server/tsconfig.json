@@ -14,6 +14,7 @@
     "types": [
       "node"
     ],
+    "strict": true,
     "resolveJsonModule": true,
     "incremental": true,
     "baseUrl": ".",

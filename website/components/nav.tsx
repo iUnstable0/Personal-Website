@@ -114,6 +114,8 @@ export default function NavBar({
 	Socket({
 		channel: `discord_activity`,
 		onUpdate: async () => {
+			// console.log("DISCORD ACTIVITY UPDATE");
+
 			lib_axios
 				.request({
 					method: "POST",
@@ -137,11 +139,16 @@ export default function NavBar({
 					toast.error(lib_toaster.multiToast("error", errors));
 				});
 		},
+		// onConnect: async () => {
+		// 	console.log("DISCORD ACTIVITY CONNECT");
+		// },
 	});
 
 	Socket({
 		channel: `discord_info`,
 		onUpdate: async () => {
+			//console.log("DISCORD INFO UPDATE");
+
 			lib_axios
 				.request({
 					method: "POST",
@@ -170,6 +177,8 @@ export default function NavBar({
 	Socket({
 		channel: `discord_extra_info`,
 		onUpdate: async () => {
+			//console.log("DISCORD EXTRA INFO UPDATE");
+
 			lib_axios
 				.request({
 					method: "POST",

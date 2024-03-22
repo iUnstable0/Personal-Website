@@ -13,35 +13,35 @@ const client = Discord.getClient();
 
 export default class lib_discord {
 	public static async getInfo(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localDiscordInfoFile = `discordInfo_${strippedDiscordUserId}.json`;
 		// const discordInfoCacheKey = `cache_discordInfo_${strippedDiscordUserId}`;
 
 		// const cachedDiscordInfo: any = await lib_cache.get(discordInfoCacheKey);
 
-		let discordInfo: any = {};
+		let discordInfo: any;
 
 		let changed = !lib_data.exists(localDiscordInfoFile);
 
 		if (cache && !changed) {
 			discordInfo = await lib_data.readFile(localDiscordInfoFile);
 		} else {
-			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID!);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID!);
 
 			// console.log(member.user);
 
 			const discordAvatar = `https://cdn.discordapp.com/avatars/${
-				member.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
-			}/${member.user.avatar}.${
-				member.user.avatar.startsWith("a_") ? "gif" : "png"
+				member?.user.id // Idk if i should use data.user.id or process.env.DISCORD_USER_ID
+			}/${member?.user.avatar}.${
+				member?.user.avatar?.startsWith("a_") ? "gif" : "png"
 			}?size=2048`;
 
 			discordInfo = {
-				id: member.user.id, // Same here ;p
-				username: member.user.username,
-				globalName: member.user.globalName,
+				id: member?.user.id, // Same here ;p
+				username: member?.user.username,
+				globalName: member?.user.globalName,
 				avatar: discordAvatar,
 			};
 
@@ -65,7 +65,7 @@ export default class lib_discord {
 	}
 
 	public static async getExtraInfo(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localExtraDiscordInfoFile = `extraDiscordInfo_${strippedDiscordUserId}.json`;
 		// const discordInfoCacheKey = `cache_discordInfo_${strippedDiscordUserId}`;
@@ -82,11 +82,11 @@ export default class lib_discord {
 			try {
 				const data: any = (
 					await axios.get(
-						`https://discord.com/api/v9/users/${process.env.DISCORD_USER_ID}/profile?with_mutual_guilds=false&with_mutual_friends_count=false`,
+						`https://discord.com/api/v9/users/${process.env.DISCORD_USER_ID!}/profile?with_mutual_guilds=false&with_mutual_friends_count=false`,
 						{
 							headers: {
 								Accept: "*/*",
-								Authorization: process.env.DISCORD_TOKEN,
+								Authorization: process.env.DISCORD_TOKEN!,
 							},
 						},
 					)
@@ -116,9 +116,9 @@ export default class lib_discord {
 				const discordBanner = data.user_profile.banner
 					? `https://cdn.discordapp.com/banners/${data.user.id}/${
 							data.user_profile.banner
-					  }.${
+						}.${
 							data.user_profile.banner.startsWith("a_") ? "gif" : "png"
-					  }?size=4096`
+						}?size=4096`
 					: null;
 
 				extraDiscordInfo = {
@@ -204,19 +204,19 @@ export default class lib_discord {
 	}
 
 	public static async getActivity(cache = true) {
-		const strippedDiscordUserId = process.env.DISCORD_USER_ID.substring(0, 5);
+		const strippedDiscordUserId = process.env.DISCORD_USER_ID!.substring(0, 5);
 
 		const localDiscordActivityFile = `discordActivity_${strippedDiscordUserId}.json`;
 
-		let discordActivity: any = {};
+		let discordActivity: any;
 
 		let changed = !lib_data.exists(localDiscordActivityFile);
 
 		if (cache && !changed) {
 			discordActivity = await lib_data.readFile(localDiscordActivityFile);
 		} else {
-			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-			const member = guild.members.cache.get(process.env.DISCORD_USER_ID);
+			const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID!);
+			const member = guild?.members.cache.get(process.env.DISCORD_USER_ID!);
 
 			let customStatus: any = null;
 
@@ -224,22 +224,24 @@ export default class lib_discord {
 
 			const activities: any[] = [];
 
-			for (const activity of member.presence?.activities) {
-				if (activity.name === "Custom Status") {
-					customStatus = {
-						state: activity.state,
-						emoji: activity.emoji,
-					};
-				} else {
-					activities.push({
-						name: activity.name,
-						details: activity.details,
-						state: activity.state,
-						applicationId: activity.applicationId,
-						timestamps: activity.timestamps,
-						assets: activity.assets,
-						createdTimestamp: activity.createdTimestamp,
-					});
+			if (member?.presence?.activities) {
+				for (const activity of member.presence?.activities) {
+					if (activity.name === "Custom Status") {
+						customStatus = {
+							state: activity.state,
+							emoji: activity.emoji,
+						};
+					} else {
+						activities.push({
+							name: activity.name,
+							details: activity.details,
+							state: activity.state,
+							applicationId: activity.applicationId,
+							timestamps: activity.timestamps,
+							assets: activity.assets,
+							createdTimestamp: activity.createdTimestamp,
+						});
+					}
 				}
 			}
 
