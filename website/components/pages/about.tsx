@@ -17,8 +17,7 @@ export default function Component({
 					language was Roblox Lua.
 					<br />
 					<br />
-					Languages I currently know: JavaScript, TypeScript, Python, Lua,
-					Shell, SQL, and more
+					Languages I currently know: JavaScript, TypeScript, Python, Lua, Rust
 					<br />
 					Languages I{"'"}m learning (and planning to learn): Rust, Go, C++,
 					Swift
