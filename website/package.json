@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "doppler run -- next dev -p 4104",
-    "build": "next build",
+    "build": "doppler run -- next build",
     "start": "doppler run -- next start -p 4104",
     "staging": "doppler run -- next start -p 5104",
     "lint": "next lint"
