@@ -10,7 +10,7 @@
     "dev": "doppler run -- cross-env NODE_ENV=development nodemon"
   },
   "dependencies": {
-    "@apollo/server": "^4.10.1",
+    "@apollo/server": "^4.10.2",
     "@fastify/rate-limit": "^9.1.0",
     "@graphql-tools/schema": "^10.0.3",
     "@graphql-tools/utils": "^10.1.2",
@@ -43,14 +43,14 @@
     "@types/cryptr": "^4.0.3",
     "@types/graphql-depth-limit": "^1.1.6",
     "@types/luxon": "^3.4.2",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.5",
     "@types/tinycolor2": "^1.4.6",
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.10",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   },
   "_moduleAliases": {
     "@": "./build"
