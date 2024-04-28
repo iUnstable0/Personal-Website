@@ -421,7 +421,7 @@ height: 82vh; */
 
 .banner {
   width: 100% !important;
-  //height: 100% !important;
+  height: 100% !important;
   //height: 30% !important;
 
   position: relative !important;
@@ -439,7 +439,13 @@ height: 82vh; */
 
   object-fit: cover;
 
+  //margin-top: 10px;
+
   mask: url("/ddwa.svg");
+  // Shift the mask down
+  //  mask-position: 0 10px;
+  //no mask repeat
+  mask-repeat: no-repeat;
 
   //mask-image: url("/border.svg");
 
@@ -483,13 +489,21 @@ opacity: 0.5; */
   // DWDWDWDWDWDW
 
   //margin-top: -52px;
-  margin-top: 65px;
+  margin-top: 66px;
   margin-left: 11px;
 
   display: flex;
   justify-content: left;
   align-items: center;
   z-index: 2;
+
+  //mask: url("/avatarDecoRoundMask.svg");
+  // mask-size: auto;
+  //  mask-repeat: repeat;
+  //  mask-origin: border-box;
+  //  mask-clip: border-box;
+  //  mask-composite: add;
+  //  mask-mode: match-source;
 
   /* width: 30%; */
   /* width: auto; */
