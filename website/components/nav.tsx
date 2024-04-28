@@ -364,15 +364,16 @@ export default function NavBar({
 							justify-content: center;
 							align-items: center;
 
-							gap: 4px;
+							//gap: 4px;
 
-							margin: 1rem auto;
+							//margin: 0.5rem auto;
+							margin: auto auto 16px auto;
 							margin-right: 5%;
 
 							border-radius: 9px;
 							background: ${extraDiscordInfo.theme === "light"
 								? "#ffffff95"
-								: "#00000060"};
+								: "rgba(0,0,0,0.50)"};
 
 							padding-left: 5px;
 							padding-right: 5px;
@@ -391,8 +392,7 @@ export default function NavBar({
 							border-radius: 9px;
 							background: ${extraDiscordInfo.theme === "light"
 								? "#ffffff95"
-								: // : "#13131395"};
-									"#00000060"};
+								: "rgba(0,0,0,0.50)"};
 							width: 90%;
 							margin: 0 auto 18px auto;
 							flex-grow: 1;
