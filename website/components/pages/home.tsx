@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import Image from "next/image";
 import Typewriter from "typewriter-effect";
 
-import styles from "styles/Index.module.scss";
+import styles from "@/styles/Index.module.scss";
 
 export default function Component({
 	setPage,

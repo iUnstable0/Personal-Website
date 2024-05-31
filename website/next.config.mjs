@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
-const path = require("path");
+import path from "path";
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
 	images: {
@@ -21,7 +21,7 @@ const nextConfig = {
 	},
 	sassOptions: {
 		includePaths: [
-			path.join(__dirname, "styles"),
+			path.join("styles"),
 			// path.join(__dirname, "components", "styles"),
 			// path.join(__dirname, "components", "dashboard", "styles"),
 			// path.join(__dirname, "components", "dashboard", "pages", "styles"),
@@ -29,4 +29,4 @@ const nextConfig = {
 	},
 };
 
-module.exports = nextConfig;
+export default nextConfig;

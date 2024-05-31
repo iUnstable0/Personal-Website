@@ -17,7 +17,7 @@ import lib_axios from "@iunstable0/server-libs/build/axios";
 
 import lib_toaster from "@iunstable0/website-libs/build/toaster";
 
-import lib_gqlSchema from "modules/gqlSchema";
+import lib_gqlSchema from "@/modules/gqlSchema";
 
 // Components
 
@@ -28,7 +28,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { Popover, Tooltip } from "@mantine/core";
 
-import Socket from "components/socket";
+import Socket from "@/components/socket";
 
 // import { Tooltip } from "@nextui-org/react";
 
@@ -37,7 +37,7 @@ import { UilAngleLeft, UilAngleRight, UilCopy } from "@iconscout/react-unicons";
 
 // Styles
 
-import navStyles from "components/styles/Nav.module.scss";
+import navStyles from "@/components/styles/Nav.module.scss";
 
 export default function NavBar({
 	page,
@@ -367,7 +367,7 @@ export default function NavBar({
 							//gap: 4px;
 
 							//margin: 0.5rem auto;
-							margin: auto auto 16px auto;
+							margin: 16px auto 16px auto;
 							margin-right: 5%;
 
 							border-radius: 9px;
