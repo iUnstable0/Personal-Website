@@ -367,7 +367,7 @@ export default function NavBar({
 							//gap: 4px;
 
 							//margin: 0.5rem auto;
-							margin: auto auto 16px auto;
+							margin: 16px auto 16px auto;
 							margin-right: 5%;
 
 							border-radius: 9px;
