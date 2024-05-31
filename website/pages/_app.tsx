@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { useRouter } from "next/router";
 
-import { Gradient } from "public/Gradient.js";
+import { Gradient } from "@/public/Gradient.js";
 
 // Additional Components
 
@@ -32,7 +32,7 @@ import { UilArrowDown, UilArrowUp } from "@iconscout/react-unicons";
 // import ScaleLoader from "react-spinners/ScaleLoader";
 import BarLoader from "react-spinners/BarLoader";
 
-import Toaster from "components/toaster";
+import Toaster from "@/components/toaster";
 
 // Types
 
@@ -40,10 +40,10 @@ import type { AppProps } from "next/app";
 
 // Styles
 
-import "styles/globals.scss";
+import "@/styles/globals.scss";
 
-import styles from "styles/Index.module.scss";
-import mediaControlStyles from "styles/MediaControl.module.scss";
+import styles from "@/styles/Index.module.scss";
+import mediaControlStyles from "@/styles/MediaControl.module.scss";
 
 // Fonts
 
