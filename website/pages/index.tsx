@@ -8,22 +8,22 @@ import lib_gql from "@iunstable0/website-libs/build/gql";
 
 import lib_axios from "@iunstable0/server-libs/build/axios";
 
-import lib_gqlSchema from "modules/gqlSchema";
+import lib_gqlSchema from "@/modules/gqlSchema";
 
 // Components
 
 import { motion, AnimatePresence } from "framer-motion";
 
-import Nav from "components/nav";
+import Nav from "@/components/nav";
 
-import Home from "components/pages/home";
-import About from "components/pages/about";
-import Contact from "components/pages/contact";
-import Scrapbook from "components/pages/scrapbook";
+import Home from "@/components/pages/home";
+import About from "@/components/pages/about";
+import Contact from "@/components/pages/contact";
+import Scrapbook from "@/components/pages/scrapbook";
 
 // Styles
 
-import styles from "styles/Index.module.scss";
+import styles from "@/styles/Index.module.scss";
 
 // Types
 
