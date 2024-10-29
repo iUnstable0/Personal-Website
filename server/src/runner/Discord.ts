@@ -45,7 +45,7 @@ export default class DiscordRunner {
 		return new Promise(async (resolve) => {
 			client.on("ready", async () => {
 				console.log(
-					chalk.magenta(`[Discord]`),
+					chalk.green(`[Discord]`),
 					`Logged in as ${client.user?.tag}!`,
 				);
 
@@ -68,7 +68,7 @@ export default class DiscordRunner {
 
 			await client.destroy();
 
-			console.log(chalk.magenta(`[Discord]`), `Logged out of Discord!`);
+			console.log(chalk.red(`[Discord]`), `Logged out of Discord!`);
 
 			resolve(true);
 		});

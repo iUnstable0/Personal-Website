@@ -47,7 +47,7 @@ export default class WebSocketRunner {
 		});
 
 		console.log(
-			chalk.magenta(`[WebSocket]`),
+			chalk.green(`[WebSocket]`),
 			`WebSocket Server ready at ws://${
 				process.env.NODE_ENV !== "development"
 					? "127.0.0.1"
@@ -63,14 +63,14 @@ export default class WebSocketRunner {
 	public static async stop() {
 		// console.log(chalk.blue(`[WebSocket]`), `Stopping cronjob...`);
 		// await job.stop();
-		// console.log(chalk.magenta(`[WebSocket]`), `Stopped cronjob`);
+		// console.log(chalk.red(`[WebSocket]`), `Stopped cronjob`);
 
 		console.log(chalk.blue(`[WebSocket]`), `Disconnecting from Redis...`);
 		await redis.disconnect();
-		console.log(chalk.magenta(`[WebSocket]`), `Disconnected from Redis`);
+		console.log(chalk.red(`[WebSocket]`), `Disconnected from Redis`);
 
 		console.log(chalk.blue(`[WebSocket]`), `Stopping WebSocket Server...`);
 		await io.close();
-		console.log(chalk.magenta(`[WebSocket]`), `Stopped WebSocket Server`);
+		console.log(chalk.red(`[WebSocket]`), `Stopped WebSocket Server`);
 	}
 }

@@ -156,7 +156,7 @@ export default class ApolloRunner {
 				},
 			}).then(() => {
 				console.log(
-					chalk.magenta(`[Apollo]`),
+					chalk.green(`[Apollo]`),
 					`Apollo Server ready at http://${
 						process.env.NODE_ENV !== "development"
 							? "127.0.0.1"
@@ -176,7 +176,7 @@ export default class ApolloRunner {
 			server
 				.stop()
 				.then(() => {
-					console.log(chalk.magenta(`[Apollo]`), `Stopped Apollo Server`);
+					console.log(chalk.red(`[Apollo]`), `Stopped Apollo Server`);
 
 					resolve(true);
 				})
