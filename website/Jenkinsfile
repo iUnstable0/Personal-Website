@@ -1,6 +1,10 @@
 pipeline {
     agent { 
-        label 'iunstable0_personal-website'
+        label 'eclipse'
+    }
+
+    environment {
+        PATH = "/root/.bun/bin:${env.PATH}"
     }
 
     stages {
@@ -55,7 +59,7 @@ pipeline {
 
                     cd website
 
-                    pnpm install || true
+                    bun i || true
                 '''
             }
         }
@@ -73,9 +77,9 @@ pipeline {
                     returnStdout: true,
                     script: '''
                         if [ "$BRANCH_NAME" = "staging" ]; then
-                            echo ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa;
+                            echo 613b6508-688f-4915-8241-2d6e9f1d225a;
                         else
-                            echo c2423ab3-f04f-44b6-b634-4703f7846c3f;
+                            echo aa4d190c-2df8-471a-8fbf-58b16a39aa80;
                         fi
                     '''
                 )}""")
@@ -84,9 +88,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'staging') {
-                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging/Website'
+                        env.DEPLOY_PATH = '/home/jenkins/iUnstable0_Personal-Website/Staging/Website'
                     } else {
-                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main/Website'
+                        env.DEPLOY_PATH = '/home/jenkins/iUnstable0_Personal-Website/Main/Website'
                     }
                 }
 
@@ -108,7 +112,7 @@ pipeline {
                         echo "No .next found in last successful build";
                     fi
 
-                    DOPPLER_TOKEN=${DOPPLER_TOKEN} pnpm build || true
+                    DOPPLER_TOKEN=${DOPPLER_TOKEN} bun run build || true
                 '''
             }
         }
@@ -126,9 +130,9 @@ pipeline {
                     returnStdout: true,
                     script: '''
                         if [ "$BRANCH_NAME" = "staging" ]; then
-                            echo ad1dd2ef-08a3-4ce3-a201-27a9c37fe5fa;
+                            echo 613b6508-688f-4915-8241-2d6e9f1d225a;
                         else
-                            echo c2423ab3-f04f-44b6-b634-4703f7846c3f;
+                            echo aa4d190c-2df8-471a-8fbf-58b16a39aa80;
                         fi
                     '''
                 )}""")
@@ -138,13 +142,13 @@ pipeline {
                 script {
                     // Override the DOPPLER_TOKEN for the staging branch
                     if (env.BRANCH_NAME == 'staging') {
-                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Staging'
+                        env.DEPLOY_PATH = '/home/jenkins/iUnstable0_Personal-Website/Staging'
                         env.PM2_NAME = "@iUnstable0/Personal-Website/Staging-Website"
-                        env.PNPM_COMMAND = 'staging'
+                        env.BUN_COMMAND = 'staging'
                     } else {
-                        env.DEPLOY_PATH = '/home/deployments/iUnstable0_Personal-Website/Main'
+                        env.DEPLOY_PATH = '/home/jenkins/iUnstable0_Personal-Website/Main'
                         env.PM2_NAME = "@iUnstable0/Personal-Website/Website"
-                        env.PNPM_COMMAND = 'start'
+                        env.BUN_COMMAND = 'start'
                     }
                 }
 
@@ -163,7 +167,7 @@ pipeline {
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
                     else
                         cd ${DEPLOY_PATH}/Website;
-                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start "pnpm ${PNPM_COMMAND}" --name "${PM2_NAME}";
+                        DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start "bun run ${BUN_COMMAND}" --name "${PM2_NAME}";
                     fi
                 '''
 

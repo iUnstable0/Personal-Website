@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== "development") {
-	require("module-alias/register");
-}
+// if (process.env.NODE_ENV !== "development") {
+// 	require("module-alias/register");
+// }
 
 let time = Date.now();
 
@@ -26,7 +26,7 @@ let chalk: any;
 				Apollo.start(chalk).then(() => {
 					Cron.start(chalk).then(() => {
 						console.log(
-							chalk.green(`[Init]`),
+							chalk.magenta(`[Init]`),
 							`Server online! Took ${Date.now() - time}ms`,
 						);
 
