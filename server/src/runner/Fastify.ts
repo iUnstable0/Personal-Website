@@ -57,7 +57,7 @@ export default class FastifyRunner {
 				},
 				() => {
 					console.log(
-						chalk.magenta(`[Fastify]`),
+						chalk.green(`[Fastify]`),
 						`Public Fastify ready at http://${
 							process.env.NODE_ENV !== "development"
 								? "127.0.0.1"
@@ -76,7 +76,7 @@ export default class FastifyRunner {
 			console.log(chalk.blue(`[Fastify]`), `Stopping Public Fastify...`);
 
 			publicFastify.close().then(() => {
-				console.log(chalk.magenta(`[Fastify]`), `Stopped Public Fastify`);
+				console.log(chalk.red(`[Fastify]`), `Stopped Public Fastify`);
 
 				resolve(true);
 			});

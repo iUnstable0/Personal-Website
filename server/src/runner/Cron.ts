@@ -26,8 +26,13 @@ export default class Cron {
 						const result = await lib_discord.getActivity(false);
 
 						if (result.changed) {
+							// console.log(
+							// 	"Data change detected, sending update to discord activity channel",
+							// );
+
 							console.log(
-								"Data change detected, sending update to discord activity channel",
+								chalk.yellow(`[WebSocket]`),
+								`Sending update to discord activity channel`,
 							);
 
 							io.to("discord_activity").emit("update");
@@ -50,8 +55,13 @@ export default class Cron {
 						const result = await lib_discord.getInfo(false);
 
 						if (result.changed) {
+							// console.log(
+							// 	"Data change detected, sending update to discord info channel",
+							// );
+
 							console.log(
-								"Data change detected, sending update to discord info channel",
+								chalk.yellow(`[WebSocket]`),
+								`Sending update to discord info channel`,
 							);
 
 							io.to("discord_info").emit("update");
@@ -89,7 +99,7 @@ export default class Cron {
 				),
 			);
 
-			console.log(chalk.magenta(`[Cron]`), `Started All Jobs`);
+			console.log(chalk.green(`[Cron]`), `Started All Jobs`);
 
 			resolve(true);
 		});
@@ -103,7 +113,7 @@ export default class Cron {
 				await job.stop();
 			}
 
-			console.log(chalk.magenta(`[Cron]`), `Stopped All Jobs`);
+			console.log(chalk.red(`[Cron]`), `Stopped All Jobs`);
 
 			resolve(true);
 		});
