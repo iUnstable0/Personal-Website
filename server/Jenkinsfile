@@ -125,7 +125,7 @@ pipeline {
 
                     mkdir -p ${DEPLOY_PATH};
 
-                    rsync -aP server/ ${DEPLOY_PATH}/Server/;
+                    rsync -aPq server/ ${DEPLOY_PATH}/Server/;
 
                     if pm2 list | grep -q "${PM2_NAME}"; then
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} pm2 restart "${PM2_NAME}" --update-env;
