@@ -3,6 +3,10 @@ pipeline {
         label 'eclipse'
     }
 
+    environment {
+        PATH = "/root/.bun/bin:${env.PATH}"
+    }
+
     stages {
         stage('Filter') {
             when {

@@ -1,6 +1,10 @@
 pipeline {
     agent { 
-        label 'eclipse
+        label 'eclipse'
+    }
+
+    environment {
+        PATH = "/root/.bun/bin:${env.PATH}"
     }
 
     stages {
