@@ -95,9 +95,9 @@ pipeline {
                     returnStdout: true,
                     script: '''
                         if [ "$BRANCH_NAME" = "staging" ]; then
-                            echo e078650d-c49c-4899-bd0d-e06b3a137864;
+                            echo 41f8e42c-b0ba-444b-b34e-51b5c63c60b0;
                         else
-                            echo bf6cfc2c-9668-485b-9574-6d58efd813c3;
+                            echo 6a1fc46d-1eca-4163-a8f7-800c6deb0e2f;
                         fi
                     '''
                 )}""")
@@ -133,8 +133,12 @@ pipeline {
                         cd ${DEPLOY_PATH}/Server;
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start "bun run ${BUN_COMMAND}" --name "${PM2_NAME}";
                     fi
+
+                    pm2 save
                 '''
 
+                // Very important to run this seperated from the above script block
+                // I forgot why 💀
                 sh 'rm -rf *;'
             }
         }
