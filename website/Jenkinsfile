@@ -130,9 +130,9 @@ pipeline {
                     returnStdout: true,
                     script: '''
                         if [ "$BRANCH_NAME" = "staging" ]; then
-                            echo 613b6508-688f-4915-8241-2d6e9f1d225a;
+                            echo 1580e34f-f25b-43da-8461-191dcfdcc099;
                         else
-                            echo aa4d190c-2df8-471a-8fbf-58b16a39aa80;
+                            echo 1ea76aa9-6809-44e8-80a1-a795b8578952;
                         fi
                     '''
                 )}""")
