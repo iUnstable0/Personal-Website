@@ -169,8 +169,12 @@ pipeline {
                         cd ${DEPLOY_PATH}/Website;
                         DOPPLER_TOKEN=${DOPPLER_TOKEN} FORCE_COLOR=1 pm2 start "bun run ${BUN_COMMAND}" --name "${PM2_NAME}";
                     fi
+
+                    pm2 save
                 '''
 
+                // Very important to run this seperated from the above script block
+                // I forgot why 💀
                 sh 'rm -rf *;'
             }
         }
