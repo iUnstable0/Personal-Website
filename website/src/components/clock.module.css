@@ -1,0 +1,20 @@
+.clock {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flag {
+	width: 20px;
+	height: 20px;
+
+	margin-right: 8px;
+}
+
+.sep {
+	margin-right: 8px;
+}
+
+.info {
+	margin-right: 8px;
+}

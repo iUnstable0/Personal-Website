@@ -1,8 +1,10 @@
 {
   "name": "personal-website",
   "version": "1.0.0",
-  "private": true,
+  "module": "index.ts",
   "devDependencies": {
-    "prettier": "3.3.3"
-  }
+    "prettier": "3.5.3"
+  },
+  "private": true,
+  "type": "module"
 }

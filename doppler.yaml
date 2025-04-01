@@ -1,7 +1,10 @@
 setup:
   - project: personal-website_server
-    config: dev
+    config: dev_personal
     path: server/
+  - project: personal-website_helper
+    config: dev_personal
+    path: helper/
   - project: personal-website_website
-    config: dev
+    config: dev_personal
     path: website/
