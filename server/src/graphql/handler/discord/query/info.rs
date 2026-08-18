@@ -9,7 +9,7 @@ use crate::graphql::query::Query;
 
 #[Object]
 impl Query {
-    pub async fn info(&self, ctx: &Context<'_>) -> Result<DiscordUser, ServiceError> {
+    pub async fn info(&self, _ctx: &Context<'_>) -> Result<DiscordUser, ServiceError> {
         // Ok(discord::get_info(true).await?.info)
 
         match discord::get_info(true).await {

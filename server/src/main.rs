@@ -1,5 +1,3 @@
-use std::process;
-
 use tracing_subscriber::{EnvFilter, FmtSubscriber, util::SubscriberInitExt};
 
 use async_graphql::{EmptySubscription, Schema, http::GraphiQLSource};
@@ -18,7 +16,7 @@ use tower_http::cors::CorsLayer;
 // being explicit if a package is local or external
 use crate::config::CONFIG;
 use crate::graphql::{mutation::Mutation, query::Query};
-use crate::modules::{cache, discord};
+use crate::modules::cache;
 
 #[macro_use]
 pub extern crate tracing;

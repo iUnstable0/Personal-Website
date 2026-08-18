@@ -1,4 +1,4 @@
-use async_graphql::{InputObject};
+use async_graphql::InputObject;
 use serde::Deserialize;
 
 #[derive(InputObject, Deserialize)]

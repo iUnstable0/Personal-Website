@@ -1,13 +1,12 @@
 use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 
-use crate::config::CONFIG;
-use crate::modules::{cache, discord};
+use crate::modules::discord;
 
 pub async fn init() -> Result<(), JobSchedulerError> {
     let mut sched = JobScheduler::new().await?;
 
     sched
-        .add(Job::new_async("*/2 * * * * *", |uuid, mut l| {
+        .add(Job::new_async("*/2 * * * * *", |_uuid, _l| {
             Box::pin(async move {
                 let response = discord::get_info(false).await;
 

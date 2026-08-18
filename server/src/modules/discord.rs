@@ -1,7 +1,6 @@
 use reqwest;
 
 use crate::config::CONFIG;
-use crate::errors::ServiceError;
 use crate::graphql::handler::discord::schema::{DiscordUser, DiscordUserExtended};
 use crate::modules::cache;
 
